@@ -3,9 +3,11 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
 import 'package:m2mobile/pages/main/more/about/about_widget.dart';
+import 'package:m2mobile/pages/main/more/help/help_widget.dart';
 import 'package:m2mobile/pages/main/more/profile/profile_widget.dart';
 import 'package:m2mobile/pages/main/more/favourite/favourite_widget.dart';
 import 'package:m2mobile/pages/main/more/order_list/order_list_widget.dart';
+import 'package:m2mobile/pages/main/more/settings/settings_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 
@@ -20,8 +22,8 @@ final _optionMap = {
   'အော်ဒါ': OrderListWidget.route,
   'ဆိုင်အကြောင်း': AboutWidget.route,
   'သင်ကြိုက်နှစ်သက်သောပစ္စည်းများ': FavouriteWidget.route,
-  'အကူအညီရယူရန်': "",
-  'ပြင်ဆင်ရန်': "",
+  'အကူအညီရယူရန်': HelpWidget.route,
+  'ပြင်ဆင်ရန်': SettingsWidget.route,
   'အကောင့်ထွက်ရန်': ''
 };
 
@@ -64,9 +66,12 @@ class _MoreWidgetState extends State<MoreWidget> {
                         ? Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: Dimens.marginMedium),
-                            child: SvgPicture.asset(
-                              "lib/res/svgs/m2_logo.svg",
-                              width: MediaQuery.of(context).size.width * 0.1,
+                            child: Hero(
+                              tag: AboutWidget.heroTag,
+                              child: SvgPicture.asset(
+                                "lib/res/svgs/m2_logo.svg",
+                                width: MediaQuery.of(context).size.width * 0.1,
+                              ),
                             ),
                           )
                         : Padding(

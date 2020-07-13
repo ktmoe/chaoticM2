@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:m2mobile/pages/main/more/about/about_widget.dart';
+import 'package:m2mobile/pages/main/search/m2_search_delegate.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/pages/main/cart/cart_widget.dart';
@@ -111,7 +112,9 @@ class M2AppBarState extends State<M2AppBar> {
       child: Material(
         elevation: Dimens.cardElevation,
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            showSearch(context: context, delegate: M2SearchDelegate());
+          },
           child: IgnorePointer(
             child: TextFormField(
               focusNode: focusNode,
@@ -149,7 +152,7 @@ class M2AppBarState extends State<M2AppBar> {
   Widget _buildCorrectLeading() => widget.showSearch
       ? InkWell(
           onTap: () {
-            // Navigator.of(context).pushNamed(AppRoutes.contact);
+            Modular.to.pushNamed(AboutWidget.route);
           },
           child: Hero(
             tag: AboutWidget.heroTag,
@@ -188,7 +191,7 @@ class M2GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
               Expanded(
                 flex: 1,
                 child: Icon(
-                  Icons.arrow_back_ios,
+                  Icons.chevron_left,
                   color: Colors.white,
                 ),
               ),

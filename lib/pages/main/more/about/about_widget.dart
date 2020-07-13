@@ -20,8 +20,6 @@ class AboutWidget extends StatefulWidget {
 
 class _AboutWidgetState extends State<AboutWidget> {
   final Completer<GoogleMapController> _controller = Completer();
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorState =
-      GlobalKey<RefreshIndicatorState>();
 
   static const location = LatLng(21.940372, 96.083979);
 
@@ -74,8 +72,10 @@ class _AboutWidgetState extends State<AboutWidget> {
 
   Widget _buildM2AboutArea() => Align(
         child: Container(
-          margin:
-              EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.03),
+          margin: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height * 0.03,
+              left: Dimens.marginLarge,
+              right: Dimens.marginLarge),
           child: Column(
             children: <Widget>[
               Hero(
@@ -179,7 +179,7 @@ class _AboutWidgetState extends State<AboutWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Icon(
-                    M2Icon.apple,
+                    M2Icon.facebook,
                     color: Colors.white,
                   ),
                   const SizedBox(width: 5),

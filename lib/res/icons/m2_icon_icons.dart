@@ -105,4 +105,6 @@ class M2Icon {
       IconData(0xe832, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData apple =
       IconData(0xe833, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData facebook =
+      IconData(0xf09a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
