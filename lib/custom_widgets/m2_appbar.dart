@@ -13,11 +13,13 @@ class M2AppBar extends StatefulWidget implements PreferredSizeWidget {
   final bool showSearch;
   final String title;
   final bool deleteOnly;
+  final Function onBackPressed;
 
   M2AppBar(
       {@required this.showSearch,
       @required this.title,
-      @required this.deleteOnly});
+      @required this.deleteOnly,
+      @required this.onBackPressed});
 
   @override
   State<StatefulWidget> createState() => M2AppBarState();
@@ -123,15 +125,10 @@ class M2AppBarState extends State<M2AppBar> {
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 fillColor: Colors.white,
-                suffixIcon: IconButton(
-                    icon: Icon(
-                      M2Icon.search,
-                      size: Dimens.marginMedium3,
-                    ),
-                    onPressed: () {
-                      // showSearch(context: context, delegate: SearchItemDelegate(store,appStore));
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) => SearchWidget(productList: generateFakeProductList())));
-                    }),
+                suffixIcon: Icon(
+                  M2Icon.search,
+                  size: Dimens.marginMedium3,
+                ),
                 hintText: 'Search Item',
                 hintStyle: TextStyle(fontSize: Dimens.textRegular),
                 border: OutlineInputBorder(
@@ -162,9 +159,7 @@ class M2AppBarState extends State<M2AppBar> {
           ),
         )
       : InkWell(
-          onTap: () {
-            Modular.to.pop();
-          },
+          onTap: widget.onBackPressed,
           child: Icon(
             Icons.chevron_left,
             color: Theme.of(context).iconTheme.color,
@@ -188,11 +183,14 @@ class M2GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
           decoration: BoxDecoration(gradient: gradient),
           child: Row(
             children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Icon(
-                  Icons.chevron_left,
-                  color: Colors.white,
+              InkWell(
+                onTap: () {},
+                child: Expanded(
+                  flex: 1,
+                  child: Icon(
+                    Icons.chevron_left,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               Expanded(

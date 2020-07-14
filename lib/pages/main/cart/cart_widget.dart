@@ -17,7 +17,12 @@ class _CartWidgetState extends State<CartWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: M2AppBar(showSearch: false, title: "My Cart", deleteOnly: true),
+        appBar: M2AppBar(
+          showSearch: false,
+          title: "My Cart",
+          deleteOnly: true,
+          onBackPressed: () => Modular.to.pop(),
+        ),
         body: _buildNonEmptyBody());
   }
 
@@ -228,6 +233,8 @@ class _BottomSheetState extends State<BottomSheet> {
                             endIndent: Dimens.marginLarge),
                         _buildTotalText(),
                         RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
                           padding: const EdgeInsets.only(
                               left: Dimens.marginLargeX,
                               right: Dimens.marginLargeX),

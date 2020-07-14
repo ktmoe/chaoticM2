@@ -26,6 +26,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("${Modular.to.path}");
+
+    ///login/authenticate/main/more/profile/edit_profile
     return Scaffold(
       key: _scaffoldKey,
       appBar: M2GradientAppBar(

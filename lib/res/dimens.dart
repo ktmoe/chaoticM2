@@ -18,6 +18,7 @@ abstract class Dimens {
 
   static const double marginMediumN = -8;
 
+  static const double textRegular_small = 12;
   static const double textRegular = 14;
   static const double textRegular2x = 16;
   static const double textRegular2_5x = 18;

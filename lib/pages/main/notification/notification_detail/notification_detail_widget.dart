@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class NotificationDetailWidget extends StatefulWidget {
   static const route =
@@ -16,7 +17,10 @@ class _NotificationDetailWidgetState extends State<NotificationDetailWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: M2AppBar(
-            showSearch: false, title: "Notifications", deleteOnly: false),
+            showSearch: false,
+            title: "Notifications",
+            deleteOnly: false,
+            onBackPressed: () => Modular.to.pop()),
         body: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Container(

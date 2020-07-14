@@ -27,7 +27,10 @@ class _CompleteOrderWidgetState extends State<CompleteOrderWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: M2AppBar(
-          showSearch: false, title: '‌ငွေလွှဲစလစ်ပို့ရန်', deleteOnly: false),
+          showSearch: false,
+          title: '‌ငွေလွှဲစလစ်ပို့ရန်',
+          deleteOnly: false,
+          onBackPressed: () => Modular.to.pop()),
       body: Stack(
         children: <Widget>[ScreenBgCard(), _buildBillingInfo()],
       ),

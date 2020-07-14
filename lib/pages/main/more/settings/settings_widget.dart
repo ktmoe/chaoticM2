@@ -17,8 +17,11 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:
-          M2AppBar(showSearch: false, title: 'ပြင်ဆင်ရန် ', deleteOnly: false),
+      appBar: M2AppBar(
+          showSearch: false,
+          title: 'ပြင်ဆင်ရန် ',
+          deleteOnly: false,
+          onBackPressed: () => Modular.to.pop()),
       body: Stack(
         children: <Widget>[
           ScreenBgCard(),

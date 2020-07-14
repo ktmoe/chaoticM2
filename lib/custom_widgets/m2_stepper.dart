@@ -36,13 +36,14 @@ const double _kTriangleHeight =
 
 @immutable
 class M2Step {
-  const M2Step({
-    @required this.title,
-    this.subtitle,
-    @required this.content,
-    this.state = M2StepState.indexed,
-    this.isActive = false,
-  })  : assert(title != null),
+  const M2Step(
+      {@required this.title,
+      this.subtitle,
+      @required this.content,
+      this.state = M2StepState.indexed,
+      this.isActive = false,
+      @required this.isLast})
+      : assert(title != null),
         assert(content != null),
         assert(state != null);
 
@@ -55,6 +56,8 @@ class M2Step {
   final M2StepState state;
 
   final bool isActive;
+
+  final bool isLast;
 }
 
 class M2Stepper extends StatefulWidget {
@@ -67,8 +70,7 @@ class M2Stepper extends StatefulWidget {
       this.onStepTapped,
       this.onStepContinue,
       this.onStepCancel,
-      this.controlsBuilder,
-      this.showCancel = true})
+      this.controlsBuilder})
       : assert(steps != null),
         assert(type != null),
         assert(currentStep != null),
@@ -90,8 +92,6 @@ class M2Stepper extends StatefulWidget {
   final VoidCallback onStepCancel;
 
   final ControlsWidgetBuilder controlsBuilder;
-
-  final bool showCancel;
 
   @override
   _M2StepperState createState() => _M2StepperState();
@@ -260,7 +260,7 @@ class _M2StepperState extends State<M2Stepper> with TickerProviderStateMixin {
     }
   }
 
-  Widget _buildVerticalControls() {
+  Widget _buildVerticalControls(int index) {
     if (widget.controlsBuilder != null)
       return widget.controlsBuilder(context,
           onStepContinue: widget.onStepContinue,
@@ -287,6 +287,19 @@ class _M2StepperState extends State<M2Stepper> with TickerProviderStateMixin {
         constraints: const BoxConstraints.tightFor(height: 48.0),
         child: Row(
           children: <Widget>[
+            (_isLast(index))
+                ? RaisedButton(
+                    elevation: Dimens.cardElevation,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    onPressed: widget.onStepCancel,
+                    color: Colors.white,
+                    textColor: themeData.accentColor,
+                    textTheme: ButtonTextTheme.normal,
+                    child: Text('Cancel'),
+                  )
+                : Container(),
+            const SizedBox(width: Dimens.marginMedium3),
             RaisedButton(
               elevation: Dimens.cardElevation,
               shape: RoundedRectangleBorder(
@@ -297,18 +310,7 @@ class _M2StepperState extends State<M2Stepper> with TickerProviderStateMixin {
               textColor: Colors.white,
               textTheme: ButtonTextTheme.normal,
               child: Text('Continue'),
-            ),
-            (widget.showCancel)
-                ? Container(
-                    margin: const EdgeInsetsDirectional.only(start: 8.0),
-                    child: FlatButton(
-                      onPressed: widget.onStepCancel,
-                      textColor: cancelColor,
-                      textTheme: ButtonTextTheme.normal,
-                      child: Text('Cancel'),
-                    ),
-                  )
-                : Container(),
+            )
           ],
         ),
       ),
@@ -387,8 +389,6 @@ class _M2StepperState extends State<M2Stepper> with TickerProviderStateMixin {
         children: <Widget>[
           Column(
             children: <Widget>[
-              // Line parts are always added in order for the ink splash to
-              // flood the tips of the connector lines.
               _buildLine(!_isFirst(index)),
               _buildIcon(index),
               _buildLine(!_isLast(index)),
@@ -433,7 +433,7 @@ class _M2StepperState extends State<M2Stepper> with TickerProviderStateMixin {
             child: Column(
               children: <Widget>[
                 widget.steps[index].content,
-                _buildVerticalControls(),
+                _buildVerticalControls(index),
               ],
             ),
           ),
@@ -461,8 +461,6 @@ class _M2StepperState extends State<M2Stepper> with TickerProviderStateMixin {
               InkWell(
                 onTap: widget.steps[i].state != M2StepState.disabled
                     ? () {
-                        // In the vertical case we need to scroll to the newly tapped
-                        // step.
                         Scrollable.ensureVisible(
                           _keys[i].currentContext,
                           curve: Curves.fastOutSlowIn,
@@ -539,7 +537,7 @@ class _M2StepperState extends State<M2Stepper> with TickerProviderStateMixin {
                 vsync: this,
                 child: widget.steps[widget.currentStep].content,
               ),
-              _buildVerticalControls(),
+              _buildVerticalControls(widget.currentStep),
             ],
           ),
         ),

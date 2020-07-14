@@ -71,8 +71,7 @@ class M2SearchDelegate extends SearchDelegate {
                   childAspectRatio: (120 / 170),
                   children: List.generate(17, (index) {
                     return ProductCard(
-                      id: index.toString(),
-                    );
+                        id: index.toString(), discountItem: false);
                   }),
                 ),
               ],

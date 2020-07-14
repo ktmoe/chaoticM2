@@ -3,6 +3,7 @@ import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/custom_widgets/product_card.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
 import 'package:m2mobile/res/dimens.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class ProductNameArgs {
   final String productName;
@@ -28,9 +29,11 @@ class _ProductListWidgetState extends State<ProductListWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: M2AppBar(
-          showSearch: false,
-          title: widget.productName.productName,
-          deleteOnly: false),
+        showSearch: false,
+        title: widget.productName.productName,
+        deleteOnly: false,
+        onBackPressed: () => Modular.to.pop(),
+      ),
       body: Stack(
         children: <Widget>[
           ScreenBgCard(),
@@ -44,15 +47,13 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     GridView.count(
-                      primary: false,
                       crossAxisCount: 2,
+                      childAspectRatio: 120 / 170,
                       padding: const EdgeInsets.all(Dimens.marginMedium),
                       shrinkWrap: true,
-                      childAspectRatio: (120 / 170),
                       children: List.generate(17, (index) {
                         return ProductCard(
-                          id: index.toString(),
-                        );
+                            id: index.toString(), discountItem: false);
                       }),
                     ),
                   ],

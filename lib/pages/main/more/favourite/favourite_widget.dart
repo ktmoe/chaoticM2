@@ -3,6 +3,7 @@ import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/custom_widgets/product_card.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
 import 'package:m2mobile/res/dimens.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class FavouriteWidget extends StatefulWidget {
   static const route = "/login/authenticate/main/more/favourite";
@@ -17,7 +18,10 @@ class _FavouriteWidgetState extends State<FavouriteWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: M2AppBar(
-          showSearch: false, title: "Favourite List", deleteOnly: false),
+          showSearch: false,
+          title: "Favourite List",
+          deleteOnly: false,
+          onBackPressed: () => Modular.to.pop()),
       body: Stack(
         children: <Widget>[
           ScreenBgCard(),
@@ -38,8 +42,7 @@ class _FavouriteWidgetState extends State<FavouriteWidget> {
                       childAspectRatio: (120 / 170),
                       children: List.generate(17, (index) {
                         return ProductCard(
-                          id: index.toString(),
-                        );
+                            id: index.toString(), discountItem: false);
                       }),
                     ),
                   ],

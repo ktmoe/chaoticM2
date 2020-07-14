@@ -3,6 +3,7 @@ import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/custom_widgets/notification_card.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
 import 'package:m2mobile/res/dimens.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class NotificationWidget extends StatefulWidget {
   static const route = "/login/authenticate/main/notification";
@@ -15,8 +16,11 @@ class _NotificationWidgetState extends State<NotificationWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:
-          M2AppBar(showSearch: false, title: "Notification", deleteOnly: false),
+      appBar: M2AppBar(
+          showSearch: false,
+          title: "Notification",
+          deleteOnly: false,
+          onBackPressed: () => Modular.to.pop()),
       body: RefreshIndicator(
         onRefresh: () async {},
         child: Stack(

@@ -41,7 +41,7 @@ abstract class _AuthenticateStoreBase with Store {
   @action
   Future init() async {
     _appBox = await AppBox.create();
-    readUserProfile();
+    // readUserProfile();
   }
 
   @action

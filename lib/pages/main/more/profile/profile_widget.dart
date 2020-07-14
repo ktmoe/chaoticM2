@@ -102,21 +102,18 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     const SizedBox(
                       width: Dimens.marginLarge,
                     ),
-                    Expanded(
+                    Flexible(
                       child: const Text(
                         "အမှတ် ၁၆၊ (၃) ရပ်ကွက်၊ မင်းညိုစံလမ်း နှင့် အောင်ဇေယျလမ်း ထောင့်၊ ရွှေဘိုမြို့။",
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.visible,
-                        maxLines: 4,
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                     )
                   ],
                 ),
               ),
-              SizedBox(
-                height: Dimens.marginLargeX,
-              ),
+              SizedBox(height: Dimens.marginLargeX),
               RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),

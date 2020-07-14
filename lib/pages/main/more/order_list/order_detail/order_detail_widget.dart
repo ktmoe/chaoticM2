@@ -3,6 +3,7 @@ import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
 import 'package:m2mobile/res/styles.dart';
 import 'package:m2mobile/res/dimens.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class OrderDetailWidget extends StatefulWidget {
   static const route = "/login/authenticate/main/more/order_list/order_detail";
@@ -20,7 +21,11 @@ class _OrderDetailWidgetState extends State<OrderDetailWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: M2AppBar(showSearch: false, title: "အော်ဒါ", deleteOnly: false),
+      appBar: M2AppBar(
+          showSearch: false,
+          title: "အော်ဒါ",
+          deleteOnly: false,
+          onBackPressed: () => Modular.to.pop()),
       body: Stack(children: <Widget>[
         ScreenBgCard(),
         Container(

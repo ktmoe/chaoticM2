@@ -6,6 +6,7 @@ import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/res/styles.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class HelpWidget extends StatefulWidget {
   static const route = "/login/authenticate/main/more/help";
@@ -27,8 +28,12 @@ class _HelpWidgetState extends State<HelpWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:
-          M2AppBar(showSearch: false, title: 'အကူအညီရယူရန်', deleteOnly: false),
+      appBar: M2AppBar(
+        showSearch: false,
+        title: 'အကူအညီရယူရန်',
+        deleteOnly: false,
+        onBackPressed: () => Modular.to.pop(),
+      ),
       body: Stack(
         children: <Widget>[
           ScreenBgCard(),

@@ -6,7 +6,6 @@ import 'package:m2mobile/modules/product_detail_module.dart';
 import 'package:m2mobile/modules/product_list_module.dart';
 import 'package:m2mobile/modules/settings_module.dart';
 import 'package:m2mobile/pages/main/main_widget.dart';
-import 'package:m2mobile/stores/main_store.dart';
 import 'package:m2mobile/modules/cart_module.dart';
 import 'package:m2mobile/modules/notification_module.dart';
 import 'package:m2mobile/modules/favourite_module.dart';
@@ -14,7 +13,7 @@ import 'package:m2mobile/modules/order_list_module.dart';
 
 class MainScreenModule extends ChildModule {
   @override
-  List<Bind> get binds => [Bind((i) => MainStore())];
+  List<Bind> get binds => [];
 
   @override
   List<Router> get routers => [

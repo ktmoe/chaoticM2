@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
@@ -10,6 +11,7 @@ import 'package:m2mobile/pages/main/more/order_list/order_list_widget.dart';
 import 'package:m2mobile/pages/main/more/settings/settings_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
+import 'package:m2mobile/custom_widgets/easy_get_widget.dart';
 
 class MoreWidget extends StatefulWidget {
   static const route = "/authenticate/main/more";
@@ -58,8 +60,14 @@ class _MoreWidgetState extends State<MoreWidget> {
                 return Material(
                   color: Colors.white,
                   child: ListTile(
-                    onTap: () {
-                      Modular.to.pushNamed(_optionMap.values.toList()[index]);
+                    onTap: () async {
+                      final route = _optionMap.values.toList()[index];
+                      if (route.isNotEmpty) {
+                        Modular.to.pushNamed(route);
+                      } else {
+                        final willPop = await context.onBackPressed();
+                        if (willPop) SystemNavigator.pop();
+                      }
                     },
                     contentPadding: const EdgeInsets.all(Dimens.marginSmall),
                     leading: (icons[index] == null)
