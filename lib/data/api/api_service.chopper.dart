@@ -22,4 +22,19 @@ class _$ApiService extends ApiService {
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<ProductResponse, ProductResponse>($request);
   }
+
+  @override
+  Future<Response<Product>> getProductById(String id) {
+    final $url = '/api/productview/getProductByID';
+    final $params = <String, dynamic>{'productid': id};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<Product, Product>($request);
+  }
+
+  @override
+  Future<Response<HelpResponse>> getHelpInfo() {
+    final $url = '/api/getHelpview/help';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<HelpResponse, HelpResponse>($request);
+  }
 }

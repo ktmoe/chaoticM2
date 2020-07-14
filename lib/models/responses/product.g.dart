@@ -397,11 +397,49 @@ class ProductAdapter extends TypeAdapter<Product> {
     final fields = <int, dynamic>{
       for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return (ProductBuilder()).build();
+    return (ProductBuilder()
+          ..id = fields[0] as String
+          ..imageurl1 = fields[1] as String
+          ..imageurl2 = fields[2] as String
+          ..imageurl3 = fields[3] as String
+          ..categoryid = fields[4] as String
+          ..subcategoryid = fields[5] as String
+          ..productname = fields[6] as String
+          ..description = fields[7] as String
+          ..itemcount = fields[8] as int
+          ..price = fields[9] as int
+          ..category = fields[10] as String
+          ..subCategory = fields[11] as String)
+        .build();
   }
 
   @override
   void write(BinaryWriter writer, Product obj) {
-    writer..writeByte(0);
+    writer
+      ..writeByte(12)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.imageurl1)
+      ..writeByte(2)
+      ..write(obj.imageurl2)
+      ..writeByte(3)
+      ..write(obj.imageurl3)
+      ..writeByte(4)
+      ..write(obj.categoryid)
+      ..writeByte(5)
+      ..write(obj.subcategoryid)
+      ..writeByte(6)
+      ..write(obj.productname)
+      ..writeByte(7)
+      ..write(obj.description)
+      ..writeByte(8)
+      ..write(obj.itemcount)
+      ..writeByte(9)
+      ..write(obj.price)
+      ..writeByte(10)
+      ..write(obj.category)
+      ..writeByte(11)
+      ..write(obj.subCategory);
   }
 }
