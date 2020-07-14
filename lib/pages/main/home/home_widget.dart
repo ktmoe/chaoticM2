@@ -6,6 +6,7 @@ import 'package:m2mobile/pages/main/product_detail/product_detail_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
 import 'package:m2mobile/custom_widgets/product_card.dart';
+import 'package:m2mobile/stores/store_home.dart';
 
 class HomeWidget extends StatefulWidget {
   @override
@@ -18,6 +19,8 @@ class _HomeWidgetState extends State<HomeWidget>
     "https://pyxis.nymag.com/v1/imgs/57d/5f1/4e4dae00f150e36a22a13ffa956d4301d8-07-timothee-chalamet.rvertical.w600.jpg",
     "https://pyxis.nymag.com/v1/imgs/57d/5f1/4e4dae00f150e36a22a13ffa956d4301d8-07-timothee-chalamet.rvertical.w600.jpg"
   ];
+
+  final StoreHome storeHome = Modular.get<StoreHome>();
 
   @override
   void initState() {

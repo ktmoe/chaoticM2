@@ -23,6 +23,13 @@ mixin _$AuthenticateStore on _AuthenticateStoreBase, Store {
       (_$validPhoneComputed ??= Computed<bool>(() => super.validPhone,
               name: '_AuthenticateStoreBase.validPhone'))
           .value;
+  Computed<String> _$userIdComputed;
+
+  @override
+  String get userId =>
+      (_$userIdComputed ??= Computed<String>(() => super.userId,
+              name: '_AuthenticateStoreBase.userId'))
+          .value;
 
   final _$pageAtom = Atom(name: '_AuthenticateStoreBase.page');
 
@@ -176,7 +183,8 @@ otp: ${otp},
 userProfile: ${userProfile},
 exception: ${exception},
 fullPhone: ${fullPhone},
-validPhone: ${validPhone}
+validPhone: ${validPhone},
+userId: ${userId}
     ''';
   }
 }

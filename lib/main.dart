@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:m2mobile/data/dummy/vos/user_profile.dart';
+import 'package:m2mobile/models/responses/product.dart';
 import 'package:m2mobile/modules/app_module.dart';
 
 Future<void> main() async {
@@ -24,4 +25,5 @@ void _setupLogging() {
 
 void _registerAdapters() {
   Hive.registerAdapter<UserProfile>(UserProfileAdapter());
+  Hive.registerAdapter<Product>(ProductAdapter());
 }
