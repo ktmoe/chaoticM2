@@ -1,9 +1,8 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/boxes/box_products.dart';
 import 'package:m2mobile/data/api/api_service.dart';
+import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:m2mobile/models/responses/product.dart';
 import 'package:mobx/mobx.dart';
 
@@ -11,41 +10,42 @@ part 'store_home.g.dart';
 
 class StoreHome = _StoreHome with _$StoreHome;
 
-abstract class _StoreHome with Store{
+abstract class _StoreHome with Store {
+  final ApiService _api = Modular.get<ApiService>();
+  BoxProduct _boxProduct;
 
-  final ApiService api = Modular.get<ApiService>();
-
-  @observable
-  List<Product> products = [];
-
-  BoxProduct boxProduct;
-
-  _StoreHome(){
+  _StoreHome() {
     init();
   }
 
+  @observable
+  AppException exception;
+
+  @observable
+  ObservableList<Product> products = ObservableList();
+
   @action
-  Future init() async{
-    boxProduct = await BoxProduct.create();
+  Future init() async {
+    _boxProduct = await BoxProduct.create();
     updateProducts();
-    boxProduct.listenable.addListener(updateProducts);
+    _boxProduct.listenable.addListener(updateProducts);
   }
 
   @action
-  void updateProducts(){
-    products = boxProduct.listenable.value.values;
+  void updateProducts() {
+    products = ObservableList.of(_boxProduct.listenable.value.values);
   }
 
   @action
-  Future getProductList({bool refresh = false}) async{
-     try{
-       final productResponse = await api.getProducts();
-       final products = productResponse.body.product.toList();
-       if(refresh) boxProduct.deleteAll();
-       boxProduct.saveAll(products);
-     }catch(e){
-        print("err when fetching product list => ${e.toString()}");
-     }
+  Future getProductList({bool refresh = false}) async {
+    try {
+      final productResponse = await _api.getProducts();
+      final products = productResponse.body.product.toList();
+      if (refresh) _boxProduct.deleteAll();
+      _boxProduct.saveAll(products);
+    } catch (e) {
+      debugPrint("err when fetching product list => ${e.toString()}");
+      exception = AppException(message: e.toString());
+    }
   }
-
 }

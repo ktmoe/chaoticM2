@@ -9,16 +9,31 @@ part of 'store_home.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$StoreHome on _StoreHome, Store {
+  final _$exceptionAtom = Atom(name: '_StoreHome.exception');
+
+  @override
+  AppException<dynamic> get exception {
+    _$exceptionAtom.reportRead();
+    return super.exception;
+  }
+
+  @override
+  set exception(AppException<dynamic> value) {
+    _$exceptionAtom.reportWrite(value, super.exception, () {
+      super.exception = value;
+    });
+  }
+
   final _$productsAtom = Atom(name: '_StoreHome.products');
 
   @override
-  List<Product> get products {
+  ObservableList<Product> get products {
     _$productsAtom.reportRead();
     return super.products;
   }
 
   @override
-  set products(List<Product> value) {
+  set products(ObservableList<Product> value) {
     _$productsAtom.reportWrite(value, super.products, () {
       super.products = value;
     });
@@ -55,6 +70,7 @@ mixin _$StoreHome on _StoreHome, Store {
   @override
   String toString() {
     return '''
+exception: ${exception},
 products: ${products}
     ''';
   }

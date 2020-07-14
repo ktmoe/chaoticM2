@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_page_indicator/flutter_page_indicator.dart';
+import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:m2mobile/pages/main/product_detail/product_detail_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
 import 'package:m2mobile/custom_widgets/product_card.dart';
 import 'package:m2mobile/stores/store_home.dart';
+import 'package:mobx/mobx.dart';
+import 'package:m2mobile/utils/extensions.dart';
 
 class HomeWidget extends StatefulWidget {
   @override
@@ -20,18 +23,30 @@ class _HomeWidgetState extends State<HomeWidget>
     "https://pyxis.nymag.com/v1/imgs/57d/5f1/4e4dae00f150e36a22a13ffa956d4301d8-07-timothee-chalamet.rvertical.w600.jpg"
   ];
 
-  final StoreHome storeHome = Modular.get<StoreHome>();
+  final StoreHome _storeHome = Modular.get<StoreHome>();
+  final List<ReactionDisposer> _disposer = [];
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorState = GlobalKey();
+
+  ReactionDisposer _onException() {
+    return reaction<AppException>((_) => _storeHome.exception, (exception) {
+      exception.message.showSnackBar(context);
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    _disposer.addAll([_onException()]);
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
-        onRefresh: () async {},
+        key: _refreshIndicatorState,
+        onRefresh: () async {
+          await _storeHome.getProductList();
+        },
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

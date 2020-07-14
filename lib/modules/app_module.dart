@@ -12,27 +12,27 @@ import 'package:m2mobile/stores/splash_store.dart';
 import 'package:m2mobile/stores/store_home.dart';
 import 'package:m2mobile/utils/constants.dart';
 
-import '../utils/custom_json_converter.dart';
+import 'package:m2mobile/utils/custom_json_converter.dart';
 
 class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
-    Bind((i) => SplashStore()),
-    Bind((i) => ChopperClient(
-      interceptors: [
-        HttpLoggingInterceptor(),
-        JWTInterceptor(),
-        // HeadersInterceptor({HttpHeaders.authorizationHeader: bearerToken})
-      ],
-      baseUrl: baseUrl,
-      converter: const CustomJsonConverter(),
-      errorConverter: const CustomJsonConverter(),
-      //services: [ApiService.create(), FileService.create()],
-    )),
-    Bind((i) => i.get<ChopperClient>().getService<JwtService>()),
-    Bind((i) => i.get<ChopperClient>().getService<ApiService>()),
-    Bind((i) => StoreHome()),
-  ];
+        Bind((i) => SplashStore()),
+        Bind((i) => ChopperClient(
+              interceptors: [
+                HttpLoggingInterceptor(),
+                JWTInterceptor(),
+                // HeadersInterceptor({HttpHeaders.authorizationHeader: bearerToken})
+              ],
+              baseUrl: baseUrl,
+              converter: const CustomJsonConverter(),
+              errorConverter: const CustomJsonConverter(),
+              services: [ApiService.create()],
+            )),
+        Bind((i) => JwtService.create()),
+        Bind((i) => i.get<ChopperClient>().getService<ApiService>()),
+        Bind((i) => StoreHome()),
+      ];
 
   @override
   Widget get bootstrap => AppWidget();
