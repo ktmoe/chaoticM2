@@ -44,6 +44,9 @@ abstract class _AuthenticateStoreBase with Store {
     readUserProfile();
   }
 
+  @computed
+  String get userId => userProfile.value.id;
+
   @action
   void readUserProfile() => userProfile = Observable(_appBox.getUserProfile());
 

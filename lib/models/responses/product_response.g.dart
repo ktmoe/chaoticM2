@@ -20,7 +20,7 @@ class _$ProductResponseSerializer
   Iterable<Object> serialize(Serializers serializers, ProductResponse object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'product',
+      'data',
       serializers.serialize(object.product,
           specifiedType:
               const FullType(BuiltList, const [const FullType(Product)])),
@@ -41,7 +41,7 @@ class _$ProductResponseSerializer
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'product':
+        case 'data':
           result.product.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(Product)]))

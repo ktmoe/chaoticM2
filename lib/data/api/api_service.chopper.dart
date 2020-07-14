@@ -37,4 +37,34 @@ class _$ApiService extends ApiService {
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<HelpResponse, HelpResponse>($request);
   }
+
+  @override
+  Future<Response<ProductResponse>> getFavList(String id) {
+    final $url = '/api/customerview/favoriteList';
+    final $params = <String, dynamic>{'customerid': id};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<ProductResponse, ProductResponse>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> addToFav(String customerId, String productId) {
+    final $url = '/api/customerview/favorite';
+    final $params = <String, dynamic>{
+      'customerid': customerId,
+      'productid': productId
+    };
+    final $request = Request('POST', $url, client.baseUrl, parameters: $params);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> removeFromFav(String customerId, String productId) {
+    final $url = '/api/customerview/Removefavorite';
+    final $params = <String, dynamic>{
+      'customerid': customerId,
+      'productid': productId
+    };
+    final $request = Request('POST', $url, client.baseUrl, parameters: $params);
+    return client.send<dynamic, dynamic>($request);
+  }
 }

@@ -20,7 +20,25 @@ abstract class ApiService extends ChopperService{
       );
 
   /// help ///
-  @Get(path: 'getHelpview/help')
+  @Get(path: '/getHelpview/help')
   Future<Response<HelpResponse>> getHelpInfo();
+
+  /// Favorite ///
+  @Get(path: '/customerview/favoriteList')
+  Future<Response<ProductResponse>> getFavList(
+      @Query('customerid') String id
+      );
+
+  @Post(path: '/customerview/favorite')
+  Future<Response> addToFav(
+      @Query('customerid') String customerId,
+      @Query('productid') String productId
+      );
+
+  @Post(path: '/customerview/Removefavorite')
+  Future<Response> removeFromFav(
+      @Query('customerid') String customerId,
+      @Query('productid') String productId
+      );
 
 }

@@ -16,7 +16,7 @@ abstract class ProductResponse
   factory ProductResponse([updates(ProductResponseBuilder b)]) =
   _$ProductResponse;
 
-  @BuiltValueField(wireName: 'product')
+  @BuiltValueField(wireName: 'data')
   BuiltList<Product> get product;
   String toJson() {
     return json
