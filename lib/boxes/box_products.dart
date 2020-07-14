@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hive/hive.dart';
@@ -9,15 +8,15 @@ class BoxProduct implements Disposable{
 
   Box<Product> _box;
 
-  var key = "productBox";
+ static var key = "productBox";
 
-  BoxProduct _instance;
+  static BoxProduct _instance;
 
   BoxProduct._(this._box);
 
-  BoxProduct get instance => _instance;
+  //static BoxProduct get instance => _instance;
 
-  Future<BoxProduct> create() async{
+  static Future<BoxProduct> create() async{
     return _instance ??= BoxProduct._(await Hive.openBox(key));
   }
 
@@ -39,10 +38,13 @@ class BoxProduct implements Disposable{
     _box.keys.forEach((key){
       products.add(_box.get(key));
     });
+    return products;
   }
 
   void save(Product product){
     _box.put(product.id,product);
   }
+
+  void deleteAll() => _box.deleteAll(_box.keys);
 
 }

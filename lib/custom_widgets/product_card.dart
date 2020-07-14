@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:m2mobile/models/responses/product.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/pages/main/product_detail/product_detail_widget.dart';
 
 class ProductCard extends StatefulWidget {
-  final String id;
 
   static const String heroTag = "Product-image-Hero";
 
-  const ProductCard({Key key, this.id}) : super(key: key);
+  final Product product;
+
+  final String id;
+
+  const ProductCard({Key key,this.product,this.id}) : super(key: key);
   @override
   _ProductCardState createState() => _ProductCardState();
 }
@@ -31,7 +35,7 @@ class _ProductCardState extends State<ProductCard> {
                 Modular.to.pushNamed(ProductDetailWidget.route,
                     arguments: ["iPhone SE", widget.id]);
               },
-              child: ProductCardHeader(id: widget.id),
+              child: ProductCardHeader(id: widget.id,product: widget.product,),
             ),
           ),
           Expanded(
@@ -46,8 +50,9 @@ class _ProductCardState extends State<ProductCard> {
 
 class ProductCardHeader extends StatelessWidget {
   final String id;
+  final Product product;
 
-  const ProductCardHeader({Key key, this.id}) : super(key: key);
+  const ProductCardHeader({Key key, this.id,this.product}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -77,7 +82,7 @@ class ProductCardHeader extends StatelessWidget {
             padding: const EdgeInsets.symmetric(
                 horizontal: Dimens.marginMedium, vertical: Dimens.marginSmall),
             child: Text(
-              'iPhone Z 64 GB',
+              '${product.productname}',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
@@ -86,7 +91,7 @@ class ProductCardHeader extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: Text(
-                "1,200,000 MMK",
+                "${product.price} MMK",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).accentColor),
