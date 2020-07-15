@@ -170,8 +170,13 @@ class M2AppBarState extends State<M2AppBar> {
 class M2GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final LinearGradient gradient;
+  final Function onBackPressed;
 
-  const M2GradientAppBar({Key key, this.title, this.gradient})
+  const M2GradientAppBar(
+      {Key key,
+      @required this.title,
+      this.gradient,
+      @required this.onBackPressed})
       : super(key: key);
 
   @override
@@ -184,24 +189,22 @@ class M2GradientAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Row(
             children: <Widget>[
               InkWell(
-                onTap: () {},
-                child: Expanded(
-                  flex: 1,
-                  child: Icon(
-                    Icons.chevron_left,
-                    color: Colors.white,
-                  ),
+                onTap: onBackPressed,
+                child: Icon(
+                  Icons.chevron_left,
+                  color: Colors.white,
                 ),
               ),
-              Expanded(
-                  flex: 10,
-                  child: Center(
-                    child: Text(title,
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
-                  )),
+              Container(
+                constraints: BoxConstraints(
+                    minWidth: MediaQuery.of(context).size.width - 50),
+                alignment: Alignment.center,
+                child: Text(title,
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
+              ),
             ],
           )),
     );

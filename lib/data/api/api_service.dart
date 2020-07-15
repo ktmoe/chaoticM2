@@ -6,7 +6,7 @@ import 'package:m2mobile/models/responses/product_response.dart';
 part 'api_service.chopper.dart';
 
 @ChopperApi(baseUrl: '/api')
-abstract class ApiService extends ChopperService{
+abstract class ApiService extends ChopperService {
   static ApiService create([ChopperClient client]) => _$ApiService(client);
 
   /// product ///
@@ -15,9 +15,7 @@ abstract class ApiService extends ChopperService{
   Future<Response<ProductResponse>> getProducts();
 
   @Get(path: '/productview/getProductByID')
-  Future<Response<Product>> getProductById(
-      @Query('productid') String id
-      );
+  Future<Response<Product>> getProductById(@Query('productid') String id);
 
   /// help ///
   @Get(path: '/getHelpview/help')
@@ -25,20 +23,13 @@ abstract class ApiService extends ChopperService{
 
   /// Favorite ///
   @Get(path: '/customerview/favoriteList')
-  Future<Response<ProductResponse>> getFavList(
-      @Query('customerid') String id
-      );
+  Future<Response<ProductResponse>> getFavList(@Query('customerid') String id);
 
   @Post(path: '/customerview/favorite')
-  Future<Response> addToFav(
-      @Query('customerid') String customerId,
-      @Query('productid') String productId
-      );
+  Future<Response> addToFav(@Query('customerid') String customerId,
+      @Query('productid') String productId);
 
   @Post(path: '/customerview/Removefavorite')
-  Future<Response> removeFromFav(
-      @Query('customerid') String customerId,
-      @Query('productid') String productId
-      );
-
+  Future<Response> removeFromFav(@Query('customerid') String customerId,
+      @Query('productid') String productId);
 }

@@ -5,7 +5,7 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:m2mobile/models/responses/product.dart';
 
-import '../serializers.dart';
+import 'package:m2mobile/models/serializers.dart';
 
 part 'product_response.g.dart';
 
@@ -14,7 +14,7 @@ abstract class ProductResponse
   ProductResponse._();
 
   factory ProductResponse([updates(ProductResponseBuilder b)]) =
-  _$ProductResponse;
+      _$ProductResponse;
 
   @BuiltValueField(wireName: 'data')
   BuiltList<Product> get product;

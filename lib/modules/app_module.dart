@@ -20,8 +20,9 @@ class AppModule extends MainModule {
         Bind((i) => SplashStore()),
         Bind((i) => ChopperClient(
               interceptors: [
-                HttpLoggingInterceptor(),
                 JWTInterceptor(),
+                HttpLoggingInterceptor(),
+                CurlInterceptor(),
                 // HeadersInterceptor({HttpHeaders.authorizationHeader: bearerToken})
               ],
               baseUrl: baseUrl,
@@ -30,7 +31,7 @@ class AppModule extends MainModule {
               services: [ApiService.create()],
             )),
         Bind((i) => JwtService.create()),
-        Bind((i) => i.get<ChopperClient>().getService<ApiService>()),
+        Bind((i) => ApiService.create(i.get<ChopperClient>())),
         Bind((i) => StoreHome()),
       ];
 

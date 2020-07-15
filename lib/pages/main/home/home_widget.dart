@@ -9,6 +9,7 @@ import 'package:m2mobile/res/styles.dart';
 import 'package:m2mobile/custom_widgets/product_card.dart';
 import 'package:m2mobile/stores/store_home.dart';
 import 'package:mobx/mobx.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:m2mobile/utils/extensions.dart';
 
 class HomeWidget extends StatefulWidget {
@@ -42,33 +43,39 @@ class _HomeWidgetState extends State<HomeWidget>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return RefreshIndicator(
-        key: _refreshIndicatorState,
-        onRefresh: () async {
-          await _storeHome.getProductList();
-        },
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _buildProductImagesSlider(),
-              Container(
-                  margin: const EdgeInsets.only(
-                      left: Dimens.marginMedium2, right: Dimens.marginMedium2),
-                  child: Text('Discount Items',
-                      style: Styles.m2TextTheme
-                          .copyWith(fontWeight: FontWeight.bold))),
-              _buildDiscountItemList(),
-              Container(
-                  margin: const EdgeInsets.only(
-                      left: Dimens.marginMedium2, right: Dimens.marginMedium2),
-                  child: Text('Latest Items',
-                      style: Styles.m2TextTheme
-                          .copyWith(fontWeight: FontWeight.bold))),
-              _buildLastestItemGrid(),
-            ],
-          ),
-        ));
+    return Observer(
+      builder: (context) {
+        return RefreshIndicator(
+            key: _refreshIndicatorState,
+            onRefresh: () async {
+              await _storeHome.getProductList();
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _buildProductImagesSlider(),
+                  Container(
+                      margin: const EdgeInsets.only(
+                          left: Dimens.marginMedium2,
+                          right: Dimens.marginMedium2),
+                      child: Text('Discount Items',
+                          style: Styles.m2TextTheme
+                              .copyWith(fontWeight: FontWeight.bold))),
+                  _buildDiscountItemList(),
+                  Container(
+                      margin: const EdgeInsets.only(
+                          left: Dimens.marginMedium2,
+                          right: Dimens.marginMedium2),
+                      child: Text('Latest Items',
+                          style: Styles.m2TextTheme
+                              .copyWith(fontWeight: FontWeight.bold))),
+                  _buildLastestItemGrid(),
+                ],
+              ),
+            ));
+      },
+    );
   }
 
   Widget _buildDiscountItemList() => ConstrainedBox(
@@ -91,7 +98,7 @@ class _HomeWidgetState extends State<HomeWidget>
         crossAxisCount: 2,
         padding: const EdgeInsets.all(Dimens.marginMedium),
         childAspectRatio: (120 / 170),
-        children: List.generate(20, (index) {
+        children: List.generate(_storeHome.products.length, (index) {
           return ProductCard(id: index.toString(), discountItem: false);
         }),
       );

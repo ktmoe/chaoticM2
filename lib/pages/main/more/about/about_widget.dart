@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
@@ -43,7 +44,8 @@ class _AboutWidgetState extends State<AboutWidget> {
         appBar: M2GradientAppBar(
             title: 'About',
             gradient:
-                LinearGradient(colors: [Color(0xFFED6A46), Color(0xFFF2493E)])),
+                LinearGradient(colors: [Color(0xFFED6A46), Color(0xFFF2493E)]),
+            onBackPressed: () => Modular.to.pop()),
         body: Stack(
           children: <Widget>[
             _buildBackgroundGradient(),

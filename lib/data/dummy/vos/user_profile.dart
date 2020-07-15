@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:hive/hive.dart';
-import 'package:m2mobile/utils/serializers.dart';
+import 'package:m2mobile/models/serializers.dart';
 
 part 'user_profile.g.dart';
 

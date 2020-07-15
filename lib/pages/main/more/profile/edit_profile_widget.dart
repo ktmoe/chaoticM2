@@ -35,6 +35,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
         title: widget.register ? "Register" : "Profile",
         gradient:
             LinearGradient(colors: [Color(0xFFFFC300), Color(0xFFFE6F00)]),
+        onBackPressed: () {
+          if (!widget.register) Modular.to.pop();
+        },
       ),
       body: Stack(
         children: <Widget>[
@@ -43,7 +46,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
               margin: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.15),
               child: ScreenBgCard()),
-          _buildProfileInfoArea(),
+          _buildProfileInfoArea()
         ],
       ),
     );

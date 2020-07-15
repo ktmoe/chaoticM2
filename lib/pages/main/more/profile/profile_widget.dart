@@ -20,6 +20,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         title: 'Profile',
         gradient:
             LinearGradient(colors: [Color(0xFFFFC300), Color(0xFFFE6F00)]),
+        onBackPressed: () => Modular.to.pop(),
       ),
       body: Stack(
         children: <Widget>[
@@ -102,7 +103,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     const SizedBox(
                       width: Dimens.marginLarge,
                     ),
-                    Flexible(
+                    Expanded(
                       child: const Text(
                         "အမှတ် ၁၆၊ (၃) ရပ်ကွက်၊ မင်းညိုစံလမ်း နှင့် အောင်ဇေယျလမ်း ထောင့်၊ ရွှေဘိုမြို့။",
                         textAlign: TextAlign.center,

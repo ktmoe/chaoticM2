@@ -20,8 +20,6 @@ abstract class JwtService extends ChopperService {
     return instance;
   }
 
-  @Get(path: '/token', headers: {
-    HttpHeaders.authorizationHeader: basicAuth
-  })
+  @Get(path: '/token', headers: {HttpHeaders.authorizationHeader: basicAuth})
   Future<Response> getToken();
 }

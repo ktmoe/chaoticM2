@@ -36,46 +36,62 @@ class _AuthenticateWidgetState extends State<AuthenticateWidget> {
         backgroundColor: Colors.white,
         body: Observer(
           builder: (_) {
-            return Column(
-              children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.7,
-                  child: PageView(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: Dimens.marginLarge,
-                            right: Dimens.marginLarge),
-                        child: Authenticate1Widget(),
-                      ),
-                      Authenticate2Widget()
-                    ],
-                    controller: _pageController,
-                    physics: const NeverScrollableScrollPhysics(),
+            return SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    constraints: BoxConstraints(
+                      minWidth: MediaQuery.of(context).size.width,
+                      minHeight: MediaQuery.of(context).size.height * 0.7,
+                    ),
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    child: PageView(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: Dimens.marginLarge,
+                              right: Dimens.marginLarge),
+                          child: Authenticate1Widget(),
+                        ),
+                        Authenticate2Widget()
+                      ],
+                      controller: _pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                    ),
                   ),
-                ),
-                DotsIndicator(
-                  controller: _pageController,
-                  itemCount: 2,
-                  color: Colors.grey,
-                  onPageSelected: (_) =>
-                      _authenticateStore.validPhone ? _nextAuth : null,
-                ),
-                RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                  padding: const EdgeInsets.only(
-                      left: Dimens.marginLargeX, right: Dimens.marginLargeX),
-                  color: Theme.of(context).buttonColor,
-                  textColor: Colors.white,
-                  disabledTextColor: Colors.white,
-                  onPressed: _onAuthenticateBtnPressed,
-                  child: _authenticateStore.page.value == 0
-                      ? const Text("Get OTP")
-                      : const Text("Verify OTP"),
-                ),
-              ],
+                  Container(
+                    constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.1),
+                    child: DotsIndicator(
+                      controller: _pageController,
+                      itemCount: 2,
+                      color: Colors.grey,
+                      onPageSelected: (_) =>
+                          _authenticateStore.validPhone ? _nextAuth : null,
+                    ),
+                  ),
+                  Container(
+                    constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.1),
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
+                      padding: const EdgeInsets.only(
+                          left: Dimens.marginLargeX,
+                          right: Dimens.marginLargeX),
+                      color: Theme.of(context).buttonColor,
+                      textColor: Colors.white,
+                      disabledTextColor: Colors.white,
+                      onPressed: _onAuthenticateBtnPressed,
+                      child: _authenticateStore.page.value == 0
+                          ? const Text("Get OTP")
+                          : const Text("Verify OTP"),
+                    ),
+                  ),
+                ],
+              ),
             );
           },
         ),

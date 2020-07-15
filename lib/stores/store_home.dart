@@ -44,7 +44,7 @@ abstract class _StoreHome with Store {
       if (refresh) _boxProduct.deleteAll();
       _boxProduct.saveAll(products);
     } catch (e) {
-      debugPrint("err when fetching product list => ${e.toString()}");
+      debugPrint("${e.toString()}");
       exception = AppException(message: e.toString());
     }
   }

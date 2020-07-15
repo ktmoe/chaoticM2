@@ -3,11 +3,10 @@ import 'dart:io';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
 import 'package:chopper/chopper.dart';
-import 'package:m2mobile/utils/serializers.dart';
+import 'package:m2mobile/models/serializers.dart';
 
 class CustomJsonConverter extends JsonConverter {
   const CustomJsonConverter();
-
   @override
   Request convertRequest(Request request) {
     // return super.convertRequest(request.copyWith(
