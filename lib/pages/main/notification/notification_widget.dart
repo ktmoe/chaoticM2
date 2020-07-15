@@ -6,7 +6,7 @@ import 'package:m2mobile/res/dimens.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class NotificationWidget extends StatefulWidget {
-  static const route = "/login/authenticate/main/notification";
+  static const route = "/main/notification";
 
   @override
   _NotificationWidgetState createState() => _NotificationWidgetState();

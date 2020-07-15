@@ -6,7 +6,7 @@ import 'package:m2mobile/res/dimens.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class OrderDetailWidget extends StatefulWidget {
-  static const route = "/login/authenticate/main/more/order_list/order_detail";
+  static const route = "/main/more/order_list/order_detail";
 
   @override
   _OrderDetailWidgetState createState() => _OrderDetailWidgetState();

@@ -7,7 +7,7 @@ import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 
 class ProfileWidget extends StatefulWidget {
-  static const route = "/login/authenticate/main/more/profile";
+  static const route = "/main/more/profile";
   @override
   _ProfileWidgetState createState() => _ProfileWidgetState();
 }

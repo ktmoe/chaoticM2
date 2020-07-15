@@ -49,7 +49,7 @@ mixin _$StoreHome on _StoreHome, Store {
   final _$getProductListAsyncAction = AsyncAction('_StoreHome.getProductList');
 
   @override
-  Future<dynamic> getProductList({bool refresh = false}) {
+  Future<dynamic> getProductList({bool refresh = true}) {
     return _$getProductListAsyncAction
         .run(() => super.getProductList(refresh: refresh));
   }

@@ -7,8 +7,7 @@ import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
 class CompleteOrderWidget extends StatefulWidget {
-  static const route =
-      "/login/authenticate/main/more/order_list/complete_order";
+  static const route = "/main/more/order_list/complete_order";
 
   @override
   _CompleteOrderWidgetState createState() => _CompleteOrderWidgetState();

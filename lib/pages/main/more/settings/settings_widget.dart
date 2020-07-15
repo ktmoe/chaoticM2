@@ -7,7 +7,7 @@ import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
 
 class SettingsWidget extends StatefulWidget {
-  static const route = "/login/authenticate/main/more/settings";
+  static const route = "/main/main/more/settings";
 
   @override
   _SettingsWidgetState createState() => _SettingsWidgetState();

@@ -11,8 +11,8 @@ class _AppWidgetState extends State<AppWidget> {
   Widget build(BuildContext context) {
     return MaterialApp(
         navigatorKey: Modular.navigatorKey,
-        title: 'MyHealthcare',
-        initialRoute: '/',
+        title: 'M2Mobile',
+        initialRoute: '/main',
         onGenerateRoute: Modular.generateRoute,
         theme: ThemeData(
             primaryColor: Color(0xFFF47208),

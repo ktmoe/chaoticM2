@@ -4,7 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:m2mobile/pages/main/main_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
-import 'package:m2mobile/pages/login/authenticate/authenticate_widget.dart';
+import 'package:m2mobile/pages/authenticate/authenticate_widget.dart';
 
 class LoginWidget extends StatefulWidget {
   static const route = "/login";

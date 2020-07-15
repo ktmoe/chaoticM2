@@ -12,7 +12,7 @@ import 'package:m2mobile/res/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutWidget extends StatefulWidget {
-  static const route = "/login/authenticate/main/more/about";
+  static const route = "/main/more/about";
   static const heroTag = "About-logo-hero-tag";
 
   @override

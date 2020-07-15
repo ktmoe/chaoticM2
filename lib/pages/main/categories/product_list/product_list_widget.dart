@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/custom_widgets/product_card.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
+import 'package:m2mobile/models/responses/product.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -12,7 +13,7 @@ class ProductNameArgs {
 }
 
 class ProductListWidget extends StatefulWidget {
-  static const route = "/login/authenticate/main/categories/product_list";
+  static const route = "/main/categories/product_list";
 
   final ProductNameArgs productName;
 
@@ -53,7 +54,7 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                       shrinkWrap: true,
                       children: List.generate(17, (index) {
                         return ProductCard(
-                            id: index.toString(), discountItem: false);
+                            product: Product(), discountItem: false);
                       }),
                     ),
                   ],

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/custom_widgets/dots_indicator.dart';
 import 'package:m2mobile/pages/login/login_widget.dart';
-import 'package:m2mobile/pages/login/authenticate/authenticate1/authenticate1_widget.dart';
-import 'package:m2mobile/pages/login/authenticate/authenticate2/authenticate2_widget.dart';
+import 'package:m2mobile/pages/authenticate/authenticate1/authenticate1_widget.dart';
+import 'package:m2mobile/pages/authenticate/authenticate2/authenticate2_widget.dart';
 import 'package:m2mobile/pages/main/more/profile/edit_profile_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/stores/authenticate_store.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class AuthenticateWidget extends StatefulWidget {
-  static const route = "/login/authenticate";
+  static const route = "/authenticate";
   @override
   _AuthenticateWidgetState createState() => _AuthenticateWidgetState();
 }

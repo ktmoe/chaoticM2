@@ -4,7 +4,7 @@ import 'package:m2mobile/custom_widgets/order_list_card.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class OrderListWidget extends StatefulWidget {
-  static const route = "/login/authenticate/main/more/order_list";
+  static const route = "/main/more/order_list";
 
   @override
   _OrderListWidgetState createState() => _OrderListWidgetState();

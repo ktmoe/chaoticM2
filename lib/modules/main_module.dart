@@ -10,10 +10,11 @@ import 'package:m2mobile/modules/cart_module.dart';
 import 'package:m2mobile/modules/notification_module.dart';
 import 'package:m2mobile/modules/favourite_module.dart';
 import 'package:m2mobile/modules/order_list_module.dart';
+import 'package:m2mobile/stores/store_home.dart';
 
 class MainScreenModule extends ChildModule {
   @override
-  List<Bind> get binds => [];
+  List<Bind> get binds => [Bind((i) => StoreHome())];
 
   @override
   List<Router> get routers => [

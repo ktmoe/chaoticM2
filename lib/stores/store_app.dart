@@ -1,28 +1,30 @@
+import 'package:mobx/mobx.dart';
 import 'package:m2mobile/boxes/app_box.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
-import 'package:mobx/mobx.dart';
-part 'splash_store.g.dart';
 
-class SplashStore = _SplashStoreBase with _$SplashStore;
+part 'store_app.g.dart';
 
-abstract class _SplashStoreBase with Store {
+class StoreApp = _StoreApp with _$StoreApp;
+
+abstract class _StoreApp with Store {
   AppBox _appBox;
+
+  _StoreApp() {
+    init();
+  }
 
   @observable
   AppException exception;
 
-  @observable
-  Observable<bool> isFirstTime;
-
   @action
   Future init() async {
     _appBox = await AppBox.create();
-    readIsFirstTime();
   }
 
   @action
-  void readIsFirstTime() => isFirstTime = Observable(_appBox.getIsFirstTime());
+  bool readIsFirstTime() => _appBox.getIsFirstTime();
 
+  //Call this method after Selecting Language
   @action
   Future changeFirstTime() async {
     await _appBox.changeFirstTime(false);

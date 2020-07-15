@@ -17,43 +17,79 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
   @override
   Iterable<Object> serialize(Serializers serializers, Product object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'id',
-      serializers.serialize(object.id, specifiedType: const FullType(String)),
-      'imageurl1',
-      serializers.serialize(object.imageurl1,
-          specifiedType: const FullType(String)),
-      'imageurl2',
-      serializers.serialize(object.imageurl2,
-          specifiedType: const FullType(String)),
-      'imageurl3',
-      serializers.serialize(object.imageurl3,
-          specifiedType: const FullType(String)),
-      'categoryid',
-      serializers.serialize(object.categoryid,
-          specifiedType: const FullType(String)),
-      'subcategoryid',
-      serializers.serialize(object.subcategoryid,
-          specifiedType: const FullType(String)),
-      'productname',
-      serializers.serialize(object.productname,
-          specifiedType: const FullType(String)),
-      'description',
-      serializers.serialize(object.description,
-          specifiedType: const FullType(String)),
-      'itemcount',
-      serializers.serialize(object.itemcount,
-          specifiedType: const FullType(int)),
-      'price',
-      serializers.serialize(object.price, specifiedType: const FullType(int)),
-      'category',
-      serializers.serialize(object.category,
-          specifiedType: const FullType(String)),
-      'sub_category',
-      serializers.serialize(object.subCategory,
-          specifiedType: const FullType(String)),
-    ];
-
+    final result = <Object>[];
+    if (object.id != null) {
+      result
+        ..add('id')
+        ..add(serializers.serialize(object.id,
+            specifiedType: const FullType(String)));
+    }
+    if (object.imageurl1 != null) {
+      result
+        ..add('imageurl1')
+        ..add(serializers.serialize(object.imageurl1,
+            specifiedType: const FullType(String)));
+    }
+    if (object.imageurl2 != null) {
+      result
+        ..add('imageurl2')
+        ..add(serializers.serialize(object.imageurl2,
+            specifiedType: const FullType(String)));
+    }
+    if (object.imageurl3 != null) {
+      result
+        ..add('imageurl3')
+        ..add(serializers.serialize(object.imageurl3,
+            specifiedType: const FullType(String)));
+    }
+    if (object.categoryid != null) {
+      result
+        ..add('categoryid')
+        ..add(serializers.serialize(object.categoryid,
+            specifiedType: const FullType(String)));
+    }
+    if (object.subcategoryid != null) {
+      result
+        ..add('subcategoryid')
+        ..add(serializers.serialize(object.subcategoryid,
+            specifiedType: const FullType(String)));
+    }
+    if (object.productname != null) {
+      result
+        ..add('productname')
+        ..add(serializers.serialize(object.productname,
+            specifiedType: const FullType(String)));
+    }
+    if (object.description != null) {
+      result
+        ..add('description')
+        ..add(serializers.serialize(object.description,
+            specifiedType: const FullType(String)));
+    }
+    if (object.itemcount != null) {
+      result
+        ..add('itemcount')
+        ..add(serializers.serialize(object.itemcount,
+            specifiedType: const FullType(int)));
+    }
+    if (object.price != null) {
+      result
+        ..add('price')
+        ..add(serializers.serialize(object.price,
+            specifiedType: const FullType(int)));
+    }
+    if (object.category != null) {
+      result
+        ..add('category')
+        ..add(serializers.serialize(object.category,
+            specifiedType: const FullType(String)));
+    }
+    if (object.subCategory != null) {
+      result
+        ..add('sub_category')
+        ..add(serializers.serialize(object.subCategory,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
@@ -165,44 +201,7 @@ class _$Product extends Product {
       this.price,
       this.category,
       this.subCategory})
-      : super._() {
-    if (id == null) {
-      throw new BuiltValueNullFieldError('Product', 'id');
-    }
-    if (imageurl1 == null) {
-      throw new BuiltValueNullFieldError('Product', 'imageurl1');
-    }
-    if (imageurl2 == null) {
-      throw new BuiltValueNullFieldError('Product', 'imageurl2');
-    }
-    if (imageurl3 == null) {
-      throw new BuiltValueNullFieldError('Product', 'imageurl3');
-    }
-    if (categoryid == null) {
-      throw new BuiltValueNullFieldError('Product', 'categoryid');
-    }
-    if (subcategoryid == null) {
-      throw new BuiltValueNullFieldError('Product', 'subcategoryid');
-    }
-    if (productname == null) {
-      throw new BuiltValueNullFieldError('Product', 'productname');
-    }
-    if (description == null) {
-      throw new BuiltValueNullFieldError('Product', 'description');
-    }
-    if (itemcount == null) {
-      throw new BuiltValueNullFieldError('Product', 'itemcount');
-    }
-    if (price == null) {
-      throw new BuiltValueNullFieldError('Product', 'price');
-    }
-    if (category == null) {
-      throw new BuiltValueNullFieldError('Product', 'category');
-    }
-    if (subCategory == null) {
-      throw new BuiltValueNullFieldError('Product', 'subCategory');
-    }
-  }
+      : super._();
 
   @override
   Product rebuild(void Function(ProductBuilder) updates) =>

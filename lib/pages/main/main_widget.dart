@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/custom_widgets/easy_get_widget.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/pages/main/home/home_widget.dart';
 import 'package:m2mobile/pages/main/more/more_widget.dart';
 import 'package:m2mobile/pages/main/categories/categories_widget.dart';
-import 'package:m2mobile/stores/authenticate_store.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 
 class MainWidget extends StatefulWidget {
-  static const route = "/login/authenticate/main";
+  static const route = "/main";
 
   @override
   _MainWidgetState createState() => _MainWidgetState();
@@ -18,8 +16,6 @@ class MainWidget extends StatefulWidget {
 
 class _MainWidgetState extends State<MainWidget>
     with AutomaticKeepAliveClientMixin<MainWidget>, WidgetsBindingObserver {
-  final _authenticateStore = Modular.get<AuthenticateStore>();
-
   int _selectedIndex = 0;
 
   final PageController pageController = PageController();
@@ -33,7 +29,6 @@ class _MainWidgetState extends State<MainWidget>
   @override
   void initState() {
     super.initState();
-    _authenticateStore.init();
   }
 
   @override

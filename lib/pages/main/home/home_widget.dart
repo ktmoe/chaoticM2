@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_page_indicator/flutter_page_indicator.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
+import 'package:m2mobile/models/responses/product.dart';
 import 'package:m2mobile/pages/main/product_detail/product_detail_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
@@ -19,10 +20,7 @@ class HomeWidget extends StatefulWidget {
 
 class _HomeWidgetState extends State<HomeWidget>
     with AutomaticKeepAliveClientMixin<HomeWidget> {
-  final List<String> _images = [
-    "https://pyxis.nymag.com/v1/imgs/57d/5f1/4e4dae00f150e36a22a13ffa956d4301d8-07-timothee-chalamet.rvertical.w600.jpg",
-    "https://pyxis.nymag.com/v1/imgs/57d/5f1/4e4dae00f150e36a22a13ffa956d4301d8-07-timothee-chalamet.rvertical.w600.jpg"
-  ];
+  List<String> _images = ["", ""];
 
   final StoreHome _storeHome = Modular.get<StoreHome>();
   final List<ReactionDisposer> _disposer = [];
@@ -87,21 +85,24 @@ class _HomeWidgetState extends State<HomeWidget>
           padding: const EdgeInsets.all(Dimens.marginMedium),
           childAspectRatio: ((MediaQuery.of(context).size.width * 0.68) / 170),
           children: List.generate(5, (index) {
-            return ProductCard(id: index.toString(), discountItem: true);
+            return ProductCard(product: Product(), discountItem: true);
           }),
         ),
       );
 
-  Widget _buildLastestItemGrid() => GridView.count(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        crossAxisCount: 2,
-        padding: const EdgeInsets.all(Dimens.marginMedium),
-        childAspectRatio: (120 / 170),
-        children: List.generate(_storeHome.products.length, (index) {
-          return ProductCard(id: index.toString(), discountItem: false);
-        }),
-      );
+  Widget _buildLastestItemGrid() {
+    return GridView.count(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      crossAxisCount: 2,
+      padding: const EdgeInsets.all(Dimens.marginMedium),
+      childAspectRatio: (120 / 170),
+      children: List.generate(_storeHome.products.length, (index) {
+        return ProductCard(
+            product: _storeHome.products[index], discountItem: false);
+      }),
+    );
+  }
 
   Widget _buildProductImagesSlider() => Container(
         margin: const EdgeInsets.all(Dimens.marginMedium2),

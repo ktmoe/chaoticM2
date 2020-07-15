@@ -8,7 +8,7 @@ import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/custom_widgets/easy_get_widget.dart';
 
 class OrderWidget extends StatefulWidget {
-  static const route = "/login/authenticate/main/cart/order";
+  static const route = "/main/cart/order";
 
   @override
   _OrderWidgetState createState() => _OrderWidgetState();

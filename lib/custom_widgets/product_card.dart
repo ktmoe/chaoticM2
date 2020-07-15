@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:m2mobile/models/responses/product.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/pages/main/product_detail/product_detail_widget.dart';
+import 'package:m2mobile/utils/constants.dart';
+import 'package:m2mobile/utils/extensions.dart';
 
 class ProductCard extends StatefulWidget {
-  final String id;
+  final Product product;
   final bool discountItem;
 
   static const String heroTag = "Product-image-Hero";
 
-  const ProductCard({Key key, @required this.id, @required this.discountItem})
+  const ProductCard(
+      {Key key, @required this.product, @required this.discountItem})
       : super(key: key);
   @override
   _ProductCardState createState() => _ProductCardState();
@@ -31,10 +35,11 @@ class _ProductCardState extends State<ProductCard> {
             child: InkWell(
                 onTap: () {
                   Modular.to.pushNamed(ProductDetailWidget.route,
-                      arguments: ["iPhone SE", widget.id]);
+                      arguments: widget.product);
                 },
                 child: ProductCardHeader(
-                    id: widget.id, discountItem: widget.discountItem)),
+                    product: widget.product,
+                    discountItem: widget.discountItem)),
           ),
           Expanded(
             flex: 1,
@@ -47,10 +52,10 @@ class _ProductCardState extends State<ProductCard> {
 }
 
 class ProductCardHeader extends StatelessWidget {
-  final String id;
+  final Product product;
   final bool discountItem;
 
-  const ProductCardHeader({Key key, this.id, this.discountItem})
+  const ProductCardHeader({Key key, this.product, this.discountItem})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -71,21 +76,25 @@ class ProductCardHeader extends StatelessWidget {
                   child: FadeInImage(
                     fit: BoxFit.cover,
                     placeholder: AssetImage("lib/res/images/earth.jpg"),
-                    image: NetworkImage(
-                        "https://pyxis.nymag.com/v1/imgs/57d/5f1/4e4dae00f150e36a22a13ffa956d4301d8-07-timothee-chalamet.rvertical.w600.jpg"),
+                    image: product.imageurl1 == null
+                        ? NetworkImage('')
+                        : NetworkImage(baseUrl + '/' + product.imageurl1),
                   ),
                 ),
               ),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Dimens.marginMedium,
-                        vertical: Dimens.marginSmall),
-                    child: Text(
-                      'iPhone Z 64 GB',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: Dimens.marginMedium,
+                          vertical: Dimens.marginSmall),
+                      child: Text(
+                        product.productname == null ? '' : product.productname,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.visible,
+                      ),
                     ),
                   ),
                   discountItem ? _buildSoldCountTag() : Container()
@@ -94,7 +103,7 @@ class ProductCardHeader extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
-                  "1,200,000 MMK",
+                  product.price == null ? '' : product.price.toDouble().money(),
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).accentColor),

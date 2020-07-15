@@ -2,35 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_page_indicator/flutter_page_indicator.dart';
+import 'package:m2mobile/models/responses/product.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/res/styles.dart';
+import 'package:m2mobile/utils/constants.dart';
+import 'package:m2mobile/utils/extensions.dart';
 
 class ProductDetailWidget extends StatefulWidget {
-  static const route = "/login/authenticate/main/product_detail";
+  static const route = "/main/product_detail";
 
-  final String productName;
-  final String productId;
+  final Product product;
 
-  const ProductDetailWidget({Key key, this.productName, this.productId})
-      : super(key: key);
+  const ProductDetailWidget({Key key, this.product}) : super(key: key);
 
   @override
   _ProductDetailWidgetState createState() => _ProductDetailWidgetState();
 }
 
 class _ProductDetailWidgetState extends State<ProductDetailWidget> {
-  final List<String> _images = [
-    "https://pyxis.nymag.com/v1/imgs/57d/5f1/4e4dae00f150e36a22a13ffa956d4301d8-07-timothee-chalamet.rvertical.w600.jpg",
-    "https://pyxis.nymag.com/v1/imgs/57d/5f1/4e4dae00f150e36a22a13ffa956d4301d8-07-timothee-chalamet.rvertical.w600.jpg"
-  ];
+  List<String> _images;
+
+  @override
+  void initState() {
+    _images = [
+      widget.product.imageurl1,
+      widget.product.imageurl2,
+      widget.product.imageurl3
+    ];
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: M2AppBar(
           showSearch: false,
-          title: widget.productName,
+          title: widget.product.productname,
           deleteOnly: false,
           onBackPressed: () => Modular.to.pop()),
       body: Flex(
@@ -69,7 +78,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      '1,300,000 MMK',
+                      widget.product.price.toDouble().money(),
                       style: TextStyle(
                           color: Theme.of(context).accentColor,
                           fontWeight: FontWeight.w500,
@@ -146,7 +155,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                   return FadeInImage(
                     fit: BoxFit.cover,
                     placeholder: AssetImage("lib/res/images/earth.jpg"),
-                    image: NetworkImage(_images[index]),
+                    image: NetworkImage(baseUrl + '/' + _images[index]),
                   );
                 },
               ),

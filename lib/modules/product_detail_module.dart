@@ -1,4 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:m2mobile/models/responses/product.dart';
 import 'package:m2mobile/pages/main/product_detail/product_detail_widget.dart';
 
 class ProductDetailModule extends ChildModule {
@@ -10,10 +11,8 @@ class ProductDetailModule extends ChildModule {
         Router(
           Modular.initialRoute,
           child: (context, args) {
-            final arguments = args.data as List<String>;
             return ProductDetailWidget(
-              productName: arguments[0],
-              productId: arguments[1],
+              product: args.data as Product,
             );
           },
         )

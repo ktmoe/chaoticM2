@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:m2mobile/custom_widgets/product_card.dart';
+import 'package:m2mobile/models/responses/product.dart';
 import 'package:m2mobile/res/dimens.dart';
 
 class M2SearchDelegate extends SearchDelegate {
@@ -70,8 +71,7 @@ class M2SearchDelegate extends SearchDelegate {
                   shrinkWrap: true,
                   childAspectRatio: (120 / 170),
                   children: List.generate(17, (index) {
-                    return ProductCard(
-                        id: index.toString(), discountItem: false);
+                    return ProductCard(product: Product(), discountItem: false);
                   }),
                 ),
               ],

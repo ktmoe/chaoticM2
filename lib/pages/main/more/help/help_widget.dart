@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class HelpWidget extends StatefulWidget {
-  static const route = "/login/authenticate/main/more/help";
+  static const route = "/main/more/help";
 
   @override
   _HelpWidgetState createState() => _HelpWidgetState();

@@ -22,25 +22,29 @@ abstract class _StoreHome with Store {
   AppException exception;
 
   @observable
-  ObservableList<Product> products = ObservableList();
+  ObservableList<Product> products = ObservableList.of([]);
 
   @action
   Future init() async {
     _boxProduct = await BoxProduct.create();
     updateProducts();
     _boxProduct.listenable.addListener(updateProducts);
+
+    await getProductList();
   }
 
   @action
   void updateProducts() {
+    debugPrint("Got till here");
     products = ObservableList.of(_boxProduct.listenable.value.values);
   }
 
   @action
-  Future getProductList({bool refresh = false}) async {
+  Future getProductList({bool refresh = true}) async {
     try {
       final productResponse = await _api.getProducts();
       final products = productResponse.body.product.toList();
+      debugPrint("Products ${products.length}");
       if (refresh) _boxProduct.deleteAll();
       _boxProduct.saveAll(products);
     } catch (e) {
