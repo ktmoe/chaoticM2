@@ -4,6 +4,7 @@ import 'package:m2mobile/models/responses/product.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/pages/main/product_detail/product_detail_widget.dart';
+import 'package:m2mobile/stores/store_cart.dart';
 import 'package:m2mobile/utils/constants.dart';
 import 'package:m2mobile/utils/extensions.dart';
 
@@ -43,7 +44,7 @@ class _ProductCardState extends State<ProductCard> {
           ),
           Expanded(
             flex: 1,
-            child: ProductCardBottom(),
+            child: ProductCardBottom(product: widget.product),
           )
         ],
       ),
@@ -168,6 +169,11 @@ class ProductCardHeader extends StatelessWidget {
 }
 
 class ProductCardBottom extends StatelessWidget {
+  final StoreCart _storeCart = Modular.get<StoreCart>();
+  final Product product;
+
+  ProductCardBottom({Key key, @required this.product}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -194,7 +200,11 @@ class ProductCardBottom extends StatelessWidget {
             endIndent: Dimens.marginMedium,
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              _storeCart.cartProducts.containsKey(product)
+                  ? _storeCart.removeFromCart(product)
+                  : _storeCart.addToCart(product);
+            },
             child: Icon(
               M2Icon.cart_plus,
               color: Colors.white,

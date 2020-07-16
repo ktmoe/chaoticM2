@@ -5,6 +5,10 @@ import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/custom_widgets/order_item_card.dart';
 import 'package:m2mobile/pages/main/cart/order/order_widget.dart';
+import 'package:m2mobile/stores/store_cart.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:m2mobile/models/responses/product.dart';
+import 'package:m2mobile/utils/extensions.dart';
 
 class CartWidget extends StatefulWidget {
   static const route = "/main/cart";
@@ -14,16 +18,28 @@ class CartWidget extends StatefulWidget {
 }
 
 class _CartWidgetState extends State<CartWidget> {
+  final StoreCart _storeCart = Modular.get<StoreCart>();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: M2AppBar(
-          showSearch: false,
-          title: "My Cart",
-          deleteOnly: true,
-          onBackPressed: () => Modular.to.pop(),
-        ),
-        body: _buildNonEmptyBody());
+    return Observer(builder: (context) {
+      return WillPopScope(
+          onWillPop: _cartBackPressed,
+          child: Scaffold(
+              appBar: M2AppBar(
+                showSearch: false,
+                title: "My Cart",
+                deleteOnly: true,
+                onBackPressed: () async {
+                  final pop = await _cartBackPressed();
+                  if (pop) Modular.to.pop();
+                },
+                onDeletePressed: _cartDeletePressed,
+              ),
+              body: _storeCart.cartCount == 0
+                  ? _buildEmptyBody()
+                  : _buildNonEmptyBody()));
+    });
   }
 
   Widget _buildNonEmptyBody() => Stack(
@@ -33,45 +49,74 @@ class _CartWidgetState extends State<CartWidget> {
         ],
       );
 
-  Widget _buildOrderList() => Container(
-        padding: const EdgeInsets.symmetric(horizontal: Dimens.marginMedium),
-        margin: const EdgeInsets.only(bottom: Dimens.marginLargeX),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Checkbox(
-                    activeColor: Colors.green,
-                    value: true,
-                    onChanged: (val) {}),
-                const Text('Select all',
-                    style: TextStyle(
-                        color: Color(0xff99000000),
-                        fontSize: Dimens.textRegular2_5x))
-              ],
-            ),
-            Expanded(
-                child: ListView.builder(
-                    itemCount: 12,
-                    itemBuilder: (context, index) {
-                      return _buildOrderRow();
-                    }))
-          ],
-        ),
-      );
+  Widget _buildOrderList() {
+    final cartProductsMap = _storeCart.cartProducts;
+    final cartProducts = cartProductsMap.keys.toList();
+    final cartCounts = cartProductsMap.values.toList();
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: Dimens.marginMedium),
+      margin: const EdgeInsets.only(bottom: Dimens.marginLargeX),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _storeCart.showSelect
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Checkbox(
+                        activeColor: Colors.green,
+                        value: _storeCart.selectedProducts.length ==
+                            _storeCart.cartProducts.length,
+                        onChanged: (val) {
+                          _storeCart.selectedProducts.clear();
+                          if (val)
+                            _storeCart.selectedProducts
+                                .addAll(_storeCart.cartProducts.keys);
+                        }),
+                    const Text('Select all',
+                        style: TextStyle(
+                            color: Color(0xff99000000),
+                            fontSize: Dimens.textRegular2_5x))
+                  ],
+                )
+              : Container(height: Dimens.marginLarge),
+          Expanded(
+              child: ListView.builder(
+                  itemCount: cartProductsMap.length,
+                  itemBuilder: (context, index) {
+                    return _buildOrderRow(
+                        cartProducts[index], cartCounts[index]);
+                  }))
+        ],
+      ),
+    );
+  }
 
-  Widget _buildOrderRow() => Container(
+  Widget _buildOrderRow(Product product, int count) => Container(
         padding: const EdgeInsets.only(bottom: Dimens.marginMedium3),
         child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Checkbox(
-                activeColor: Colors.green, value: true, onChanged: (val) {}),
-            OrderItemCard()
+            _storeCart.showSelect
+                ? Checkbox(
+                    activeColor: Colors.green,
+                    value:
+                        _storeCart.selectedProducts.contains(product) ?? false,
+                    onChanged: (val) {
+                      val
+                          ? _storeCart.selectedProducts.add(product)
+                          : _storeCart.selectedProducts.remove(product);
+                    })
+                : Container(),
+            InkWell(
+                onLongPress: () {
+                  if (!_storeCart.showSelect) {
+                    _storeCart.showSelect = true;
+                    _storeCart.selectedProducts.add(product);
+                  }
+                },
+                child: OrderItemCard(product: product, count: count))
           ],
         ),
       );
@@ -104,6 +149,28 @@ class _CartWidgetState extends State<CartWidget> {
       ),
     );
   }
+
+  void _cartDeletePressed() {
+    if (_storeCart.showSelect) {
+      _storeCart.selectedProducts.forEach((delete) {
+        _storeCart.removeFromCart(delete, all: true);
+      });
+      _storeCart.selectedProducts.clear();
+      if (_storeCart.cartProducts.isEmpty) _storeCart.showSelect = false;
+    } else {
+      _storeCart.selectedProducts.clear();
+      _storeCart.showSelect = true;
+    }
+  }
+
+  Future<bool> _cartBackPressed() async {
+    if (_storeCart.showSelect) {
+      _storeCart.showSelect = false;
+      return Future.value(false);
+    } else {
+      return Future.value(true);
+    }
+  }
 }
 
 class BottomSheet extends StatefulWidget {
@@ -112,9 +179,12 @@ class BottomSheet extends StatefulWidget {
 }
 
 class _BottomSheetState extends State<BottomSheet> {
+  final StoreCart _storeCart = Modular.get<StoreCart>();
   @override
   Widget build(BuildContext context) {
-    return _buildNonEmptyCartBottomSheet();
+    return _storeCart.cartCount == 0
+        ? _buildEmptyCartBottomSheet()
+        : _buildNonEmptyCartBottomSheet();
   }
 
   Widget _buildEmptyCartBottomSheet() => Container(
@@ -128,7 +198,9 @@ class _BottomSheetState extends State<BottomSheet> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           disabledColor: Colors.white,
-          onPressed: () {},
+          onPressed: () {
+            Modular.to.pop();
+          },
           color: Colors.white,
           textColor: Theme.of(context).accentColor,
           child: Row(
@@ -147,7 +219,7 @@ class _BottomSheetState extends State<BottomSheet> {
       );
 
   Widget _buildAmountText() => Container(
-        padding: const EdgeInsets.all(Dimens.marginSmall),
+        padding: const EdgeInsets.all(Dimens.marginMedium),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -155,7 +227,8 @@ class _BottomSheetState extends State<BottomSheet> {
                 style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: Dimens.textRegular2_5x)),
-            Text("18,000,000 MMK",
+            Text(_storeCart.amount.toDouble().money(),
+                textAlign: TextAlign.end,
                 style: TextStyle(
                     color: Theme.of(context).accentColor,
                     fontWeight: FontWeight.w800,
@@ -173,7 +246,8 @@ class _BottomSheetState extends State<BottomSheet> {
                 style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: Dimens.textRegular2_5x)),
-            Text("9,000 MMK",
+            Text(_storeCart.tax.toDouble().money(),
+                textAlign: TextAlign.end,
                 style: TextStyle(
                     color: Theme.of(context).accentColor,
                     fontWeight: FontWeight.w800,
@@ -191,7 +265,8 @@ class _BottomSheetState extends State<BottomSheet> {
                 style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: Dimens.textRegular2_5x)),
-            Text("18,009,000 MMK",
+            Text(_storeCart.total.toDouble().money(),
+                textAlign: TextAlign.end,
                 style: TextStyle(
                     color: Theme.of(context).accentColor,
                     fontWeight: FontWeight.w800,
@@ -252,7 +327,7 @@ class _BottomSheetState extends State<BottomSheet> {
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.3,
-                  child: Divider(thickness: 2),
+                  child: Divider(thickness: 3),
                 )
               ],
             ),

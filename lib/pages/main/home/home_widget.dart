@@ -83,7 +83,7 @@ class _HomeWidgetState extends State<HomeWidget>
           scrollDirection: Axis.horizontal,
           crossAxisCount: 1,
           padding: const EdgeInsets.all(Dimens.marginMedium),
-          childAspectRatio: ((MediaQuery.of(context).size.width * 0.68) / 170),
+          childAspectRatio: ((MediaQuery.of(context).size.width * 0.55) / 170),
           children: List.generate(5, (index) {
             return ProductCard(product: Product(), discountItem: true);
           }),

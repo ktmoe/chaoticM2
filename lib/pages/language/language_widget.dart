@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
 import 'package:m2mobile/res/dimens.dart';
+import 'package:m2mobile/stores/store_app.dart';
 
 class LanguageWidget extends StatefulWidget {
   static const route = "/language";
@@ -11,6 +12,8 @@ class LanguageWidget extends StatefulWidget {
 }
 
 class _LanguageWidgetState extends State<LanguageWidget> {
+  final StoreApp _storeApp = Modular.get<StoreApp>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,8 +134,9 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8))),
                 color: Theme.of(context).buttonColor,
-                onPressed: () {
-                  Modular.to.pushReplacementNamed('/');
+                onPressed: () async {
+                  await _storeApp.changeFirstTime();
+                  Modular.to.popAndPushNamed('/');
                 },
                 child: Text(
                   'Done',

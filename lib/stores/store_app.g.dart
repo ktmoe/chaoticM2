@@ -24,6 +24,21 @@ mixin _$StoreApp on _StoreApp, Store {
     });
   }
 
+  final _$isFirstTimeAtom = Atom(name: '_StoreApp.isFirstTime');
+
+  @override
+  bool get isFirstTime {
+    _$isFirstTimeAtom.reportRead();
+    return super.isFirstTime;
+  }
+
+  @override
+  set isFirstTime(bool value) {
+    _$isFirstTimeAtom.reportWrite(value, super.isFirstTime, () {
+      super.isFirstTime = value;
+    });
+  }
+
   final _$initAsyncAction = AsyncAction('_StoreApp.init');
 
   @override
@@ -41,7 +56,7 @@ mixin _$StoreApp on _StoreApp, Store {
   final _$_StoreAppActionController = ActionController(name: '_StoreApp');
 
   @override
-  bool readIsFirstTime() {
+  void readIsFirstTime() {
     final _$actionInfo = _$_StoreAppActionController.startAction(
         name: '_StoreApp.readIsFirstTime');
     try {
@@ -65,7 +80,8 @@ mixin _$StoreApp on _StoreApp, Store {
   @override
   String toString() {
     return '''
-exception: ${exception}
+exception: ${exception},
+isFirstTime: ${isFirstTime}
     ''';
   }
 }

@@ -11,8 +11,9 @@ class _AppWidgetState extends State<AppWidget> {
   Widget build(BuildContext context) {
     return MaterialApp(
         navigatorKey: Modular.navigatorKey,
+        debugShowCheckedModeBanner: false,
         title: 'M2Mobile',
-        initialRoute: '/main',
+        initialRoute: '/',
         onGenerateRoute: Modular.generateRoute,
         theme: ThemeData(
             primaryColor: Color(0xFFF47208),

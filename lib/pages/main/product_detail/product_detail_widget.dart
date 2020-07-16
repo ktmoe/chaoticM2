@@ -9,6 +9,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/res/styles.dart';
 import 'package:m2mobile/utils/constants.dart';
 import 'package:m2mobile/utils/extensions.dart';
+import 'package:m2mobile/stores/store_cart.dart';
 
 class ProductDetailWidget extends StatefulWidget {
   static const route = "/main/product_detail";
@@ -199,11 +200,15 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
 }
 
 class BottomSheet extends StatefulWidget {
+  final Product product;
+
+  const BottomSheet({Key key, this.product}) : super(key: key);
   @override
   _BottomSheetState createState() => _BottomSheetState();
 }
 
 class _BottomSheetState extends State<BottomSheet> {
+  final StoreCart _storeCart = Modular.get<StoreCart>();
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -237,7 +242,9 @@ class _BottomSheetState extends State<BottomSheet> {
         elevation: Dimens.marginMedium2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         disabledColor: Colors.white,
-        onPressed: () {},
+        onPressed: () {
+          _storeCart.addToCart(widget.product);
+        },
         color: Colors.white,
         textColor: Theme.of(context).accentColor,
         child: Row(

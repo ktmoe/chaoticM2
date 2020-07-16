@@ -41,7 +41,7 @@ class AppModule extends MainModule {
 
   @override
   List<Router> get routers => Router.group(routes: [
-        Router("/splash", child: (context, args) => SplashWidget()),
+        Router("/", child: (context, args) => SplashWidget()),
         Router("/language", child: (context, args) => LanguageWidget()),
         Router("/login", module: LoginModule()),
         Router("/authenticate", module: AuthenticateModule()),

@@ -9,20 +9,22 @@ class StoreApp = _StoreApp with _$StoreApp;
 abstract class _StoreApp with Store {
   AppBox _appBox;
 
-  _StoreApp() {
-    init();
-  }
-
   @observable
   AppException exception;
+
+  @observable
+  bool isFirstTime;
 
   @action
   Future init() async {
     _appBox = await AppBox.create();
+    readIsFirstTime();
   }
 
   @action
-  bool readIsFirstTime() => _appBox.getIsFirstTime();
+  void readIsFirstTime() {
+    isFirstTime = _appBox.getIsFirstTime();
+  }
 
   //Call this method after Selecting Language
   @action

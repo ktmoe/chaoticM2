@@ -8,18 +8,22 @@ import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/pages/main/cart/cart_widget.dart';
 import 'package:m2mobile/pages/main/notification/notification_widget.dart';
+import 'package:m2mobile/stores/store_cart.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class M2AppBar extends StatefulWidget implements PreferredSizeWidget {
   final bool showSearch;
   final String title;
   final bool deleteOnly;
   final Function onBackPressed;
+  final Function onDeletePressed;
 
   M2AppBar(
       {@required this.showSearch,
       @required this.title,
       @required this.deleteOnly,
-      @required this.onBackPressed});
+      @required this.onBackPressed,
+      this.onDeletePressed});
 
   @override
   State<StatefulWidget> createState() => M2AppBarState();
@@ -29,6 +33,7 @@ class M2AppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class M2AppBarState extends State<M2AppBar> {
+  final StoreCart _storeCart = Modular.get<StoreCart>();
   FocusNode focusNode;
 
   @override
@@ -66,32 +71,37 @@ class M2AppBarState extends State<M2AppBar> {
                           Modular.to.pushNamed(NotificationWidget.route);
                         }),
                   ),
-            Expanded(
-                flex: 2,
-                child: widget.deleteOnly
-                    ? IconButton(
-                        icon: Icon(
-                          M2Icon.delete,
-                          size: 18,
-                        ),
-                        onPressed: () {})
-                    : Badge(
-                        animationDuration: const Duration(milliseconds: 50),
-                        badgeColor: Theme.of(context).accentColor,
-                        badgeContent: Text(
-                          '2',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        // showBadge: (cartItmes == 0) ? false : true,
-                        child: IconButton(
+            Observer(
+              builder: (context) {
+                return Expanded(
+                    flex: 2,
+                    child: widget.deleteOnly
+                        ? IconButton(
                             icon: Icon(
-                              M2Icon.cart,
-                              size: 20,
+                              M2Icon.delete,
+                              size: 18,
                             ),
-                            onPressed: () {
-                              Modular.to.pushNamed(CartWidget.route);
-                            }),
-                      )),
+                            onPressed: widget.onDeletePressed)
+                        : Badge(
+                            animationDuration: const Duration(milliseconds: 50),
+                            badgeColor: Theme.of(context).accentColor,
+                            badgeContent: Text(
+                              '${_storeCart.cartCount}',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            showBadge:
+                                (_storeCart.cartCount == 0) ? false : true,
+                            child: IconButton(
+                                icon: Icon(
+                                  M2Icon.cart,
+                                  size: 20,
+                                ),
+                                onPressed: () {
+                                  Modular.to.pushNamed(CartWidget.route);
+                                }),
+                          ));
+              },
+            ),
           ],
         ),
       ),
