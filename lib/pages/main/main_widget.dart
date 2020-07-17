@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/custom_widgets/easy_get_widget.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
@@ -47,23 +48,29 @@ class _MainWidgetState extends State<MainWidget>
     super.build(context);
     return WillPopScope(
       onWillPop: context.onBackPressed,
-      child: Scaffold(
-        appBar: M2AppBar(
-            showSearch: (_selectedIndex == 2) ? false : true,
-            title: "More",
-            deleteOnly: false,
-            onBackPressed: () async {
-              final willPop = await context.onBackPressed();
-              if (willPop) {
-                SystemNavigator.pop();
-              }
-            }),
-        body: PageView(
-          controller: pageController,
-          onPageChanged: onPageChanged,
-          children: pages,
-        ),
-        bottomNavigationBar: _bottomNavigationBar(_selectedIndex),
+      child: Observer(
+        builder: (_) {
+          final forceUpdate = _storeApp.forceUpdate;
+          debugPrint("forceUpdate flag => $forceUpdate");
+          return Scaffold(
+          appBar: M2AppBar(
+              showSearch: (_selectedIndex == 2) ? false : true,
+              title: "More",
+              deleteOnly: false,
+              onBackPressed: () async {
+                final willPop = await context.onBackPressed();
+                if (willPop) {
+                  SystemNavigator.pop();
+                }
+              }),
+          body: PageView(
+            controller: pageController,
+            onPageChanged: onPageChanged,
+            children: pages,
+          ),
+          bottomNavigationBar: _bottomNavigationBar(_selectedIndex),
+        );
+        },
       ),
     );
   }

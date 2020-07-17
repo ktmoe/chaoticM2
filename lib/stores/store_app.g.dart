@@ -24,6 +24,21 @@ mixin _$StoreApp on _StoreApp, Store {
     });
   }
 
+  final _$forceUpdateAtom = Atom(name: '_StoreApp.forceUpdate');
+
+  @override
+  bool get forceUpdate {
+    _$forceUpdateAtom.reportRead();
+    return super.forceUpdate;
+  }
+
+  @override
+  set forceUpdate(bool value) {
+    _$forceUpdateAtom.reportWrite(value, super.forceUpdate, () {
+      super.forceUpdate = value;
+    });
+  }
+
   final _$isFirstTimeAtom = Atom(name: '_StoreApp.isFirstTime');
 
   @override
@@ -39,7 +54,6 @@ mixin _$StoreApp on _StoreApp, Store {
     });
   }
 
-<<<<<<< HEAD
   final _$chosenLanguageAtom = Atom(name: '_StoreApp.chosenLanguage');
 
   @override
@@ -52,20 +66,6 @@ mixin _$StoreApp on _StoreApp, Store {
   set chosenLanguage(Language value) {
     _$chosenLanguageAtom.reportWrite(value, super.chosenLanguage, () {
       super.chosenLanguage = value;
-=======
-  final _$isLoggedInAtom = Atom(name: '_StoreApp.isLoggedIn');
-
-  @override
-  bool get isLoggedIn {
-    _$isLoggedInAtom.reportRead();
-    return super.isLoggedIn;
-  }
-
-  @override
-  set isLoggedIn(bool value) {
-    _$isLoggedInAtom.reportWrite(value, super.isLoggedIn, () {
-      super.isLoggedIn = value;
->>>>>>> 07ba8c5bb43fca1ebeffb8b0ff0abfb06303de96
     });
   }
 
@@ -74,6 +74,14 @@ mixin _$StoreApp on _StoreApp, Store {
   @override
   Future<dynamic> init() {
     return _$initAsyncAction.run(() => super.init());
+  }
+
+  final _$checkForceUpdateAsyncAction =
+      AsyncAction('_StoreApp.checkForceUpdate');
+
+  @override
+  Future<dynamic> checkForceUpdate() {
+    return _$checkForceUpdateAsyncAction.run(() => super.checkForceUpdate());
   }
 
   final _$changeFirstTimeAsyncAction = AsyncAction('_StoreApp.changeFirstTime');
@@ -122,12 +130,9 @@ mixin _$StoreApp on _StoreApp, Store {
   String toString() {
     return '''
 exception: ${exception},
+forceUpdate: ${forceUpdate},
 isFirstTime: ${isFirstTime},
-<<<<<<< HEAD
 chosenLanguage: ${chosenLanguage}
-=======
-isLoggedIn: ${isLoggedIn}
->>>>>>> 07ba8c5bb43fca1ebeffb8b0ff0abfb06303de96
     ''';
   }
 }
