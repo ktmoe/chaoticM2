@@ -39,6 +39,21 @@ mixin _$StoreApp on _StoreApp, Store {
     });
   }
 
+  final _$isLoggedInAtom = Atom(name: '_StoreApp.isLoggedIn');
+
+  @override
+  bool get isLoggedIn {
+    _$isLoggedInAtom.reportRead();
+    return super.isLoggedIn;
+  }
+
+  @override
+  set isLoggedIn(bool value) {
+    _$isLoggedInAtom.reportWrite(value, super.isLoggedIn, () {
+      super.isLoggedIn = value;
+    });
+  }
+
   final _$initAsyncAction = AsyncAction('_StoreApp.init');
 
   @override
@@ -81,7 +96,8 @@ mixin _$StoreApp on _StoreApp, Store {
   String toString() {
     return '''
 exception: ${exception},
-isFirstTime: ${isFirstTime}
+isFirstTime: ${isFirstTime},
+isLoggedIn: ${isLoggedIn}
     ''';
   }
 }

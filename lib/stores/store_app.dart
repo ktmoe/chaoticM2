@@ -15,6 +15,9 @@ abstract class _StoreApp with Store {
   @observable
   bool isFirstTime;
 
+  @observable
+  bool isLoggedIn = false;
+
   @action
   Future init() async {
     _appBox = await AppBox.create();
