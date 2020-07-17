@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:m2mobile/pages/main/main_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/pages/authenticate/authenticate_widget.dart';
+import 'package:m2mobile/stores/store_app.dart';
 
 class LoginWidget extends StatefulWidget {
   static const route = "/login";
@@ -13,6 +14,7 @@ class LoginWidget extends StatefulWidget {
 }
 
 class _LoginWidgetState extends State<LoginWidget> {
+  final StoreApp _storeApp = Modular.get<StoreApp>();
   final _phoneFieldController = TextEditingController();
   final _passwordFieldController = TextEditingController();
 
@@ -102,6 +104,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 textColor: Colors.white,
                 disabledTextColor: Colors.white,
                 onPressed: () {
+                  _storeApp.isLoggedIn = true;
                   Modular.to.pushReplacementNamed(MainWidget.route);
                 },
                 child: const Text("Login"),

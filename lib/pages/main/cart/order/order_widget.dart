@@ -6,6 +6,8 @@ import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
 import 'package:m2mobile/pages/main/more/order_list/order_list_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/custom_widgets/easy_get_widget.dart';
+import 'package:m2mobile/models/ui_model/payment_methods_model.dart';
+import 'package:m2mobile/stores/store_order.dart';
 
 class OrderWidget extends StatefulWidget {
   static const route = "/main/cart/order";
@@ -15,6 +17,7 @@ class OrderWidget extends StatefulWidget {
 }
 
 class _OrderWidgetState extends State<OrderWidget> {
+  final StoreOrder _storeOrder = Modular.get<StoreOrder>();
   int currentStep;
   bool complete = false;
 
@@ -119,7 +122,15 @@ class _OrderWidgetState extends State<OrderWidget> {
                       isLast: false),
                   M2Step(
                       isActive: currentStep == 3,
-                      state: currentStep == 3
+                      state: currentStep > 3
+                          ? M2StepState.complete
+                          : M2StepState.indexed,
+                      title: const Text('Payment Method'),
+                      content: _buildPaymentRadioList(),
+                      isLast: false),
+                  M2Step(
+                      isActive: currentStep == 4,
+                      state: currentStep == 4
                           ? M2StepState.complete
                           : M2StepState.indexed,
                       title: const Text('Confirm Order'),
@@ -138,8 +149,28 @@ class _OrderWidgetState extends State<OrderWidget> {
     );
   }
 
+  Widget _buildPaymentRadioList() =>
+      Wrap(direction: Axis.horizontal, children: [
+        RadioListTile<String>(
+            value: PaymentMethodsModel.kbzPay,
+            groupValue: _storeOrder.selectedPaymentMethod,
+            selected:
+                _storeOrder.selectedPaymentMethod == PaymentMethodsModel.kbzPay,
+            dense: true,
+            onChanged: (value) => _storeOrder.selectedPaymentMethod = value,
+            title: Text(PaymentMethodsModel.kbzPay)),
+        RadioListTile<String>(
+            value: PaymentMethodsModel.bankPay,
+            groupValue: _storeOrder.selectedPaymentMethod,
+            selected: _storeOrder.selectedPaymentMethod ==
+                PaymentMethodsModel.bankPay,
+            dense: true,
+            onChanged: (value) => _storeOrder.selectedPaymentMethod = value,
+            title: Text(PaymentMethodsModel.bankPay))
+      ]);
+
   next() {
-    currentStep + 1 != 4
+    currentStep + 1 != 5
         ? goTo(currentStep + 1)
         : Modular.to.pushReplacementNamed(OrderListWidget.route);
   }

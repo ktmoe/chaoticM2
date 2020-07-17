@@ -39,6 +39,7 @@ mixin _$StoreApp on _StoreApp, Store {
     });
   }
 
+<<<<<<< HEAD
   final _$chosenLanguageAtom = Atom(name: '_StoreApp.chosenLanguage');
 
   @override
@@ -51,6 +52,20 @@ mixin _$StoreApp on _StoreApp, Store {
   set chosenLanguage(Language value) {
     _$chosenLanguageAtom.reportWrite(value, super.chosenLanguage, () {
       super.chosenLanguage = value;
+=======
+  final _$isLoggedInAtom = Atom(name: '_StoreApp.isLoggedIn');
+
+  @override
+  bool get isLoggedIn {
+    _$isLoggedInAtom.reportRead();
+    return super.isLoggedIn;
+  }
+
+  @override
+  set isLoggedIn(bool value) {
+    _$isLoggedInAtom.reportWrite(value, super.isLoggedIn, () {
+      super.isLoggedIn = value;
+>>>>>>> 07ba8c5bb43fca1ebeffb8b0ff0abfb06303de96
     });
   }
 
@@ -108,7 +123,11 @@ mixin _$StoreApp on _StoreApp, Store {
     return '''
 exception: ${exception},
 isFirstTime: ${isFirstTime},
+<<<<<<< HEAD
 chosenLanguage: ${chosenLanguage}
+=======
+isLoggedIn: ${isLoggedIn}
+>>>>>>> 07ba8c5bb43fca1ebeffb8b0ff0abfb06303de96
     ''';
   }
 }

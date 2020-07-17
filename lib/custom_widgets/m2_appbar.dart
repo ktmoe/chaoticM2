@@ -71,18 +71,18 @@ class M2AppBarState extends State<M2AppBar> {
                           Modular.to.pushNamed(NotificationWidget.route);
                         }),
                   ),
-            Observer(
-              builder: (context) {
-                return Expanded(
-                    flex: 2,
-                    child: widget.deleteOnly
-                        ? IconButton(
-                            icon: Icon(
-                              M2Icon.delete,
-                              size: 18,
-                            ),
-                            onPressed: widget.onDeletePressed)
-                        : Badge(
+            Expanded(
+                flex: 2,
+                child: widget.deleteOnly
+                    ? IconButton(
+                        icon: Icon(
+                          M2Icon.delete,
+                          size: 18,
+                        ),
+                        onPressed: widget.onDeletePressed)
+                    : Observer(
+                        builder: (context) {
+                          return Badge(
                             animationDuration: const Duration(milliseconds: 50),
                             badgeColor: Theme.of(context).accentColor,
                             badgeContent: Text(
@@ -99,9 +99,9 @@ class M2AppBarState extends State<M2AppBar> {
                                 onPressed: () {
                                   Modular.to.pushNamed(CartWidget.route);
                                 }),
-                          ));
-              },
-            ),
+                          );
+                        },
+                      )),
           ],
         ),
       ),

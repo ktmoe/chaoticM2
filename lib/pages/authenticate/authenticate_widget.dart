@@ -8,6 +8,7 @@ import 'package:m2mobile/pages/main/more/profile/edit_profile_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/stores/authenticate_store.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:m2mobile/stores/store_app.dart';
 
 class AuthenticateWidget extends StatefulWidget {
   static const route = "/authenticate";
@@ -18,6 +19,7 @@ class AuthenticateWidget extends StatefulWidget {
 class _AuthenticateWidgetState extends State<AuthenticateWidget> {
   final _pageController = PageController();
   final _authenticateStore = Modular.get<AuthenticateStore>();
+  final StoreApp _storeApp = Modular.get<StoreApp>();
 
   @override
   void initState() {
@@ -105,13 +107,13 @@ class _AuthenticateWidgetState extends State<AuthenticateWidget> {
         _nextAuth();
       } else {}
     } else {
-      debugPrint("page:  ${_authenticateStore.otp}");
       // if (_authenticateStore.otp.isNotEmpty) {
       //   if (_authenticateStore.userProfile == null)
       //     Modular.to.popAndPushNamed(EditProfileWidget.route);
       //   else
       //     Modular.to.popAndPushNamed(MainWidget.route);
       // } else {}
+      _storeApp.isLoggedIn = true;
       Modular.to.pushReplacementNamed(EditProfileWidget.route, arguments: true);
     }
   }

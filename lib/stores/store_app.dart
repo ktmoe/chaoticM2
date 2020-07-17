@@ -34,6 +34,8 @@ abstract class _StoreApp with Store {
     chosenLanguage = (language == Language.Zawgyi)? Language.Zawgyi : Language.Unicode;
   }
 
+  bool isLoggedIn = false;
+
   @action
   Future init() async {
     _appBox = await AppBox.create();
