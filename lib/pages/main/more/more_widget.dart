@@ -10,6 +10,8 @@ import 'package:m2mobile/pages/main/more/order_list/order_list_widget.dart';
 import 'package:m2mobile/pages/main/more/settings/settings_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
+import 'package:m2mobile/custom_widgets/one_call_away_widget.dart';
+import 'package:m2mobile/stores/store_app.dart';
 
 class MoreWidget extends StatefulWidget {
   static const route = "/main/more";
@@ -38,6 +40,7 @@ List<IconData> icons = [
 ];
 
 class _MoreWidgetState extends State<MoreWidget> {
+  final StoreApp _storeApp = Modular.get<StoreApp>();
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -63,7 +66,11 @@ class _MoreWidgetState extends State<MoreWidget> {
                       if (route.isNotEmpty) {
                         Modular.to.pushNamed(route);
                       } else {
-                        Modular.to.pushReplacementNamed('/');
+                        final logout =
+                            await context.appLeaveWarning(logOut: true);
+                        if (logout) {
+                          _logOutApp();
+                        }
                       }
                     },
                     contentPadding: const EdgeInsets.all(Dimens.marginSmall),
@@ -98,5 +105,10 @@ class _MoreWidgetState extends State<MoreWidget> {
         ),
       ],
     );
+  }
+
+  void _logOutApp() {
+    _storeApp.isLoggedIn = false;
+    Modular.to.pushReplacementNamed('/');
   }
 }

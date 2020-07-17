@@ -206,7 +206,9 @@ class ProductCardBottom extends StatelessWidget {
                   : _storeCart.addToCart(product);
             },
             child: Icon(
-              M2Icon.cart_plus,
+              _storeCart.cartProducts.containsKey(product)
+                  ? M2Icon.cart_cross
+                  : M2Icon.cart_plus,
               color: Colors.white,
               size: 18,
             ),

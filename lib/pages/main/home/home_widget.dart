@@ -12,6 +12,7 @@ import 'package:m2mobile/stores/store_home.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:m2mobile/utils/extensions.dart';
+import 'package:m2mobile/stores/store_app.dart';
 
 class HomeWidget extends StatefulWidget {
   @override
@@ -22,20 +23,34 @@ class _HomeWidgetState extends State<HomeWidget>
     with AutomaticKeepAliveClientMixin<HomeWidget> {
   List<String> _images = ["", ""];
 
+  final StoreApp _storeApp = Modular.get<StoreApp>();
   final StoreHome _storeHome = Modular.get<StoreHome>();
   final List<ReactionDisposer> _disposer = [];
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorState = GlobalKey();
 
+  ReactionDisposer _onConnectivityChanged() =>
+      when((_) => _storeApp.isNetworkOn, () async {
+        await _storeHome.getProductList(refresh: true);
+      });
+
   ReactionDisposer _onException() {
     return reaction<AppException>((_) => _storeHome.exception, (exception) {
-      exception.message.showSnackBar(context);
+      exception.message.showSnack(context);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _disposer.addAll([_onException()]);
+    _disposer.addAll([_onConnectivityChanged(), _onException()]);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _disposer.forEach((element) {
+      element();
+    });
   }
 
   @override

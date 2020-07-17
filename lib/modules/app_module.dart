@@ -13,12 +13,14 @@ import 'package:m2mobile/pages/splash/splash_widget.dart';
 import 'package:m2mobile/utils/constants.dart';
 import 'package:m2mobile/stores/store_app.dart';
 import 'package:m2mobile/route_guard.dart';
+import 'package:m2mobile/utils/connectivity_service.dart';
 
 import 'package:m2mobile/utils/custom_json_converter.dart';
 
 class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
+        Bind((i) => ConnectivityService()),
         Bind((i) => StoreApp()),
         Bind((i) => ChopperClient(
               interceptors: [

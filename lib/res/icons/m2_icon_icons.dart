@@ -45,6 +45,8 @@ class M2Icon {
       IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData messenger =
       IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData cart_cross =
+      IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData home =
       IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData back =
@@ -67,8 +69,6 @@ class M2Icon {
       IconData(0xe81d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData home_1 =
       IconData(0xe81e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData huawei =
-      IconData(0xe81f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData information =
       IconData(0xe820, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData laptop =
@@ -89,8 +89,6 @@ class M2Icon {
       IconData(0xe829, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData phone =
       IconData(0xe82b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData samsung =
-      IconData(0xe82c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData search =
       IconData(0xe82d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData setting =
@@ -99,12 +97,6 @@ class M2Icon {
       IconData(0xe82f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData user =
       IconData(0xe830, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData vivo =
-      IconData(0xe831, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData xiaomi =
-      IconData(0xe832, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData apple =
-      IconData(0xe833, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData facebook =
       IconData(0xf09a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

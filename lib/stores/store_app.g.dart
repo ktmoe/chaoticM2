@@ -9,6 +9,36 @@ part of 'store_app.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$StoreApp on _StoreApp, Store {
+  Computed<bool> _$isNetworkOnComputed;
+
+  @override
+  bool get isNetworkOn =>
+      (_$isNetworkOnComputed ??= Computed<bool>(() => super.isNetworkOn,
+              name: '_StoreApp.isNetworkOn'))
+          .value;
+  Computed<String> _$connectivityMessageComputed;
+
+  @override
+  String get connectivityMessage => (_$connectivityMessageComputed ??=
+          Computed<String>(() => super.connectivityMessage,
+              name: '_StoreApp.connectivityMessage'))
+      .value;
+
+  final _$connectivityAtom = Atom(name: '_StoreApp.connectivity');
+
+  @override
+  ObservableStream<bool> get connectivity {
+    _$connectivityAtom.reportRead();
+    return super.connectivity;
+  }
+
+  @override
+  set connectivity(ObservableStream<bool> value) {
+    _$connectivityAtom.reportWrite(value, super.connectivity, () {
+      super.connectivity = value;
+    });
+  }
+
   final _$exceptionAtom = Atom(name: '_StoreApp.exception');
 
   @override
@@ -95,9 +125,12 @@ mixin _$StoreApp on _StoreApp, Store {
   @override
   String toString() {
     return '''
+connectivity: ${connectivity},
 exception: ${exception},
 isFirstTime: ${isFirstTime},
-isLoggedIn: ${isLoggedIn}
+isLoggedIn: ${isLoggedIn},
+isNetworkOn: ${isNetworkOn},
+connectivityMessage: ${connectivityMessage}
     ''';
   }
 }

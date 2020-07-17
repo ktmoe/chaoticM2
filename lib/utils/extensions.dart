@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 
 extension StringX on String {
-  void showSnackBar(BuildContext context) {
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text(this)));
+  void makeSnack(GlobalKey<ScaffoldState> state) {
+    state.currentState.showSnackBar(this.snackBar());
   }
 
-  SnackBar snackBar() => SnackBar(content: Text(this));
+  void showSnack(BuildContext context) {
+    Scaffold.of(context).showSnackBar(this.snackBar());
+  }
+
+  SnackBar snackBar() =>
+      SnackBar(content: Text(this), duration: Duration(seconds: 3));
 }
 
 extension DoubleX on double {

@@ -5,9 +5,10 @@ import 'package:m2mobile/custom_widgets/m2_stepper.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
 import 'package:m2mobile/pages/main/more/order_list/order_list_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
-import 'package:m2mobile/custom_widgets/easy_get_widget.dart';
+import 'package:m2mobile/custom_widgets/one_call_away_widget.dart';
 import 'package:m2mobile/models/ui_model/payment_methods_model.dart';
 import 'package:m2mobile/stores/store_order.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class OrderWidget extends StatefulWidget {
   static const route = "/main/cart/order";
@@ -30,7 +31,7 @@ class _OrderWidgetState extends State<OrderWidget> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: context.onOrderBackPressed,
+      onWillPop: context.standardWarningDialog,
       child: Scaffold(
         appBar: M2AppBar(
           showSearch: false,
@@ -41,8 +42,8 @@ class _OrderWidgetState extends State<OrderWidget> {
         body: Stack(
           children: <Widget>[
             ScreenBgCard(),
-            Expanded(
-              child: M2Stepper(
+            Observer(builder: (context) {
+              return M2Stepper(
                 steps: [
                   M2Step(
                       isActive: currentStep == 0,
@@ -106,9 +107,12 @@ class _OrderWidgetState extends State<OrderWidget> {
                           : M2StepState.indexed,
                       title: const Text('Address',
                           style: TextStyle(fontSize: Dimens.textRegular2x)),
-                      subtitle: const Text(
-                          "Address - Cloud 9, Eutopia, Euphoria Country.",
-                          style: TextStyle(fontSize: Dimens.textRegular2x)),
+                      subtitle: Expanded(
+                        child: const Text(
+                            "Address - Cloud 9, Eutopia, Euphoria Country.",
+                            overflow: TextOverflow.visible,
+                            style: TextStyle(fontSize: Dimens.textRegular2x)),
+                      ),
                       content: TextFormField(
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -141,33 +145,47 @@ class _OrderWidgetState extends State<OrderWidget> {
                 onStepContinue: next,
                 onStepTapped: (step) => goTo(step),
                 onStepCancel: cancel,
-              ),
-            )
+              );
+            })
           ],
         ),
       ),
     );
   }
 
-  Widget _buildPaymentRadioList() =>
-      Wrap(direction: Axis.horizontal, children: [
-        RadioListTile<String>(
-            value: PaymentMethodsModel.kbzPay,
-            groupValue: _storeOrder.selectedPaymentMethod,
-            selected:
-                _storeOrder.selectedPaymentMethod == PaymentMethodsModel.kbzPay,
-            dense: true,
-            onChanged: (value) => _storeOrder.selectedPaymentMethod = value,
-            title: Text(PaymentMethodsModel.kbzPay)),
-        RadioListTile<String>(
-            value: PaymentMethodsModel.bankPay,
-            groupValue: _storeOrder.selectedPaymentMethod,
-            selected: _storeOrder.selectedPaymentMethod ==
-                PaymentMethodsModel.bankPay,
-            dense: true,
-            onChanged: (value) => _storeOrder.selectedPaymentMethod = value,
-            title: Text(PaymentMethodsModel.bankPay))
-      ]);
+  Widget _buildPaymentRadioList() => Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width / 3,
+                  minWidth: MediaQuery.of(context).size.width / 3),
+              child: RadioListTile<String>(
+                  dense: true,
+                  value: PaymentMethodsModel.kbzPay,
+                  groupValue: _storeOrder.selectedPaymentMethod,
+                  selected: _storeOrder.selectedPaymentMethod ==
+                      PaymentMethodsModel.kbzPay,
+                  onChanged: (value) =>
+                      _storeOrder.selectedPaymentMethod = value,
+                  title: Text(PaymentMethodsModel.kbzPay)),
+            ),
+            Container(
+              constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width / 3,
+                  minWidth: MediaQuery.of(context).size.width / 3),
+              child: RadioListTile<String>(
+                  dense: true,
+                  value: PaymentMethodsModel.bankPay,
+                  groupValue: _storeOrder.selectedPaymentMethod,
+                  selected: _storeOrder.selectedPaymentMethod ==
+                      PaymentMethodsModel.bankPay,
+                  onChanged: (value) =>
+                      _storeOrder.selectedPaymentMethod = value,
+                  title: Text(PaymentMethodsModel.bankPay)),
+            )
+          ]);
 
   next() {
     currentStep + 1 != 5
@@ -176,7 +194,8 @@ class _OrderWidgetState extends State<OrderWidget> {
   }
 
   cancel() async {
-    final willCancel = await context.onOrderBackPressed();
+    final willCancel = await context.standardWarningDialog(
+        dialogType: WarningDialogType.orderCancelDialog);
     if (willCancel) Modular.to.pop();
   }
 

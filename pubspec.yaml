@@ -85,6 +85,7 @@ dependencies:
   flutter_email_sender:
   snack:
   multi_image_picker: ^4.6.7
+  lottie:
 
   #money Formatter
   flutter_money_formatter:
@@ -124,6 +125,7 @@ flutter:
   assets:
     - lib/res/images/
     - lib/res/svgs/
+    - lib/res/lotties/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

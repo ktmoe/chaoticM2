@@ -59,23 +59,18 @@ class _CategoriesWidgetState extends State<CategoriesWidget>
   List<Widget> _buildSubCategoriesList(String categoryName) {
     return _subCategoriesMap[categoryName]
         .map((item) => ListTile(
-              onTap: () {
-                Modular.to.pushNamed(ProductListWidget.route,
-                    arguments: ProductNameArgs(item));
-              },
-              leading: Icon(
-                _icons[item],
-                color: Theme.of(context).iconTheme.color,
-              ),
-              title: Text(
-                item,
-                style: const TextStyle(color: const Color(0x99000000)),
-              ),
-              trailing: Icon(
-                Icons.arrow_right,
-                color: Colors.grey,
-              ),
-            ))
+            onTap: () {
+              Modular.to.pushNamed(ProductListWidget.route,
+                  arguments: ProductNameArgs(item));
+            },
+            leading: Icon(
+              Icons.arrow_right,
+              color: Colors.grey,
+            ),
+            title: Text(
+              item,
+              style: const TextStyle(color: const Color(0x99000000)),
+            )))
         .toList();
   }
 
@@ -100,15 +95,6 @@ class _CategoriesWidgetState extends State<CategoriesWidget>
   final _icons = {
     "Mobile Phone": M2Icon.phone,
     "Tablet": M2Icon.tablet,
-    "Laptop": M2Icon.laptop,
-    "Apple": M2Icon.apple,
-    "Samsung": M2Icon.samsung,
-    "Xiaomi": M2Icon.xiaomi,
-    "Huawei": M2Icon.huawei,
-    "Vivo": M2Icon.vivo,
-    "Lenovo": M2Icon.laptop,
-    "HP": M2Icon.laptop,
-    "DELL": M2Icon.laptop,
-    "MSI": M2Icon.laptop
+    "Laptop": M2Icon.laptop
   };
 }
