@@ -1,4 +1,5 @@
 import 'package:chopper/chopper.dart';
+import 'package:m2mobile/models/responses/force_update_response.dart';
 import 'package:m2mobile/models/responses/help_response.dart';
 import 'package:m2mobile/models/responses/product.dart';
 import 'package:m2mobile/models/responses/product_response.dart';
@@ -32,4 +33,16 @@ abstract class ApiService extends ChopperService {
   @Post(path: '/customerview/Removefavorite')
   Future<Response> removeFromFav(@Query('customerid') String customerId,
       @Query('productid') String productId);
+
+
+  @Get(path: '/forceupdateview/forceUpdateAndroid')
+  Future<Response<ForceUpdateResponse>> forceUpdateAndroid(
+      @Query('versioncode') int versionCode
+      );
+
+  @Get(path: '/forceupdateview/forceUpdateIOS')
+  Future<Response<ForceUpdateResponse>> forceUpdateIOS(
+      @Query('buildnumber') int buildNumber
+      );
+
 }

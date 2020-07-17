@@ -39,6 +39,21 @@ mixin _$StoreApp on _StoreApp, Store {
     });
   }
 
+  final _$chosenLanguageAtom = Atom(name: '_StoreApp.chosenLanguage');
+
+  @override
+  Language get chosenLanguage {
+    _$chosenLanguageAtom.reportRead();
+    return super.chosenLanguage;
+  }
+
+  @override
+  set chosenLanguage(Language value) {
+    _$chosenLanguageAtom.reportWrite(value, super.chosenLanguage, () {
+      super.chosenLanguage = value;
+    });
+  }
+
   final _$initAsyncAction = AsyncAction('_StoreApp.init');
 
   @override
@@ -54,6 +69,17 @@ mixin _$StoreApp on _StoreApp, Store {
   }
 
   final _$_StoreAppActionController = ActionController(name: '_StoreApp');
+
+  @override
+  void changeLanguagePref(Language language) {
+    final _$actionInfo = _$_StoreAppActionController.startAction(
+        name: '_StoreApp.changeLanguagePref');
+    try {
+      return super.changeLanguagePref(language);
+    } finally {
+      _$_StoreAppActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void readIsFirstTime() {
@@ -81,7 +107,8 @@ mixin _$StoreApp on _StoreApp, Store {
   String toString() {
     return '''
 exception: ${exception},
-isFirstTime: ${isFirstTime}
+isFirstTime: ${isFirstTime},
+chosenLanguage: ${chosenLanguage}
     ''';
   }
 }

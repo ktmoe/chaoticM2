@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/custom_widgets/easy_get_widget.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/pages/main/home/home_widget.dart';
 import 'package:m2mobile/pages/main/more/more_widget.dart';
 import 'package:m2mobile/pages/main/categories/categories_widget.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
+import 'package:m2mobile/stores/store_app.dart';
 
 class MainWidget extends StatefulWidget {
   static const route = "/main";
@@ -20,6 +22,8 @@ class _MainWidgetState extends State<MainWidget>
 
   final PageController pageController = PageController();
 
+  final _storeApp = Modular.get<StoreApp>();
+
   void onPageChanged(int index) {
     setState(() {
       _selectedIndex = index;
@@ -29,6 +33,13 @@ class _MainWidgetState extends State<MainWidget>
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.resumed){
+      _storeApp.checkForceUpdate();
+    }
   }
 
   @override
