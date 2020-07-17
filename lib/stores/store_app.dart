@@ -1,3 +1,4 @@
+import 'package:m2mobile/utils/flutter_mdetect.dart';
 import 'package:mobx/mobx.dart';
 import 'package:m2mobile/boxes/app_box.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
@@ -14,6 +15,14 @@ abstract class _StoreApp with Store {
 
   @observable
   bool isFirstTime;
+
+  @observable
+  Language chosenLanguage = MDetect.isUnicode()? Language.Unicode : Language.Zawgyi;
+
+  @action
+  void changeLanguagePref(Language language){
+    chosenLanguage = (language == Language.Zawgyi)? Language.Zawgyi : Language.Unicode;
+  }
 
   @action
   Future init() async {
@@ -36,4 +45,8 @@ abstract class _StoreApp with Store {
   void dispose() {
     _appBox.dispose();
   }
+}
+
+enum Language{
+  Zawgyi,Unicode
 }
