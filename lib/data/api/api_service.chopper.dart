@@ -67,4 +67,20 @@ class _$ApiService extends ApiService {
     final $request = Request('POST', $url, client.baseUrl, parameters: $params);
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<ForceUpdateResponse>> forceUpdateAndroid(int versionCode) {
+    final $url = '/api/forceupdateview/forceUpdateAndroid';
+    final $params = <String, dynamic>{'versioncode': versionCode};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<ForceUpdateResponse, ForceUpdateResponse>($request);
+  }
+
+  @override
+  Future<Response<ForceUpdateResponse>> forceUpdateIOS(int buildNumber) {
+    final $url = '/api/forceupdateview/forceUpdateIOS';
+    final $params = <String, dynamic>{'buildnumber': buildNumber};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<ForceUpdateResponse, ForceUpdateResponse>($request);
+  }
 }

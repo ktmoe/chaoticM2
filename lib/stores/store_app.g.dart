@@ -54,6 +54,21 @@ mixin _$StoreApp on _StoreApp, Store {
     });
   }
 
+  final _$forceUpdateAtom = Atom(name: '_StoreApp.forceUpdate');
+
+  @override
+  bool get forceUpdate {
+    _$forceUpdateAtom.reportRead();
+    return super.forceUpdate;
+  }
+
+  @override
+  set forceUpdate(bool value) {
+    _$forceUpdateAtom.reportWrite(value, super.forceUpdate, () {
+      super.forceUpdate = value;
+    });
+  }
+
   final _$isFirstTimeAtom = Atom(name: '_StoreApp.isFirstTime');
 
   @override
@@ -69,18 +84,18 @@ mixin _$StoreApp on _StoreApp, Store {
     });
   }
 
-  final _$isLoggedInAtom = Atom(name: '_StoreApp.isLoggedIn');
+  final _$chosenLanguageAtom = Atom(name: '_StoreApp.chosenLanguage');
 
   @override
-  bool get isLoggedIn {
-    _$isLoggedInAtom.reportRead();
-    return super.isLoggedIn;
+  Language get chosenLanguage {
+    _$chosenLanguageAtom.reportRead();
+    return super.chosenLanguage;
   }
 
   @override
-  set isLoggedIn(bool value) {
-    _$isLoggedInAtom.reportWrite(value, super.isLoggedIn, () {
-      super.isLoggedIn = value;
+  set chosenLanguage(Language value) {
+    _$chosenLanguageAtom.reportWrite(value, super.chosenLanguage, () {
+      super.chosenLanguage = value;
     });
   }
 
@@ -91,6 +106,14 @@ mixin _$StoreApp on _StoreApp, Store {
     return _$initAsyncAction.run(() => super.init());
   }
 
+  final _$checkForceUpdateAsyncAction =
+      AsyncAction('_StoreApp.checkForceUpdate');
+
+  @override
+  Future<dynamic> checkForceUpdate() {
+    return _$checkForceUpdateAsyncAction.run(() => super.checkForceUpdate());
+  }
+
   final _$changeFirstTimeAsyncAction = AsyncAction('_StoreApp.changeFirstTime');
 
   @override
@@ -99,6 +122,17 @@ mixin _$StoreApp on _StoreApp, Store {
   }
 
   final _$_StoreAppActionController = ActionController(name: '_StoreApp');
+
+  @override
+  void changeLanguagePref(Language language) {
+    final _$actionInfo = _$_StoreAppActionController.startAction(
+        name: '_StoreApp.changeLanguagePref');
+    try {
+      return super.changeLanguagePref(language);
+    } finally {
+      _$_StoreAppActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void readIsFirstTime() {
@@ -127,10 +161,15 @@ mixin _$StoreApp on _StoreApp, Store {
     return '''
 connectivity: ${connectivity},
 exception: ${exception},
+forceUpdate: ${forceUpdate},
 isFirstTime: ${isFirstTime},
+<<<<<<< HEAD
 isLoggedIn: ${isLoggedIn},
 isNetworkOn: ${isNetworkOn},
 connectivityMessage: ${connectivityMessage}
+=======
+chosenLanguage: ${chosenLanguage}
+>>>>>>> 6e83aa3cb3bb7419c975a95480c3949d2b1ea615
     ''';
   }
 }

@@ -52,6 +52,13 @@ class _MainWidgetState extends State<MainWidget>
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _storeApp.checkForceUpdate();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     return WillPopScope(
