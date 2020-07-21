@@ -1,4 +1,4 @@
-package com.example.m2mobile
+package com.gnwt.m2mobile
 
 import io.flutter.embedding.android.FlutterActivity
 
