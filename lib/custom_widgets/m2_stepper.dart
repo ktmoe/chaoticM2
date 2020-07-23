@@ -360,7 +360,7 @@ class _M2StepperState extends State<M2Stepper> with TickerProviderStateMixin {
   Widget _buildHeaderText(int index) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         AnimatedDefaultTextStyle(
           style: _titleStyle(index),
@@ -368,24 +368,27 @@ class _M2StepperState extends State<M2Stepper> with TickerProviderStateMixin {
           curve: Curves.fastOutSlowIn,
           child: widget.steps[index].title,
         ),
-        if (widget.steps[index].subtitle != null)
-          Container(
-            margin: const EdgeInsets.only(top: 2.0),
-            child: AnimatedDefaultTextStyle(
-              style: _subtitleStyle(index),
-              duration: kThemeAnimationDuration,
-              curve: Curves.fastOutSlowIn,
-              child: widget.steps[index].subtitle,
-            ),
-          ),
+        widget.steps[index].subtitle != null
+            ? Container(
+                margin: const EdgeInsets.only(top: 2.0),
+                child: AnimatedDefaultTextStyle(
+                  style: _subtitleStyle(index),
+                  duration: kThemeAnimationDuration,
+                  curve: Curves.fastOutSlowIn,
+                  child: widget.steps[index].subtitle,
+                ),
+              )
+            : Container()
       ],
     );
   }
 
   Widget _buildVerticalHeader(int index) {
     return Container(
+      width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Column(
             children: <Widget>[
@@ -394,9 +397,11 @@ class _M2StepperState extends State<M2Stepper> with TickerProviderStateMixin {
               _buildLine(!_isLast(index)),
             ],
           ),
-          Container(
-            margin: const EdgeInsetsDirectional.only(start: 12.0),
-            child: _buildHeaderText(index),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsetsDirectional.only(start: 12.0),
+              child: _buildHeaderText(index),
+            ),
           ),
         ],
       ),

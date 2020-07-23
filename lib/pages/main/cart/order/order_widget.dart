@@ -31,7 +31,10 @@ class _OrderWidgetState extends State<OrderWidget> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: context.standardWarningDialog,
+      onWillPop: () async {
+        return await context.standardWarningDialog(
+            dialogType: WarningDialogType.orderCancelDialog);
+      },
       child: Scaffold(
         appBar: M2AppBar(
           showSearch: false,
@@ -107,12 +110,10 @@ class _OrderWidgetState extends State<OrderWidget> {
                           : M2StepState.indexed,
                       title: const Text('Address',
                           style: TextStyle(fontSize: Dimens.textRegular2x)),
-                      subtitle: Expanded(
-                        child: const Text(
-                            "Address - Cloud 9, Eutopia, Euphoria Country.",
-                            overflow: TextOverflow.visible,
-                            style: TextStyle(fontSize: Dimens.textRegular2x)),
-                      ),
+                      subtitle: const Text(
+                          "Address - Cloud 9, Eutopia, Euphoria Country.",
+                          overflow: TextOverflow.visible,
+                          style: TextStyle(fontSize: Dimens.textRegular2x)),
                       content: TextFormField(
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -129,7 +130,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                       state: currentStep > 3
                           ? M2StepState.complete
                           : M2StepState.indexed,
-                      title: const Text('Payment Method'),
+                      title: const Text('Payment Method',
+                          style: TextStyle(fontSize: Dimens.textRegular2x)),
                       content: _buildPaymentRadioList(),
                       isLast: false),
                   M2Step(
@@ -137,7 +139,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                       state: currentStep == 4
                           ? M2StepState.complete
                           : M2StepState.indexed,
-                      title: const Text('Confirm Order'),
+                      title: const Text('Confirm Order',
+                          style: TextStyle(fontSize: Dimens.textRegular2x)),
                       content: Container(),
                       isLast: true),
                 ],

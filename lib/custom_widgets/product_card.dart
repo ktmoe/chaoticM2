@@ -7,6 +7,8 @@ import 'package:m2mobile/pages/main/product_detail/product_detail_widget.dart';
 import 'package:m2mobile/stores/store_cart.dart';
 import 'package:m2mobile/utils/constants.dart';
 import 'package:m2mobile/utils/extensions.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'dart:math';
 
 class ProductCard extends StatefulWidget {
   final Product product;
@@ -29,24 +31,28 @@ class _ProductCardState extends State<ProductCard> {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Dimens.marginMedium2)),
       margin: const EdgeInsets.all(Dimens.marginMedium),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 5,
-            child: InkWell(
-                onTap: () {
-                  Modular.to.pushNamed(ProductDetailWidget.route,
-                      arguments: widget.product);
-                },
-                child: ProductCardHeader(
-                    product: widget.product,
-                    discountItem: widget.discountItem)),
-          ),
-          Expanded(
-            flex: 1,
-            child: ProductCardBottom(product: widget.product),
-          )
-        ],
+      child: Container(
+        width: min(MediaQuery.of(context).size.width * 0.4, 180),
+        height: min(MediaQuery.of(context).size.height * 0.3, 200),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              flex: 5,
+              child: InkWell(
+                  onTap: () {
+                    Modular.to.pushNamed(ProductDetailWidget.route,
+                        arguments: widget.product);
+                  },
+                  child: ProductCardHeader(
+                      product: widget.product,
+                      discountItem: widget.discountItem)),
+            ),
+            Expanded(
+              flex: 1,
+              child: ProductCardBottom(product: widget.product),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -62,57 +68,54 @@ class ProductCardHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Container(
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Expanded(
-                flex: 4,
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(Dimens.marginMedium2),
-                      topRight: Radius.circular(Dimens.marginMedium2)),
-                  child: FadeInImage(
-                    fit: BoxFit.cover,
-                    placeholder: AssetImage("lib/res/images/earth.jpg"),
-                    image: product.imageurl1 == null
-                        ? NetworkImage('')
-                        : NetworkImage(baseUrl + '/' + product.imageurl1),
-                  ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Expanded(
+              flex: 4,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(Dimens.marginMedium2),
+                    topRight: Radius.circular(Dimens.marginMedium2)),
+                child: FadeInImage(
+                  fit: BoxFit.cover,
+                  placeholder: AssetImage("lib/res/images/earth.jpg"),
+                  image: product.imageurl1 == null
+                      ? NetworkImage('')
+                      : NetworkImage(baseUrl + '/' + product.imageurl1),
                 ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: Dimens.marginMedium,
-                          vertical: Dimens.marginSmall),
-                      child: Text(
-                        product.productname == null ? '' : product.productname,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        overflow: TextOverflow.visible,
-                      ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: Dimens.marginMedium,
+                        vertical: Dimens.marginSmall),
+                    child: Text(
+                      product.productname == null ? '' : product.productname,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.visible,
                     ),
                   ),
-                  discountItem ? _buildSoldCountTag() : Container()
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  product.price == null ? '' : product.price.toDouble().money(),
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).accentColor),
                 ),
+                discountItem ? _buildSoldCountTag() : Container()
+              ],
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                product.price == null ? '' : product.price.toDouble().money(),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).accentColor),
               ),
-              discountItem ? _buildDeletedOldPrice() : Container()
-            ],
-          ),
+            ),
+            discountItem ? _buildDeletedOldPrice() : Container()
+          ],
         ),
         discountItem
             ? Align(
@@ -168,12 +171,17 @@ class ProductCardHeader extends StatelessWidget {
       );
 }
 
-class ProductCardBottom extends StatelessWidget {
+class ProductCardBottom extends StatefulWidget {
   final StoreCart _storeCart = Modular.get<StoreCart>();
   final Product product;
 
-  ProductCardBottom({Key key, @required this.product}) : super(key: key);
+  ProductCardBottom({Key key, this.product}) : super(key: key);
 
+  @override
+  _ProductCardBottomState createState() => _ProductCardBottomState();
+}
+
+class _ProductCardBottomState extends State<ProductCardBottom> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -183,38 +191,45 @@ class ProductCardBottom extends StatelessWidget {
           borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(Dimens.marginMedium2),
               bottomRight: Radius.circular(Dimens.marginMedium2))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          InkWell(
-            onTap: () {},
-            child: Icon(
-              M2Icon.favourite,
-              size: 16,
-              // color: addToFav? Colors.white : const Color(0x8AE9E9E9),
+      child: Observer(builder: (context) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            InkWell(
+              onTap: () {},
+              child: Icon(
+                M2Icon.favourite,
+                size: 16,
+                // color: addToFav? Colors.white : const Color(0x8AE9E9E9),
+              ),
             ),
-          ),
-          VerticalDivider(
-            color: Colors.white,
-            indent: Dimens.marginMedium,
-            endIndent: Dimens.marginMedium,
-          ),
-          InkWell(
-            onTap: () {
-              _storeCart.cartProducts.containsKey(product)
-                  ? _storeCart.removeFromCart(product)
-                  : _storeCart.addToCart(product);
-            },
-            child: Icon(
-              _storeCart.cartProducts.containsKey(product)
-                  ? M2Icon.cart_cross
-                  : M2Icon.cart_plus,
+            VerticalDivider(
               color: Colors.white,
-              size: 18,
+              indent: Dimens.marginMedium,
+              endIndent: Dimens.marginMedium,
             ),
-          )
-        ],
-      ),
+            InkWell(
+              onTap: () {
+                if (widget._storeCart.cartProducts
+                    .containsKey(widget.product)) {
+                  "Item removed from cart.".showSnack(context);
+                  widget._storeCart.removeFromCart(widget.product);
+                } else {
+                  "Item added to cart.".showSnack(context);
+                  widget._storeCart.addToCart(widget.product);
+                }
+              },
+              child: Icon(
+                widget._storeCart.cartProducts.containsKey(widget.product)
+                    ? M2Icon.cart_cross
+                    : M2Icon.cart_plus,
+                color: Colors.white,
+                size: 18,
+              ),
+            )
+          ],
+        );
+      }),
     );
   }
 }

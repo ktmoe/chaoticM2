@@ -163,6 +163,7 @@ class _AboutWidgetState extends State<AboutWidget> {
             child: GoogleMap(
               minMaxZoomPreference: const MinMaxZoomPreference(20, 50),
               markers: _markers,
+              onTap: (latLong) {},
               initialCameraPosition: const CameraPosition(target: location),
               onMapCreated: _onMapCreated,
             ),

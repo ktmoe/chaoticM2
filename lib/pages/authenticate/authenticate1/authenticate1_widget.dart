@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:m2mobile/res/dimens.dart';
+import 'package:m2mobile/utils/constants.dart';
 import 'package:m2mobile/stores/authenticate_store.dart';
 
 class Authenticate1Widget extends StatefulWidget {
@@ -66,6 +67,7 @@ class _Authenticate1WidgetState extends State<Authenticate1Widget> {
                       textInputAction: TextInputAction.done,
                       controller: _phoneFieldController,
                       keyboardType: TextInputType.number,
+                      maxLength: maxPhoneLength,
                       inputFormatters: [
                         WhitelistingTextInputFormatter.digitsOnly
                       ],
@@ -93,11 +95,5 @@ class _Authenticate1WidgetState extends State<Authenticate1Widget> {
         );
       },
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _phoneFieldController.dispose();
   }
 }

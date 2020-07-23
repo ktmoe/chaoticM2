@@ -7,6 +7,8 @@ part of 'serializers.dart';
 // **************************************************************************
 
 Serializers _$serializers = (new Serializers().toBuilder()
+      ..add(ForceUpdate.serializer)
+      ..add(ForceUpdateResponse.serializer)
       ..add(Help.serializer)
       ..add(Product.serializer)
       ..add(ProductResponse.serializer)

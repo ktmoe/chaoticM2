@@ -4,6 +4,7 @@ class ScreenBgCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: const BorderRadius.only(

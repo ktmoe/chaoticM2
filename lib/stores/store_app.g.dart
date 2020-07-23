@@ -57,13 +57,13 @@ mixin _$StoreApp on _StoreApp, Store {
   final _$forceUpdateAtom = Atom(name: '_StoreApp.forceUpdate');
 
   @override
-  bool get forceUpdate {
+  Observable<bool> get forceUpdate {
     _$forceUpdateAtom.reportRead();
     return super.forceUpdate;
   }
 
   @override
-  set forceUpdate(bool value) {
+  set forceUpdate(Observable<bool> value) {
     _$forceUpdateAtom.reportWrite(value, super.forceUpdate, () {
       super.forceUpdate = value;
     });
@@ -124,11 +124,22 @@ mixin _$StoreApp on _StoreApp, Store {
   final _$_StoreAppActionController = ActionController(name: '_StoreApp');
 
   @override
-  void changeLanguagePref(Language language) {
+  void changeLanguagePref() {
     final _$actionInfo = _$_StoreAppActionController.startAction(
         name: '_StoreApp.changeLanguagePref');
     try {
-      return super.changeLanguagePref(language);
+      return super.changeLanguagePref();
+    } finally {
+      _$_StoreAppActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _appBoxChanged() {
+    final _$actionInfo = _$_StoreAppActionController.startAction(
+        name: '_StoreApp._appBoxChanged');
+    try {
+      return super._appBoxChanged();
     } finally {
       _$_StoreAppActionController.endAction(_$actionInfo);
     }
@@ -140,6 +151,17 @@ mixin _$StoreApp on _StoreApp, Store {
         name: '_StoreApp.readIsFirstTime');
     try {
       return super.readIsFirstTime();
+    } finally {
+      _$_StoreAppActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void readIsUnicode() {
+    final _$actionInfo = _$_StoreAppActionController.startAction(
+        name: '_StoreApp.readIsUnicode');
+    try {
+      return super.readIsUnicode();
     } finally {
       _$_StoreAppActionController.endAction(_$actionInfo);
     }
@@ -163,13 +185,9 @@ connectivity: ${connectivity},
 exception: ${exception},
 forceUpdate: ${forceUpdate},
 isFirstTime: ${isFirstTime},
-<<<<<<< HEAD
-isLoggedIn: ${isLoggedIn},
+chosenLanguage: ${chosenLanguage},
 isNetworkOn: ${isNetworkOn},
 connectivityMessage: ${connectivityMessage}
-=======
-chosenLanguage: ${chosenLanguage}
->>>>>>> 6e83aa3cb3bb7419c975a95480c3949d2b1ea615
     ''';
   }
 }

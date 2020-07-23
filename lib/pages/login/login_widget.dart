@@ -11,6 +11,9 @@ import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/res/styles.dart';
 import 'package:mobx/mobx.dart';
 import 'package:m2mobile/utils/extensions.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:m2mobile/utils/constants.dart';
 
 class LoginWidget extends StatefulWidget {
   static const route = "/login";
@@ -110,6 +113,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           textInputAction: TextInputAction.next,
           controller: _phoneFieldController,
           keyboardType: TextInputType.number,
+          maxLength: maxPhoneLength,
           inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
           decoration: InputDecoration(
               hintText: "Mobile Number",
@@ -200,8 +204,15 @@ class _LoginWidgetState extends State<LoginWidget> {
         alignment: Alignment.centerRight,
         child: Container(
             margin: const EdgeInsets.only(top: Dimens.marginMedium2),
-            child:
-                InkWell(onTap: () {}, child: const Text("Forgot Password?"))),
+            child: InkWell(
+                onTap: () async {
+                  final yes = await context.standardWarningDialog(
+                      dialogType: WarningDialogType.forgotPasswordDialog);
+                  if (yes) {
+                    await _phoneCallWorks();
+                  }
+                },
+                child: const Text("Forgot Password?"))),
       );
 
   void _onLoginClicked() {
@@ -212,6 +223,22 @@ class _LoginWidgetState extends State<LoginWidget> {
     } else {
       context.successFailDialog(
           dialogType: WarningDialogType.loginFailedDialog);
+    }
+  }
+
+  Future<void> _phoneCallWorks() async {
+    final status = await Permission.phone.status;
+    if (!status.isGranted) {
+      await _requestAndMakeCall();
+    } else {
+      await launch('tel:09790428136');
+    }
+  }
+
+  Future<void> _requestAndMakeCall() async {
+    final newStatus = await Permission.phone.request();
+    if (newStatus.isGranted) {
+      await launch('tel:09790428136');
     }
   }
 }

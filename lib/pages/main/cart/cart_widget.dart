@@ -276,60 +276,50 @@ class _BottomSheetState extends State<BottomSheet> {
       );
 
   Widget _buildNonEmptyCartBottomSheet() => DraggableScrollableSheet(
-        maxChildSize: 0.3,
+        maxChildSize: 0.4,
         initialChildSize: 0.06,
         minChildSize: 0.06,
         builder: (context, scrollController) {
           return Container(
+            width: double.infinity,
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20))),
-            child: Stack(
-              alignment: Alignment.topCenter,
-              children: <Widget>[
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(
-                      top: Dimens.marginMedium3,
-                      left: Dimens.marginMedium,
-                      right: Dimens.marginMedium),
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        _buildAmountText(),
-                        _buildTaxText(),
-                        const Divider(
-                            height: 2,
-                            indent: Dimens.marginLarge,
-                            endIndent: Dimens.marginLarge),
-                        _buildTotalText(),
-                        RaisedButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
-                          padding: const EdgeInsets.only(
-                              left: Dimens.marginLargeX,
-                              right: Dimens.marginLargeX),
-                          color: Theme.of(context).buttonColor,
-                          textColor: Colors.white,
-                          disabledTextColor: Colors.white,
-                          onPressed: () {
-                            Modular.to.pushNamed(OrderWidget.route);
-                          },
-                          child: const Text("Order"),
-                        )
-                      ],
-                    ),
+            padding: const EdgeInsets.only(
+                left: Dimens.marginMedium, right: Dimens.marginMedium),
+            child: SingleChildScrollView(
+              controller: scrollController,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    child: Divider(thickness: 3),
                   ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: Divider(thickness: 3),
-                )
-              ],
+                  _buildAmountText(),
+                  _buildTaxText(),
+                  const Divider(
+                      height: 2,
+                      indent: Dimens.marginLarge,
+                      endIndent: Dimens.marginLarge),
+                  _buildTotalText(),
+                  RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    padding: const EdgeInsets.only(
+                        left: Dimens.marginLargeX, right: Dimens.marginLargeX),
+                    color: Theme.of(context).buttonColor,
+                    textColor: Colors.white,
+                    disabledTextColor: Colors.white,
+                    onPressed: () {
+                      Modular.to.pushNamed(OrderWidget.route);
+                    },
+                    child: const Text("Order"),
+                  )
+                ],
+              ),
             ),
           );
         },

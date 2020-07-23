@@ -91,19 +91,17 @@ class _HomeWidgetState extends State<HomeWidget>
     );
   }
 
-  Widget _buildDiscountItemList() => ConstrainedBox(
+  Widget _buildDiscountItemList() {
+    return Container(
         constraints:
             BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.4),
-        child: GridView.count(
-          scrollDirection: Axis.horizontal,
-          crossAxisCount: 1,
-          padding: const EdgeInsets.all(Dimens.marginMedium),
-          childAspectRatio: ((MediaQuery.of(context).size.width * 0.55) / 170),
-          children: List.generate(5, (index) {
-            return ProductCard(product: Product(), discountItem: true);
-          }),
-        ),
-      );
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 5,
+            itemBuilder: (_, index) {
+              return ProductCard(discountItem: true, product: Product());
+            }));
+  }
 
   Widget _buildLastestItemGrid() {
     return GridView.count(

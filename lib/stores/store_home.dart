@@ -35,7 +35,6 @@ abstract class _StoreHome with Store {
 
   @action
   void updateProducts() {
-    debugPrint("Got till here");
     products = ObservableList.of(_boxProduct.listenable.value.values);
   }
 
@@ -45,7 +44,7 @@ abstract class _StoreHome with Store {
       final productResponse = await _api.getProducts();
       final products = productResponse.body.product.toList();
       debugPrint("Products ${products.length}");
-      if (refresh) _boxProduct.deleteAll();
+      if (refresh && _boxProduct != null) _boxProduct.deleteAll();
       _boxProduct.saveAll(products);
     } catch (e) {
       debugPrint("${e.toString()}");

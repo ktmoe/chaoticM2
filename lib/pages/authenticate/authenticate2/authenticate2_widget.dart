@@ -99,18 +99,9 @@ class _Authenticate2WidgetState extends State<Authenticate2Widget> {
           enableActiveFill: true,
           controller: _optController,
           onCompleted: (v) {
-            debugPrint("Complete " + v);
             _authenticateStore.otp = v;
           },
-          onChanged: (value) {
-            debugPrint(value);
-          },
+          onChanged: (value) {},
         ));
-  }
-
-  @override
-  void dispose() {
-    _optController.dispose();
-    super.dispose();
   }
 }

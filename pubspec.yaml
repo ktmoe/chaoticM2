@@ -86,6 +86,8 @@ dependencies:
   snack:
   multi_image_picker: ^4.6.7
   lottie:
+  #redirect to PlayStore and AppStore
+  store_redirect:
 
   #money Formatter
   flutter_money_formatter:

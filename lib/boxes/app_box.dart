@@ -3,11 +3,14 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:m2mobile/data/dummy/vos/user_profile.dart';
+import 'package:m2mobile/utils/flutter_mdetect.dart';
 
 class AppBox implements Disposable {
   static const String _name = "app-box-key";
 
   static const String firstTimeKey = "first-time-key";
+
+  static const String isUnicodeKey = "is-unicode-key";
 
   static const String userProfileKey = "user-profile-key";
 
@@ -18,7 +21,8 @@ class AppBox implements Disposable {
     return AppBox._(await Hive.openBox(_name));
   }
 
-  ValueListenable<Box> get listenable => _box.listenable();
+  ValueListenable<Box> get listenable =>
+      _box.listenable(keys: [firstTimeKey, isUnicodeKey]);
 
   Future changeFirstTime(bool isFirstTime) async {
     await _box.put(firstTimeKey, isFirstTime);
@@ -26,6 +30,14 @@ class AppBox implements Disposable {
 
   bool getIsFirstTime() {
     return _box.get(firstTimeKey) ?? true;
+  }
+
+  Future changeIsUnicode(bool isUnicode) async {
+    await _box.put(isUnicodeKey, isUnicode);
+  }
+
+  bool getIsUnicode() {
+    return _box.get(isUnicodeKey) ?? MDetect.isUnicode();
   }
 
   Future saveUserProfile(UserProfile userProfile) async {

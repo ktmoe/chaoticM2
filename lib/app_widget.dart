@@ -9,26 +9,27 @@ class AppWidget extends StatefulWidget {
 }
 
 class _AppWidgetState extends State<AppWidget> {
-
   final _appStore = Modular.get<StoreApp>();
 
   @override
   Widget build(BuildContext context) {
     return Observer(
-      builder: (_){
+      builder: (_) {
         return MaterialApp(
-          navigatorKey: Modular.navigatorKey,
-          debugShowCheckedModeBanner: false,
-          title: 'M2Mobile',
-          initialRoute: '/',
-          onGenerateRoute: Modular.generateRoute,
-          theme: ThemeData(
-              fontFamily: (_appStore.chosenLanguage == Language.Unicode)? 'MyFlutterApp' : 'Zawgyi',
-              primaryColor: Color(0xFFF47208),
-              accentColor: Color(0xFFFE9F1B),
-              scaffoldBackgroundColor: Color(0xFFE4E4E4),
-              iconTheme: IconThemeData(color: Color(0xFFF47208)),
-              buttonColor: Color(0xFFFE9F1B)));
+            navigatorKey: Modular.navigatorKey,
+            debugShowCheckedModeBanner: false,
+            title: 'M2Mobile',
+            initialRoute: '/',
+            onGenerateRoute: Modular.generateRoute,
+            theme: ThemeData(
+                fontFamily: (_appStore.chosenLanguage == Language.Unicode)
+                    ? 'MyFlutterApp'
+                    : 'Zawgyi',
+                primaryColor: Color(0xFFF47208),
+                accentColor: Color(0xFFFE9F1B),
+                scaffoldBackgroundColor: Color(0xFFE4E4E4),
+                iconTheme: IconThemeData(color: Color(0xFFF47208)),
+                buttonColor: Color(0xFFFE9F1B)));
       },
     );
   }

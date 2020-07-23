@@ -19,7 +19,7 @@ class MainWidget extends StatefulWidget {
 }
 
 class _MainWidgetState extends State<MainWidget>
-    with AutomaticKeepAliveClientMixin<MainWidget>, WidgetsBindingObserver {
+    with AutomaticKeepAliveClientMixin<MainWidget> {
   final PageController pageController = PageController();
   final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey();
   final StoreApp _storeApp = Modular.get<StoreApp>();
@@ -49,13 +49,6 @@ class _MainWidgetState extends State<MainWidget>
     _disposers.forEach((element) {
       element();
     });
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _storeApp.checkForceUpdate();
-    }
   }
 
   @override

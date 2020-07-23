@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/data/api/api_service.dart';
-import 'package:m2mobile/utils/flutter_mdetect.dart';
 import 'package:mobx/mobx.dart';
 import 'package:m2mobile/boxes/app_box.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
@@ -34,20 +33,18 @@ abstract class _StoreApp with Store {
   AppException exception;
 
   @observable
-  bool forceUpdate = false;
+  Observable<bool> forceUpdate;
 
   @observable
   bool isFirstTime;
 
   @observable
-  Language chosenLanguage = MDetect.isUnicode()
-      ? Language.Unicode
-      : Language.Zawgyi ?? Language.Unicode;
+  Language chosenLanguage;
 
   @action
-  void changeLanguagePref(Language language) {
-    chosenLanguage =
-        (language == Language.Zawgyi) ? Language.Zawgyi : Language.Unicode;
+  void changeLanguagePref() {
+    print("will change language");
+    _appBox.changeIsUnicode(!_appBox.getIsUnicode());
   }
 
   bool isLoggedIn = false;
@@ -55,7 +52,11 @@ abstract class _StoreApp with Store {
   @action
   Future init() async {
     _appBox = await AppBox.create();
+    _appBox.listenable.addListener(() {
+      _appBoxChanged();
+    });
     readIsFirstTime();
+    readIsUnicode();
   }
 
   @action
@@ -63,24 +64,41 @@ abstract class _StoreApp with Store {
     final packageInfo = await PackageInfo.fromPlatform();
     final versionCode = packageInfo.buildNumber;
 
-    print("version code -> $versionCode");
-
     final forceUpdateResponse = (Platform.isAndroid)
         ? await _apiService.forceUpdateAndroid(int.parse(versionCode))
         : await _apiService.forceUpdateIOS(int.parse(versionCode));
 
-    forceUpdate = forceUpdateResponse.body.forceUpdate.forceUpdate;
+    forceUpdate = Observable(forceUpdateResponse.body.forceUpdate.forceUpdate);
+    // forceUpdate = Observable(true);
+  }
+
+  @action
+  void _appBoxChanged() {
+    isFirstTime = _appBox.listenable.value.get(AppBox.firstTimeKey);
+    chosenLanguage = _appBox.listenable.value.get(AppBox.isUnicodeKey)
+        ? Language.Unicode
+        : Language.Zawgyi;
   }
 
   @action
   void readIsFirstTime() {
-    isFirstTime = _appBox.getIsFirstTime();
+    print("isFirstTime read");
+    isFirstTime = _appBox.getIsFirstTime() ?? true;
+  }
+
+  @action
+  void readIsUnicode() {
+    chosenLanguage = _appBox.getIsUnicode()
+        ? Language.Unicode
+        : Language.Zawgyi ?? Language.Unicode;
   }
 
   //Call this method after Selecting Language
   @action
   Future changeFirstTime() async {
-    await _appBox.changeFirstTime(false);
+    if (isFirstTime) {
+      await _appBox.changeFirstTime(false);
+    }
   }
 
   @action

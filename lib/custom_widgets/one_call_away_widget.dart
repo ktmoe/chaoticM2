@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 extension OneCallAwayWidget on BuildContext {
   Future<bool> appLeaveWarning({bool logOut = false}) {
@@ -89,7 +90,7 @@ extension OneCallAwayWidget on BuildContext {
                     RaisedButton(
                         shape: Styles.m2ButtonShape,
                         elevation: Dimens.cardElevation,
-                        onPressed: () => Navigator.of(context).pop(false),
+                        onPressed: () => Modular.to.pop(false),
                         padding: const EdgeInsets.only(
                             left: Dimens.marginMedium2,
                             right: Dimens.marginMedium2),
@@ -99,7 +100,7 @@ extension OneCallAwayWidget on BuildContext {
                     RaisedButton(
                       shape: Styles.m2ButtonShape,
                       elevation: Dimens.cardElevation,
-                      onPressed: () => Navigator.of(context).pop(true),
+                      onPressed: () => Modular.to.pop(true),
                       padding: const EdgeInsets.only(
                           left: Dimens.marginMedium2,
                           right: Dimens.marginMedium2),
@@ -170,5 +171,9 @@ abstract class WarningDialogType {
   static const orderCancelDialog =
       'You are about to cancel your order. Are you sure?';
 
+  static const forgotPasswordDialog =
+      'Forgot Password အတွက် M2 Mobile သို့အောက်ဖော်ပြပါ ဖုန်းနံပါတ်ဖြင့်ဆက်သွယ်အကြောင်းကြားနိုင်သည်။\nဖုန်း - 09 790428136';
+
   static const loginFailedDialog = 'UserName or Password Wrong';
+  static const forceUpdateDialog = 'The new version is available';
 }

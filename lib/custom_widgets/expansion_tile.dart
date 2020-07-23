@@ -77,12 +77,6 @@ class _M2ExpansionTileState extends State<M2ExpansionTile>
     if (_isExpanded) _controller.value = 1.0;
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   void _handleTap() {
     setState(() {
       _isExpanded = !_isExpanded;

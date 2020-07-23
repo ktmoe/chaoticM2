@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-import '../serializers.dart';
+import 'package:m2mobile/models/serializers.dart';
 
 part 'force_update.g.dart';
 

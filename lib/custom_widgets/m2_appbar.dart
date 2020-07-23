@@ -82,23 +82,27 @@ class M2AppBarState extends State<M2AppBar> {
                         onPressed: widget.onDeletePressed)
                     : Observer(
                         builder: (context) {
-                          return Badge(
-                            animationDuration: const Duration(milliseconds: 50),
-                            badgeColor: Theme.of(context).accentColor,
-                            badgeContent: Text(
-                              '${_storeCart.cartCount}',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            showBadge:
-                                (_storeCart.cartCount == 0) ? false : true,
-                            child: IconButton(
-                                icon: Icon(
-                                  M2Icon.cart,
-                                  size: 20,
+                          return Container(
+                            margin: const EdgeInsets.only(
+                                right: Dimens.marginMedium),
+                            child: InkWell(
+                              onTap: () {
+                                Modular.to.pushNamed(CartWidget.route);
+                              },
+                              child: Badge(
+                                animationDuration:
+                                    const Duration(milliseconds: 50),
+                                badgeColor: Theme.of(context).accentColor,
+                                badgeContent: Container(
+                                  decoration:
+                                      BoxDecoration(shape: BoxShape.circle),
                                 ),
-                                onPressed: () {
-                                  Modular.to.pushNamed(CartWidget.route);
-                                }),
+                                alignment: Alignment.topRight,
+                                showBadge:
+                                    (_storeCart.cartCount == 0) ? false : true,
+                                child: const Icon(M2Icon.cart),
+                              ),
+                            ),
                           );
                         },
                       )),

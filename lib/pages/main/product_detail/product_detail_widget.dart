@@ -147,10 +147,14 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                   topRight: Radius.circular(Dimens.marginMedium2)),
               child: Swiper(
                 itemCount: _images.length,
-                indicatorLayout: PageIndicatorLayout.SCALE,
+                indicatorLayout: PageIndicatorLayout.NONE,
                 autoplay: true,
                 autoplayDelay: 2000,
-                pagination: SwiperPagination(builder: SwiperPagination.dots),
+                pagination: SwiperPagination(
+                    builder: DotSwiperPaginationBuilder(
+                        size: 8,
+                        activeColor: Theme.of(context).accentColor,
+                        activeSize: 12)),
                 control: SwiperControl(iconNext: null, iconPrevious: null),
                 itemBuilder: (context, index) {
                   return FadeInImage(
