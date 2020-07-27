@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:m2mobile/custom_widgets/product_card.dart';
-import 'package:m2mobile/models/responses/product.dart';
+import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/res/dimens.dart';
 
 class M2SearchDelegate extends SearchDelegate {

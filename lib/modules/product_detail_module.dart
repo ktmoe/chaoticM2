@@ -1,5 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:m2mobile/models/responses/product.dart';
+import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/pages/main/product_detail/product_detail_widget.dart';
 
 class ProductDetailModule extends ChildModule {

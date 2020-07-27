@@ -9,26 +9,19 @@ part of 'authenticate_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AuthenticateStore on _AuthenticateStoreBase, Store {
-  Computed<Observable<String>> _$fullPhoneComputed;
+  Computed<String> _$fullPhoneComputed;
 
   @override
-  Observable<String> get fullPhone => (_$fullPhoneComputed ??=
-          Computed<Observable<String>>(() => super.fullPhone,
+  String get fullPhone =>
+      (_$fullPhoneComputed ??= Computed<String>(() => super.fullPhone,
               name: '_AuthenticateStoreBase.fullPhone'))
-      .value;
+          .value;
   Computed<bool> _$validPhoneComputed;
 
   @override
   bool get validPhone =>
       (_$validPhoneComputed ??= Computed<bool>(() => super.validPhone,
               name: '_AuthenticateStoreBase.validPhone'))
-          .value;
-  Computed<String> _$userIdComputed;
-
-  @override
-  String get userId =>
-      (_$userIdComputed ??= Computed<String>(() => super.userId,
-              name: '_AuthenticateStoreBase.userId'))
           .value;
 
   final _$pageAtom = Atom(name: '_AuthenticateStoreBase.page');
@@ -76,18 +69,33 @@ mixin _$AuthenticateStore on _AuthenticateStoreBase, Store {
     });
   }
 
-  final _$otpAtom = Atom(name: '_AuthenticateStoreBase.otp');
+  final _$validOtpAtom = Atom(name: '_AuthenticateStoreBase.validOtp');
 
   @override
-  String get otp {
-    _$otpAtom.reportRead();
-    return super.otp;
+  String get validOtp {
+    _$validOtpAtom.reportRead();
+    return super.validOtp;
   }
 
   @override
-  set otp(String value) {
-    _$otpAtom.reportWrite(value, super.otp, () {
-      super.otp = value;
+  set validOtp(String value) {
+    _$validOtpAtom.reportWrite(value, super.validOtp, () {
+      super.validOtp = value;
+    });
+  }
+
+  final _$inputOtpAtom = Atom(name: '_AuthenticateStoreBase.inputOtp');
+
+  @override
+  String get inputOtp {
+    _$inputOtpAtom.reportRead();
+    return super.inputOtp;
+  }
+
+  @override
+  set inputOtp(String value) {
+    _$inputOtpAtom.reportWrite(value, super.inputOtp, () {
+      super.inputOtp = value;
     });
   }
 
@@ -128,13 +136,13 @@ mixin _$AuthenticateStore on _AuthenticateStoreBase, Store {
     return _$initAsyncAction.run(() => super.init());
   }
 
-  final _$saveUserProfileAsyncAction =
-      AsyncAction('_AuthenticateStoreBase.saveUserProfile');
+  final _$savePhoneNumberAsyncAction =
+      AsyncAction('_AuthenticateStoreBase.savePhoneNumber');
 
   @override
-  Future<dynamic> saveUserProfile(UserProfile userProfile) {
-    return _$saveUserProfileAsyncAction
-        .run(() => super.saveUserProfile(userProfile));
+  Future<dynamic> savePhoneNumber(String phoneNumber) {
+    return _$savePhoneNumberAsyncAction
+        .run(() => super.savePhoneNumber(phoneNumber));
   }
 
   final _$_AuthenticateStoreBaseActionController =
@@ -146,17 +154,6 @@ mixin _$AuthenticateStore on _AuthenticateStoreBase, Store {
         name: '_AuthenticateStoreBase.changePage');
     try {
       return super.changePage();
-    } finally {
-      _$_AuthenticateStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void readUserProfile() {
-    final _$actionInfo = _$_AuthenticateStoreBaseActionController.startAction(
-        name: '_AuthenticateStoreBase.readUserProfile');
-    try {
-      return super.readUserProfile();
     } finally {
       _$_AuthenticateStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -179,12 +176,12 @@ mixin _$AuthenticateStore on _AuthenticateStoreBase, Store {
 page: ${page},
 countryCode: ${countryCode},
 phone: ${phone},
-otp: ${otp},
+validOtp: ${validOtp},
+inputOtp: ${inputOtp},
 userProfile: ${userProfile},
 exception: ${exception},
 fullPhone: ${fullPhone},
-validPhone: ${validPhone},
-userId: ${userId}
+validPhone: ${validPhone}
     ''';
   }
 }

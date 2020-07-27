@@ -162,6 +162,27 @@ extension OneCallAwayWidget on BuildContext {
         ) ??
         Future.value(false);
   }
+
+  /// Image Picker return 0 -> Pick From Gallery, 1-> Capture New Photo
+  Future<int> imagePickerDialog() async {
+    return showDialog(
+        context: this,
+        builder: (context) => AlertDialog(
+                content: Column(
+              children: <Widget>[
+                InkWell(
+                    onTap: () {
+                      Navigator.of(this).pop(0);
+                    },
+                    child: const Text("Pick Image from Gallery.")),
+                InkWell(
+                    onTap: () {
+                      Navigator.of(this).pop(1);
+                    },
+                    child: const Text("Take New Image."))
+              ],
+            )));
+  }
 }
 
 abstract class WarningDialogType {

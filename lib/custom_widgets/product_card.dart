@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:m2mobile/models/responses/product.dart';
+import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/pages/main/product_detail/product_detail_widget.dart';

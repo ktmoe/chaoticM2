@@ -3,7 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_page_indicator/flutter_page_indicator.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
-import 'package:m2mobile/models/responses/product.dart';
+import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/pages/main/product_detail/product_detail_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';

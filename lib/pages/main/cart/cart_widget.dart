@@ -7,7 +7,7 @@ import 'package:m2mobile/custom_widgets/order_item_card.dart';
 import 'package:m2mobile/pages/main/cart/order/order_widget.dart';
 import 'package:m2mobile/stores/store_cart.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:m2mobile/models/responses/product.dart';
+import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/utils/extensions.dart';
 
 class CartWidget extends StatefulWidget {

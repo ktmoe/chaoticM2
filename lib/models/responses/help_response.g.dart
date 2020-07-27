@@ -19,7 +19,10 @@ class _$HelpResponseSerializer implements StructuredSerializer<HelpResponse> {
   Iterable<Object> serialize(Serializers serializers, HelpResponse object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'help',
+      'message',
+      serializers.serialize(object.message,
+          specifiedType: const FullType(String)),
+      'data',
       serializers.serialize(object.help, specifiedType: const FullType(Help)),
     ];
 
@@ -37,7 +40,11 @@ class _$HelpResponseSerializer implements StructuredSerializer<HelpResponse> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'help':
+        case 'message':
+          result.message = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'data':
           result.help.replace(serializers.deserialize(value,
               specifiedType: const FullType(Help)) as Help);
           break;
@@ -50,12 +57,17 @@ class _$HelpResponseSerializer implements StructuredSerializer<HelpResponse> {
 
 class _$HelpResponse extends HelpResponse {
   @override
+  final String message;
+  @override
   final Help help;
 
   factory _$HelpResponse([void Function(HelpResponseBuilder) updates]) =>
       (new HelpResponseBuilder()..update(updates)).build();
 
-  _$HelpResponse._({this.help}) : super._() {
+  _$HelpResponse._({this.message, this.help}) : super._() {
+    if (message == null) {
+      throw new BuiltValueNullFieldError('HelpResponse', 'message');
+    }
     if (help == null) {
       throw new BuiltValueNullFieldError('HelpResponse', 'help');
     }
@@ -71,17 +83,21 @@ class _$HelpResponse extends HelpResponse {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is HelpResponse && help == other.help;
+    return other is HelpResponse &&
+        message == other.message &&
+        help == other.help;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, help.hashCode));
+    return $jf($jc($jc(0, message.hashCode), help.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('HelpResponse')..add('help', help))
+    return (newBuiltValueToStringHelper('HelpResponse')
+          ..add('message', message)
+          ..add('help', help))
         .toString();
   }
 }
@@ -89,6 +105,10 @@ class _$HelpResponse extends HelpResponse {
 class HelpResponseBuilder
     implements Builder<HelpResponse, HelpResponseBuilder> {
   _$HelpResponse _$v;
+
+  String _message;
+  String get message => _$this._message;
+  set message(String message) => _$this._message = message;
 
   HelpBuilder _help;
   HelpBuilder get help => _$this._help ??= new HelpBuilder();
@@ -98,6 +118,7 @@ class HelpResponseBuilder
 
   HelpResponseBuilder get _$this {
     if (_$v != null) {
+      _message = _$v.message;
       _help = _$v.help?.toBuilder();
       _$v = null;
     }
@@ -121,7 +142,8 @@ class HelpResponseBuilder
   _$HelpResponse build() {
     _$HelpResponse _$result;
     try {
-      _$result = _$v ?? new _$HelpResponse._(help: help.build());
+      _$result =
+          _$v ?? new _$HelpResponse._(message: message, help: help.build());
     } catch (_) {
       String _$failedField;
       try {

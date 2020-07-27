@@ -20,20 +20,8 @@ class _$HelpSerializer implements StructuredSerializer<Help> {
     final result = <Object>[
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(String)),
-      'wholesale_phone',
-      serializers.serialize(object.wholesalePhone,
-          specifiedType: const FullType(String)),
       'customerservice_phone',
       serializers.serialize(object.customerservicePhone,
-          specifiedType: const FullType(String)),
-      'description',
-      serializers.serialize(object.description,
-          specifiedType: const FullType(String)),
-      'createddate',
-      serializers.serialize(object.createddate,
-          specifiedType: const FullType(String)),
-      'updateddate',
-      serializers.serialize(object.updateddate,
           specifiedType: const FullType(String)),
     ];
 
@@ -55,24 +43,8 @@ class _$HelpSerializer implements StructuredSerializer<Help> {
           result.id = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'wholesale_phone':
-          result.wholesalePhone = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
         case 'customerservice_phone':
           result.customerservicePhone = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'description':
-          result.description = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'createddate':
-          result.createddate = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'updateddate':
-          result.updateddate = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
       }
@@ -86,44 +58,17 @@ class _$Help extends Help {
   @override
   final String id;
   @override
-  final String wholesalePhone;
-  @override
   final String customerservicePhone;
-  @override
-  final String description;
-  @override
-  final String createddate;
-  @override
-  final String updateddate;
 
   factory _$Help([void Function(HelpBuilder) updates]) =>
       (new HelpBuilder()..update(updates)).build();
 
-  _$Help._(
-      {this.id,
-      this.wholesalePhone,
-      this.customerservicePhone,
-      this.description,
-      this.createddate,
-      this.updateddate})
-      : super._() {
+  _$Help._({this.id, this.customerservicePhone}) : super._() {
     if (id == null) {
       throw new BuiltValueNullFieldError('Help', 'id');
     }
-    if (wholesalePhone == null) {
-      throw new BuiltValueNullFieldError('Help', 'wholesalePhone');
-    }
     if (customerservicePhone == null) {
       throw new BuiltValueNullFieldError('Help', 'customerservicePhone');
-    }
-    if (description == null) {
-      throw new BuiltValueNullFieldError('Help', 'description');
-    }
-    if (createddate == null) {
-      throw new BuiltValueNullFieldError('Help', 'createddate');
-    }
-    if (updateddate == null) {
-      throw new BuiltValueNullFieldError('Help', 'updateddate');
     }
   }
 
@@ -139,34 +84,19 @@ class _$Help extends Help {
     if (identical(other, this)) return true;
     return other is Help &&
         id == other.id &&
-        wholesalePhone == other.wholesalePhone &&
-        customerservicePhone == other.customerservicePhone &&
-        description == other.description &&
-        createddate == other.createddate &&
-        updateddate == other.updateddate;
+        customerservicePhone == other.customerservicePhone;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc($jc($jc(0, id.hashCode), wholesalePhone.hashCode),
-                    customerservicePhone.hashCode),
-                description.hashCode),
-            createddate.hashCode),
-        updateddate.hashCode));
+    return $jf($jc($jc(0, id.hashCode), customerservicePhone.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Help')
           ..add('id', id)
-          ..add('wholesalePhone', wholesalePhone)
-          ..add('customerservicePhone', customerservicePhone)
-          ..add('description', description)
-          ..add('createddate', createddate)
-          ..add('updateddate', updateddate))
+          ..add('customerservicePhone', customerservicePhone))
         .toString();
   }
 }
@@ -178,38 +108,17 @@ class HelpBuilder implements Builder<Help, HelpBuilder> {
   String get id => _$this._id;
   set id(String id) => _$this._id = id;
 
-  String _wholesalePhone;
-  String get wholesalePhone => _$this._wholesalePhone;
-  set wholesalePhone(String wholesalePhone) =>
-      _$this._wholesalePhone = wholesalePhone;
-
   String _customerservicePhone;
   String get customerservicePhone => _$this._customerservicePhone;
   set customerservicePhone(String customerservicePhone) =>
       _$this._customerservicePhone = customerservicePhone;
-
-  String _description;
-  String get description => _$this._description;
-  set description(String description) => _$this._description = description;
-
-  String _createddate;
-  String get createddate => _$this._createddate;
-  set createddate(String createddate) => _$this._createddate = createddate;
-
-  String _updateddate;
-  String get updateddate => _$this._updateddate;
-  set updateddate(String updateddate) => _$this._updateddate = updateddate;
 
   HelpBuilder();
 
   HelpBuilder get _$this {
     if (_$v != null) {
       _id = _$v.id;
-      _wholesalePhone = _$v.wholesalePhone;
       _customerservicePhone = _$v.customerservicePhone;
-      _description = _$v.description;
-      _createddate = _$v.createddate;
-      _updateddate = _$v.updateddate;
       _$v = null;
     }
     return this;
@@ -230,14 +139,8 @@ class HelpBuilder implements Builder<Help, HelpBuilder> {
 
   @override
   _$Help build() {
-    final _$result = _$v ??
-        new _$Help._(
-            id: id,
-            wholesalePhone: wholesalePhone,
-            customerservicePhone: customerservicePhone,
-            description: description,
-            createddate: createddate,
-            updateddate: updateddate);
+    final _$result =
+        _$v ?? new _$Help._(id: id, customerservicePhone: customerservicePhone);
     replace(_$result);
     return _$result;
   }
@@ -251,7 +154,7 @@ class HelpBuilder implements Builder<Help, HelpBuilder> {
 
 class HelpAdapter extends TypeAdapter<Help> {
   @override
-  final int typeId = 3;
+  final int typeId = 5;
 
   @override
   Help read(BinaryReader reader) {
@@ -261,29 +164,17 @@ class HelpAdapter extends TypeAdapter<Help> {
     };
     return (HelpBuilder()
           ..id = fields[0] as String
-          ..wholesalePhone = fields[1] as String
-          ..customerservicePhone = fields[2] as String
-          ..description = fields[3] as String
-          ..createddate = fields[4] as String
-          ..updateddate = fields[5] as String)
+          ..customerservicePhone = fields[1] as String)
         .build();
   }
 
   @override
   void write(BinaryWriter writer, Help obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(2)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.wholesalePhone)
-      ..writeByte(2)
-      ..write(obj.customerservicePhone)
-      ..writeByte(3)
-      ..write(obj.description)
-      ..writeByte(4)
-      ..write(obj.createddate)
-      ..writeByte(5)
-      ..write(obj.updateddate);
+      ..write(obj.customerservicePhone);
   }
 }

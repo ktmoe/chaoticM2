@@ -20,7 +20,6 @@ class _LanguageWidgetState extends State<LanguageWidget> {
 
   ReactionDisposer _onChosenLanguage() {
     return reaction((_) => _storeApp.chosenLanguage, (language) {
-      print("in reaction to change language");
       _storeApp.changeLanguagePref();
     });
   }

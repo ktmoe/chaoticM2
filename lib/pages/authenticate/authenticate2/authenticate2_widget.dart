@@ -6,6 +6,9 @@ import 'package:m2mobile/stores/authenticate_store.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class Authenticate2Widget extends StatefulWidget {
+  final Function(String, BuildContext) registerUser;
+
+  const Authenticate2Widget({Key key, this.registerUser}) : super(key: key);
   @override
   _Authenticate2WidgetState createState() => _Authenticate2WidgetState();
 }
@@ -32,7 +35,7 @@ class _Authenticate2WidgetState extends State<Authenticate2Widget> {
                 left: Dimens.marginLarge,
                 right: Dimens.marginLarge),
             child: Text(
-              'We have sent an OTP to your number ${_authenticateStore.fullPhone.value}',
+              'We have sent an OTP to your number ${_authenticateStore.fullPhone}',
               textAlign: TextAlign.center,
               style: const TextStyle(
                   fontSize: Dimens.textRegular2_5x,
@@ -54,7 +57,8 @@ class _Authenticate2WidgetState extends State<Authenticate2Widget> {
                 child: Text("Didn't receive OTP?"),
               ),
               InkWell(
-                onTap: () {},
+                onTap: () =>
+                    widget.registerUser(_authenticateStore.fullPhone, context),
                 child: Padding(
                   padding: const EdgeInsets.all(Dimens.marginMedium),
                   child: Text(
@@ -99,7 +103,7 @@ class _Authenticate2WidgetState extends State<Authenticate2Widget> {
           enableActiveFill: true,
           controller: _optController,
           onCompleted: (v) {
-            _authenticateStore.otp = v;
+            _authenticateStore.inputOtp = v;
           },
           onChanged: (value) {},
         ));

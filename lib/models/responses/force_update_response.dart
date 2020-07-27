@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import '../serializers.dart';
-import 'force_update.dart';
+import '../force_update.dart';
 
 part 'force_update_response.g.dart';
 
@@ -11,7 +11,7 @@ abstract class ForceUpdateResponse
   ForceUpdateResponse._();
 
   factory ForceUpdateResponse([updates(ForceUpdateResponseBuilder b)]) =
-  _$ForceUpdateResponse;
+      _$ForceUpdateResponse;
 
   @BuiltValueField(wireName: 'data')
   ForceUpdate get forceUpdate;

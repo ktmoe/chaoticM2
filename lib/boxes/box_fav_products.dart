@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:m2mobile/models/responses/product.dart';
+import 'package:m2mobile/models/product.dart';
 
-class BoxFav implements Disposable{
+class BoxFav implements Disposable {
   @override
   void dispose() {
     _box.close();
@@ -18,18 +18,17 @@ class BoxFav implements Disposable{
 
   BoxFav._(this._box);
 
-  static Future<BoxFav> create() async{
+  static Future<BoxFav> create() async {
     return _instance ??= BoxFav._(await Hive.openBox(key));
   }
 
   ValueListenable<Box<Product>> get listenable => _box.listenable();
 
-  void addAll(List<Product> favs){
-    for(final fav in favs){
+  void addAll(List<Product> favs) {
+    for (final fav in favs) {
       _box.add(fav);
     }
   }
 
   void delete() => _box.delete(_box.keys);
-
 }

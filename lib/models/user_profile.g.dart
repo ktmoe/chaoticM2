@@ -20,11 +20,11 @@ class _$UserProfileSerializer implements StructuredSerializer<UserProfile> {
     final result = <Object>[
       'id',
       serializers.serialize(object.id, specifiedType: const FullType(String)),
-      'name',
-      serializers.serialize(object.name, specifiedType: const FullType(String)),
-      'image',
+      'imageurl',
       serializers.serialize(object.image,
           specifiedType: const FullType(String)),
+      'name',
+      serializers.serialize(object.name, specifiedType: const FullType(String)),
       'phone',
       serializers.serialize(object.phone,
           specifiedType: const FullType(String)),
@@ -51,12 +51,12 @@ class _$UserProfileSerializer implements StructuredSerializer<UserProfile> {
           result.id = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'name':
-          result.name = serializers.deserialize(value,
+        case 'imageurl':
+          result.image = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'image':
-          result.image = serializers.deserialize(value,
+        case 'name':
+          result.name = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'phone':
@@ -78,9 +78,9 @@ class _$UserProfile extends UserProfile {
   @override
   final String id;
   @override
-  final String name;
-  @override
   final String image;
+  @override
+  final String name;
   @override
   final String phone;
   @override
@@ -89,16 +89,16 @@ class _$UserProfile extends UserProfile {
   factory _$UserProfile([void Function(UserProfileBuilder) updates]) =>
       (new UserProfileBuilder()..update(updates)).build();
 
-  _$UserProfile._({this.id, this.name, this.image, this.phone, this.address})
+  _$UserProfile._({this.id, this.image, this.name, this.phone, this.address})
       : super._() {
     if (id == null) {
       throw new BuiltValueNullFieldError('UserProfile', 'id');
     }
-    if (name == null) {
-      throw new BuiltValueNullFieldError('UserProfile', 'name');
-    }
     if (image == null) {
       throw new BuiltValueNullFieldError('UserProfile', 'image');
+    }
+    if (name == null) {
+      throw new BuiltValueNullFieldError('UserProfile', 'name');
     }
     if (phone == null) {
       throw new BuiltValueNullFieldError('UserProfile', 'phone');
@@ -120,8 +120,8 @@ class _$UserProfile extends UserProfile {
     if (identical(other, this)) return true;
     return other is UserProfile &&
         id == other.id &&
-        name == other.name &&
         image == other.image &&
+        name == other.name &&
         phone == other.phone &&
         address == other.address;
   }
@@ -129,7 +129,7 @@ class _$UserProfile extends UserProfile {
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc($jc(0, id.hashCode), name.hashCode), image.hashCode),
+        $jc($jc($jc($jc(0, id.hashCode), image.hashCode), name.hashCode),
             phone.hashCode),
         address.hashCode));
   }
@@ -138,8 +138,8 @@ class _$UserProfile extends UserProfile {
   String toString() {
     return (newBuiltValueToStringHelper('UserProfile')
           ..add('id', id)
-          ..add('name', name)
           ..add('image', image)
+          ..add('name', name)
           ..add('phone', phone)
           ..add('address', address))
         .toString();
@@ -153,13 +153,13 @@ class UserProfileBuilder implements Builder<UserProfile, UserProfileBuilder> {
   String get id => _$this._id;
   set id(String id) => _$this._id = id;
 
-  String _name;
-  String get name => _$this._name;
-  set name(String name) => _$this._name = name;
-
   String _image;
   String get image => _$this._image;
   set image(String image) => _$this._image = image;
+
+  String _name;
+  String get name => _$this._name;
+  set name(String name) => _$this._name = name;
 
   String _phone;
   String get phone => _$this._phone;
@@ -174,8 +174,8 @@ class UserProfileBuilder implements Builder<UserProfile, UserProfileBuilder> {
   UserProfileBuilder get _$this {
     if (_$v != null) {
       _id = _$v.id;
-      _name = _$v.name;
       _image = _$v.image;
+      _name = _$v.name;
       _phone = _$v.phone;
       _address = _$v.address;
       _$v = null;
@@ -200,7 +200,7 @@ class UserProfileBuilder implements Builder<UserProfile, UserProfileBuilder> {
   _$UserProfile build() {
     final _$result = _$v ??
         new _$UserProfile._(
-            id: id, name: name, image: image, phone: phone, address: address);
+            id: id, image: image, name: name, phone: phone, address: address);
     replace(_$result);
     return _$result;
   }
@@ -224,8 +224,8 @@ class UserProfileAdapter extends TypeAdapter<UserProfile> {
     };
     return (UserProfileBuilder()
           ..id = fields[0] as String
-          ..name = fields[1] as String
-          ..image = fields[2] as String
+          ..image = fields[1] as String
+          ..name = fields[2] as String
           ..phone = fields[3] as String
           ..address = fields[4] as String)
         .build();
@@ -238,9 +238,9 @@ class UserProfileAdapter extends TypeAdapter<UserProfile> {
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.name)
-      ..writeByte(2)
       ..write(obj.image)
+      ..writeByte(2)
+      ..write(obj.name)
       ..writeByte(3)
       ..write(obj.phone)
       ..writeByte(4)

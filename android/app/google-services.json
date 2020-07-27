@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "651597124747",
+    "firebase_url": "https://m2-mobile-819d8.firebaseio.com",
+    "project_id": "m2-mobile-819d8",
+    "storage_bucket": "m2-mobile-819d8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651597124747:android:9b32c5eae014c436cd308e",
+        "android_client_info": {
+          "package_name": "com.gnwt.m2mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "651597124747-7erfgua62j2k0gmj0c3l28igmmsrt41s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlz8b8qh8WVhwYnWWUEtjBMtu1MKGqiwg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "651597124747-7erfgua62j2k0gmj0c3l28igmmsrt41s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

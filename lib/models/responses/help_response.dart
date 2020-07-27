@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-import '../serializers.dart';
-import 'help.dart';
+import 'package:m2mobile/models/serializers.dart';
+import 'package:m2mobile/models/help.dart';
 
 part 'help_response.g.dart';
 
@@ -14,7 +14,9 @@ abstract class HelpResponse
 
   factory HelpResponse([updates(HelpResponseBuilder b)]) = _$HelpResponse;
 
-  @BuiltValueField(wireName: 'help')
+  @BuiltValueField(wireName: 'message')
+  String get message;
+  @BuiltValueField(wireName: 'data')
   Help get help;
   String toJson() {
     return json

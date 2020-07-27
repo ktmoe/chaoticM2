@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/custom_widgets/product_card.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
-import 'package:m2mobile/models/responses/product.dart';
+import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 

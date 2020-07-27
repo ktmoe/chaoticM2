@@ -8,7 +8,7 @@ import 'package:m2mobile/models/serializers.dart';
 
 part 'help.g.dart';
 
-@HiveType(typeId: 3)
+@HiveType(typeId: 5)
 abstract class Help implements Built<Help, HelpBuilder> {
   Help._();
 
@@ -18,20 +18,8 @@ abstract class Help implements Built<Help, HelpBuilder> {
   @BuiltValueField(wireName: 'id')
   String get id;
   @HiveField(1)
-  @BuiltValueField(wireName: 'wholesale_phone')
-  String get wholesalePhone;
-  @HiveField(2)
   @BuiltValueField(wireName: 'customerservice_phone')
   String get customerservicePhone;
-  @HiveField(3)
-  @BuiltValueField(wireName: 'description')
-  String get description;
-  @HiveField(4)
-  @BuiltValueField(wireName: 'createddate')
-  String get createddate;
-  @HiveField(5)
-  @BuiltValueField(wireName: 'updateddate')
-  String get updateddate;
   String toJson() {
     return json.encode(serializers.serializeWith(Help.serializer, this));
   }

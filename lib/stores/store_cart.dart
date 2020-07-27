@@ -1,5 +1,5 @@
 import 'package:mobx/mobx.dart';
-import 'package:m2mobile/models/responses/product.dart';
+import 'package:m2mobile/models/product.dart';
 part 'store_cart.g.dart';
 
 class StoreCart = _StoreCartBase with _$StoreCart;

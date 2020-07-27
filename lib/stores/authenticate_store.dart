@@ -1,6 +1,6 @@
 import 'package:flutter_country_picker/flutter_country_picker.dart';
 import 'package:m2mobile/boxes/app_box.dart';
-import 'package:m2mobile/data/dummy/vos/user_profile.dart';
+import 'package:m2mobile/models/user_profile.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:mobx/mobx.dart';
 part 'authenticate_store.g.dart';
@@ -23,17 +23,19 @@ abstract class _AuthenticateStoreBase with Store {
   String phone = "";
 
   @observable
-  String otp = "";
+  String validOtp = "";
 
   @observable
-  Observable<UserProfile> userProfile;
+  String inputOtp = "";
+
+  @observable
+  Observable<UserProfile> userProfile = Observable(null);
 
   @observable
   AppException exception;
 
   @computed
-  Observable<String> get fullPhone =>
-      Observable("+" + countryCode.dialingCode + phone);
+  String get fullPhone => "+" + countryCode.dialingCode + phone;
 
   @computed
   bool get validPhone => countryCode != null && phone.trim().isNotEmpty;
@@ -41,18 +43,11 @@ abstract class _AuthenticateStoreBase with Store {
   @action
   Future init() async {
     _appBox = await AppBox.create();
-    // readUserProfile();
   }
 
-  @computed
-  String get userId => userProfile.value.id;
-
   @action
-  void readUserProfile() => userProfile = Observable(_appBox.getUserProfile());
-
-  @action
-  Future saveUserProfile(UserProfile userProfile) async {
-    await _appBox.saveUserProfile(userProfile);
+  Future savePhoneNumber(String phoneNumber) async {
+    await _appBox.savePhoneNumber(phoneNumber);
   }
 
   @action

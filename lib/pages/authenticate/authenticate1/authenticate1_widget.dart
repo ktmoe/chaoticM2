@@ -27,10 +27,7 @@ class _Authenticate1WidgetState extends State<Authenticate1Widget> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              SvgPicture.asset(
-                "lib/res/svgs/m2_logo.svg",
-                width: MediaQuery.of(context).size.width * 0.4,
-              ),
+              _buildLogo(),
               Container(
                 padding: const EdgeInsets.only(
                     top: Dimens.marginLarge,
@@ -47,46 +44,7 @@ class _Authenticate1WidgetState extends State<Authenticate1Widget> {
               SizedBox(
                 height: Dimens.marginLargeX,
               ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  CountryPicker(
-                    onChanged: (country) {
-                      _authenticateStore.countryCode = country;
-                    },
-                    showName: false,
-                    showFlag: false,
-                    showDialingCode: true,
-                    selectedCountry: _authenticateStore.countryCode,
-                  ),
-                  const SizedBox(
-                    width: Dimens.marginMedium,
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                      textInputAction: TextInputAction.done,
-                      controller: _phoneFieldController,
-                      keyboardType: TextInputType.number,
-                      maxLength: maxPhoneLength,
-                      inputFormatters: [
-                        WhitelistingTextInputFormatter.digitsOnly
-                      ],
-                      decoration: InputDecoration(
-                        hintText: "Your Mobile Number",
-                      ),
-                      validator: (value) => (value.isEmpty || value == null)
-                          ? "Should not be empty"
-                          : null,
-                      onChanged: (value) {
-                        _authenticateStore.phone = value;
-                      },
-                      onFieldSubmitted: (value) {
-                        _authenticateStore.phone = value;
-                      },
-                    ),
-                  ),
-                ],
-              ),
+              _buildPhoneNumberFieldWithCountyPicker(),
               SizedBox(
                 height: Dimens.marginLargeX,
               ),
@@ -95,5 +53,62 @@ class _Authenticate1WidgetState extends State<Authenticate1Widget> {
         );
       },
     );
+  }
+
+  Widget _buildLogo() {
+    return SvgPicture.asset(
+      "lib/res/svgs/m2_logo.svg",
+      width: MediaQuery.of(context).size.width * 0.4,
+    );
+  }
+
+  Widget _buildPhoneNumberFieldWithCountyPicker() {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: <Widget>[
+        CountryPicker(
+          onChanged: (country) {
+            _authenticateStore.countryCode = country;
+          },
+          showName: false,
+          showFlag: false,
+          showDialingCode: true,
+          selectedCountry: _authenticateStore.countryCode,
+        ),
+        const SizedBox(
+          width: Dimens.marginMedium,
+        ),
+        Expanded(
+          child: TextFormField(
+            textInputAction: TextInputAction.done,
+            controller: _phoneFieldController,
+            keyboardType: TextInputType.number,
+            maxLength: maxPhoneLength,
+            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+            decoration: InputDecoration(
+              hintText: "Your Mobile Number",
+            ),
+            validator: _getErrorMessage,
+            onChanged: _validateLength,
+            onFieldSubmitted: _validateLength,
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _validateLength(String value) {
+    if (value.length > 6 && value.length < 11) {
+      _authenticateStore.phone = value;
+    }
+  }
+
+  String _getErrorMessage(String value) {
+    if (value.isEmpty) {
+      return 'Should Not Be Empty';
+    } else if (value.length < 6 && value.length > 11) {
+      return 'Invalid Number';
+    } else
+      return null;
   }
 }

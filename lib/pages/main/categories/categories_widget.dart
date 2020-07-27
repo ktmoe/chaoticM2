@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:m2mobile/models/m2_category.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/custom_widgets/expansion_tile.dart';
 import 'package:m2mobile/pages/main/categories/product_list/product_list_widget.dart';
+import 'package:m2mobile/stores/store_app.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class CategoriesWidget extends StatefulWidget {
   @override
@@ -18,6 +21,7 @@ class _CategoriesWidgetState extends State<CategoriesWidget>
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorState =
       GlobalKey<RefreshIndicatorState>();
+  final StoreApp _storeApp = Modular.get<StoreApp>();
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +31,22 @@ class _CategoriesWidgetState extends State<CategoriesWidget>
       onRefresh: () async {},
       child: Container(
         margin: const EdgeInsets.all(Dimens.marginMedium),
-        child: ListView(
-          children: _buildCategoriesList(),
-        ),
+        child: Observer(builder: (_) {
+          var categories = _storeApp.categoryList;
+          var subCategoriesMap = _storeApp.subCategoryMap;
+          debugPrint('Categories ${categories.length}');
+          debugPrint('SubCategories ${subCategoriesMap.length}');
+          return ListView(
+            children: _buildCategoriesList(),
+          );
+        }),
       ),
     );
   }
 
   List<Card> _buildCategoriesList() {
     return List<Card>.generate(
-      _categories.length,
+      _storeApp.categoryList.length,
       (index) => Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Dimens.cardCornerRadius),
@@ -45,30 +55,28 @@ class _CategoriesWidgetState extends State<CategoriesWidget>
         child: M2ExpansionTile(
             onExpansionChanged: (val) {},
             key: PageStorageKey(index.toString()), //to fix error
-            leading: Icon(_icons[_categories[index]], color: Color(0x99000000)),
+            leading: Icon(_icons[_storeApp.categoryList[index].category],
+                color: Color(0x99000000)),
             title: Text(
-              _categories[index],
+              _storeApp.categoryList[index].category,
               style: const TextStyle(
                   color: Color(0x99000000), fontWeight: FontWeight.bold),
             ),
-            children: _buildSubCategoriesList(_categories[index])),
+            children: _buildSubCategoriesList(_storeApp.categoryList[index])),
       ),
     );
   }
 
-  List<Widget> _buildSubCategoriesList(String categoryName) {
-    return _subCategoriesMap[categoryName]
+  List<Widget> _buildSubCategoriesList(M2Category category) {
+    return _storeApp.subCategoryMap[category]
         .map((item) => ListTile(
             onTap: () {
               Modular.to.pushNamed(ProductListWidget.route,
-                  arguments: ProductNameArgs(item));
+                  arguments: ProductNameArgs(item.subCategory));
             },
-            leading: Icon(
-              Icons.arrow_right,
-              color: Colors.grey,
-            ),
+            leading: Icon(Icons.arrow_right, color: Colors.grey),
             title: Text(
-              item,
+              item.subCategory,
               style: const TextStyle(color: const Color(0x99000000)),
             )))
         .toList();
@@ -77,21 +85,6 @@ class _CategoriesWidgetState extends State<CategoriesWidget>
   @override
   bool get wantKeepAlive => true;
 
-  final _categories = ["Mobile Phone", "Tablet", "Laptop"];
-  final _subCategoriesMap = {
-    "Mobile Phone": ["Apple", "Samsung", "Xiaomi", "Huawei", "Vivo"],
-    "Tablet": ["Apple", "Samsung", "Xiaomi", "Huawei", "Vivo"],
-    "Laptop": [
-      "Apple",
-      "Huawei",
-      "Lenovo",
-      "HP",
-      "DELL",
-      "Xiaomi",
-      "Samsung",
-      "MSI"
-    ]
-  };
   final _icons = {
     "Mobile Phone": M2Icon.phone,
     "Tablet": M2Icon.tablet,

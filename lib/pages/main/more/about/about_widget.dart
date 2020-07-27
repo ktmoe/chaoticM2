@@ -25,7 +25,6 @@ class _AboutWidgetState extends State<AboutWidget> {
   static const location = LatLng(21.940372, 96.083979);
 
   void _onMapCreated(GoogleMapController controller) {
-    debugPrint("Google Map Created");
     _controller.complete(controller);
   }
 

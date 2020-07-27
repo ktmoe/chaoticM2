@@ -7,6 +7,10 @@ import 'package:m2mobile/res/styles.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:m2mobile/stores/store_help.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
+import 'package:m2mobile/utils/extensions.dart';
 
 class HelpWidget extends StatefulWidget {
   static const route = "/main/more/help";
@@ -16,14 +20,28 @@ class HelpWidget extends StatefulWidget {
 }
 
 class _HelpWidgetState extends State<HelpWidget> {
-  final List<String> _dummyPhoneList = [
-    '09790428136',
-    '09254790066',
-    '09790428136',
-    '09254790066',
-    '09790428136',
-    '09254790066'
-  ];
+  final StoreHelp _storeHelp = Modular.get<StoreHelp>();
+  List<ReactionDisposer> _disposers = [];
+
+  ReactionDisposer _onAppException() =>
+      reaction((_) => _storeHelp.exception, (e) {
+        e.toString().showSnack(context);
+      });
+
+  @override
+  void initState() {
+    super.initState();
+    _storeHelp.init();
+    _disposers.addAll([_onAppException()]);
+  }
+
+  @override
+  void dispose() {
+    _disposers.forEach((element) {
+      element();
+    });
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,24 +76,26 @@ class _HelpWidgetState extends State<HelpWidget> {
                         fontSize: Dimens.textRegular2x,
                         fontWeight: FontWeight.w600)),
                 const SizedBox(height: Dimens.marginMedium2),
-                Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: Dimens.marginLarge,
-                    direction: Axis.horizontal,
-                    children: _dummyPhoneList
-                        .map((e) => _phoneNoChipWidget(e, (phNO) async {
-                              final status = await Permission.phone.status;
-                              if (status.isUndetermined) {
-                                await Permission.phone.request();
-                                await launch("tel:$e");
-                              } else if (status.isDenied) {
-                                await Permission.phone.request();
-                                await launch("tel:$e");
-                              } else {
-                                await launch("tel:$e");
-                              }
-                            }))
-                        .toList())
+                Observer(builder: (_) {
+                  return Wrap(
+                      alignment: WrapAlignment.start,
+                      spacing: Dimens.marginLarge,
+                      direction: Axis.horizontal,
+                      children: _storeHelp.phones
+                          .map((e) => _phoneNoChipWidget(e, (phNO) async {
+                                final status = await Permission.phone.status;
+                                if (status.isUndetermined) {
+                                  await Permission.phone.request();
+                                  await launch("tel:$e");
+                                } else if (status.isDenied) {
+                                  await Permission.phone.request();
+                                  await launch("tel:$e");
+                                } else {
+                                  await launch("tel:$e");
+                                }
+                              }))
+                          .toList());
+                })
               ],
             ),
           )

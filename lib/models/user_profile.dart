@@ -19,12 +19,12 @@ abstract class UserProfile implements Built<UserProfile, UserProfileBuilder> {
   String get id;
 
   @HiveField(1)
-  @BuiltValueField(wireName: 'name')
-  String get name;
+  @BuiltValueField(wireName: 'imageurl')
+  String get image;
 
   @HiveField(2)
-  @BuiltValueField(wireName: 'image')
-  String get image;
+  @BuiltValueField(wireName: 'name')
+  String get name;
 
   @HiveField(3)
   @BuiltValueField(wireName: 'phone')

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_page_indicator/flutter_page_indicator.dart';
-import 'package:m2mobile/models/responses/product.dart';
+import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:flutter_modular/flutter_modular.dart';

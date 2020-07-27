@@ -26,6 +26,12 @@ class _SplashWidgetState extends State<SplashWidget>
     }
   }
 
+  ReactionDisposer _onException() {
+    return reaction((_) => _storeApp.exception, (e) {
+      e.toString().showSnack(context);
+    });
+  }
+
   ReactionDisposer _onForceUpdateChanged() {
     return autorun((_) async {
       if (_storeApp.forceUpdate != null) {
@@ -62,7 +68,8 @@ class _SplashWidgetState extends State<SplashWidget>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _storeApp.init();
-    _disposers.addAll([_onConnectivityChanged(), _onForceUpdateChanged()]);
+    _disposers.addAll(
+        [_onConnectivityChanged(), _onForceUpdateChanged(), _onException()]);
   }
 
   @override

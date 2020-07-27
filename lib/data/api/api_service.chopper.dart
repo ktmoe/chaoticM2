@@ -33,7 +33,7 @@ class _$ApiService extends ApiService {
 
   @override
   Future<Response<HelpResponse>> getHelpInfo() {
-    final $url = '/api/getHelpview/help';
+    final $url = '/api/helpview';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<HelpResponse, HelpResponse>($request);
   }
@@ -82,5 +82,26 @@ class _$ApiService extends ApiService {
     final $params = <String, dynamic>{'buildnumber': buildNumber};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<ForceUpdateResponse, ForceUpdateResponse>($request);
+  }
+
+  @override
+  Future<Response<CompanyInfoResponse>> getCompanyInfo() {
+    final $url = '/api/companyview';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<CompanyInfoResponse, CompanyInfoResponse>($request);
+  }
+
+  @override
+  Future<Response<M2CategoryResponse>> getCategories() {
+    final $url = '/api/categoryview';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<M2CategoryResponse, M2CategoryResponse>($request);
+  }
+
+  @override
+  Future<Response<SubCategoryResponse>> getSubCategories() {
+    final $url = '/api/subcategoryview';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<SubCategoryResponse, SubCategoryResponse>($request);
   }
 }

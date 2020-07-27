@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/pages/main/main_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/custom_widgets/one_call_away_widget.dart';
+import 'package:m2mobile/utils/image_picker_utils.dart';
+import 'package:m2mobile/stores/store_profile.dart';
 
 class EditProfileWidget extends StatefulWidget {
   static const route = "/main/more/profile/edit_profile";
@@ -25,7 +28,15 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
+  final StoreProfile _storeProfile = Modular.get<StoreProfile>();
+
   bool _obscure = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _storeProfile.init(widget.register);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +56,16 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
           body: Stack(
             children: <Widget>[
               _buildBackgroundGradient(),
-              SingleChildScrollView(
-                child: Stack(
-                  children: <Widget>[
-                    _buildCircleProfilePhoto(),
-                    _buildProfileInfoArea()
-                  ],
-                ),
-              ),
+              Observer(builder: (_) {
+                return SingleChildScrollView(
+                  child: Stack(
+                    children: <Widget>[
+                      _buildCircleProfilePhoto(),
+                      _buildProfileInfoArea()
+                    ],
+                  ),
+                );
+              }),
             ],
           ),
         ));
@@ -72,34 +85,43 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20))),
           ),
-          Container(
-            width: 100,
-            height: 100,
-            margin: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.15 - 50),
-            child: widget.register
-                ? Card(
-                    elevation: Dimens.cardElevation,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50)),
-                    child: Icon(
-                      M2Icon.camera_1,
-                      color: Color(0x99000000),
+          InkWell(
+            onTap: () async {
+              // 0 -> from gallery, 1-> camera
+              final source = await context.imagePickerDialog();
+              source == 0
+                  ? ImagePickerUtils.getGalleryImage()
+                  : ImagePickerUtils.getGalleryImage();
+            },
+            child: Container(
+              width: 100,
+              height: 100,
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.15 - 50),
+              child: widget.register
+                  ? Card(
+                      elevation: Dimens.cardElevation,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)),
+                      child: Icon(
+                        M2Icon.camera_1,
+                        color: Color(0x99000000),
+                      ),
+                    )
+                  : Card(
+                      elevation: Dimens.cardElevation,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: FadeInImage(
+                            fit: BoxFit.cover,
+                            placeholder: AssetImage("lib/res/images/earth.jpg"),
+                            image: NetworkImage(
+                                "https://pyxis.nymag.com/v1/imgs/57d/5f1/4e4dae00f150e36a22a13ffa956d4301d8-07-timothee-chalamet.rvertical.w600.jpg")),
+                      ),
                     ),
-                  )
-                : Card(
-                    elevation: Dimens.cardElevation,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50)),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: FadeInImage(
-                          fit: BoxFit.cover,
-                          placeholder: AssetImage("lib/res/images/earth.jpg"),
-                          image: NetworkImage(
-                              "https://pyxis.nymag.com/v1/imgs/57d/5f1/4e4dae00f150e36a22a13ffa956d4301d8-07-timothee-chalamet.rvertical.w600.jpg")),
-                    ),
-                  ),
+            ),
           )
         ],
       );
@@ -147,7 +169,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   Widget _buildNameTextField() {
     return TextFormField(
       textInputAction: TextInputAction.next,
-      controller: _nameController,
+      controller: _nameController..text = _storeProfile.name,
       decoration: InputDecoration(
         hintText: "Name",
       ),
@@ -166,7 +188,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   Widget _buildPhoneNoTextField() {
     return TextFormField(
       textInputAction: TextInputAction.next,
-      controller: _phoneController,
+      controller: _phoneController..text = _storeProfile.phoneNo,
       decoration: InputDecoration(
         hintText: "Phone No.",
       ),
@@ -185,7 +207,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   Widget _buildAddressTextField() {
     return TextFormField(
       textInputAction: TextInputAction.next,
-      controller: _addressController,
+      controller: _addressController..text = _storeProfile.address,
       decoration: InputDecoration(
         hintText: "Address",
       ),

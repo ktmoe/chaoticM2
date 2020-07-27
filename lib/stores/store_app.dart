@@ -2,11 +2,17 @@ import 'dart:io';
 
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/data/api/api_service.dart';
+import 'package:m2mobile/models/user_profile.dart';
+import 'package:m2mobile/models/m2_category.dart';
+import 'package:m2mobile/models/sub_category.dart';
 import 'package:mobx/mobx.dart';
 import 'package:m2mobile/boxes/app_box.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:m2mobile/utils/connectivity_service.dart';
 import 'package:package_info/package_info.dart';
+import 'package:m2mobile/models/company_info.dart';
+import 'package:m2mobile/boxes/box_category.dart';
+import 'package:m2mobile/boxes/box_sub_category.dart';
 
 part 'store_app.g.dart';
 
@@ -14,6 +20,8 @@ class StoreApp = _StoreApp with _$StoreApp;
 
 abstract class _StoreApp with Store {
   AppBox _appBox;
+  BoxCategory _boxCategory;
+  BoxSubCategory _boxSubCategory;
 
   final ApiService _apiService = Modular.get<ApiService>();
 
@@ -30,6 +38,9 @@ abstract class _StoreApp with Store {
       : "You're online";
 
   @observable
+  CompanyInfo companyInfo;
+
+  @observable
   AppException exception;
 
   @observable
@@ -39,24 +50,109 @@ abstract class _StoreApp with Store {
   bool isFirstTime;
 
   @observable
+  bool isLoggedIn;
+
+  @observable
   Language chosenLanguage;
+
+  @observable
+  UserProfile userProfile;
+
+  @observable
+  ObservableList<M2Category> categoryList;
+
+  @observable
+  ObservableList<SubCategory> subCategoryList;
+
+  @computed
+  Map<M2Category, List<SubCategory>> get subCategoryMap {
+    final result = Map<M2Category, List<SubCategory>>();
+    categoryList.forEach((category) {
+      result.putIfAbsent(
+          category,
+          () => subCategoryList
+              .where((subCategory) => subCategory.categoryId == category.id)
+              .toList());
+    });
+    return result;
+  }
 
   @action
   void changeLanguagePref() {
-    print("will change language");
     _appBox.changeIsUnicode(!_appBox.getIsUnicode());
   }
 
-  bool isLoggedIn = false;
-
   @action
   Future init() async {
-    _appBox = await AppBox.create();
+    await _createBoxes();
+    _setupBoxListeners();
+    readIsFirstTime();
+    readIsLoggedIn();
+    readIsUnicode();
+    if (!isFirstTime) {
+      await _preloadAppData();
+    }
+  }
+
+  @action
+  void _setupBoxListeners() {
     _appBox.listenable.addListener(() {
       _appBoxChanged();
     });
-    readIsFirstTime();
-    readIsUnicode();
+    _appBox.companyInfoListenable.addListener(() {
+      _companyInfoChanged();
+    });
+    _boxCategory.listenable.addListener(() {
+      _boxCategoryChanged();
+    });
+    _boxSubCategory.listenable.addListener(() {
+      _boxSubCategoryChanged();
+    });
+  }
+
+  @action
+  Future _createBoxes() async {
+    _appBox = await AppBox.create();
+    _boxCategory = await BoxCategory.create();
+    _boxSubCategory = await BoxSubCategory.create();
+  }
+
+  @action
+  Future _preloadAppData() async {
+    await getCompanyInfo();
+    await getCategories();
+    await getSubCategories();
+  }
+
+  @action
+  Future getCompanyInfo() async {
+    try {
+      final response = await _apiService.getCompanyInfo();
+      companyInfo = response.body.companyInfo;
+      await _appBox.saveCompanyInfo(companyInfo);
+    } catch (e) {
+      exception = AppException(message: e.toString());
+    }
+  }
+
+  @action
+  Future getCategories() async {
+    try {
+      final response = await _apiService.getCategories();
+      await _boxCategory.saveAll(response.body.m2Category.toList());
+    } catch (e) {
+      exception = AppException(message: e.toString());
+    }
+  }
+
+  @action
+  Future getSubCategories() async {
+    try {
+      final response = await _apiService.getSubCategories();
+      await _boxSubCategory.saveAll(response.body.subCategory.toList());
+    } catch (e) {
+      exception = AppException(message: e.toString());
+    }
   }
 
   @action
@@ -69,7 +165,23 @@ abstract class _StoreApp with Store {
         : await _apiService.forceUpdateIOS(int.parse(versionCode));
 
     forceUpdate = Observable(forceUpdateResponse.body.forceUpdate.forceUpdate);
-    // forceUpdate = Observable(true);
+  }
+
+  @action
+  void _companyInfoChanged() {
+    companyInfo =
+        _appBox.companyInfoListenable.value.get(AppBox.companyInfoKey);
+  }
+
+  @action
+  void _boxCategoryChanged() {
+    categoryList = ObservableList.of(_boxCategory.listenable.value.values);
+  }
+
+  @action
+  void _boxSubCategoryChanged() {
+    subCategoryList =
+        ObservableList.of(_boxSubCategory.listenable.value.values);
   }
 
   @action
@@ -82,7 +194,6 @@ abstract class _StoreApp with Store {
 
   @action
   void readIsFirstTime() {
-    print("isFirstTime read");
     isFirstTime = _appBox.getIsFirstTime() ?? true;
   }
 
@@ -91,6 +202,23 @@ abstract class _StoreApp with Store {
     chosenLanguage = _appBox.getIsUnicode()
         ? Language.Unicode
         : Language.Zawgyi ?? Language.Unicode;
+  }
+
+  @action
+  void readIsLoggedIn() {
+    isLoggedIn = _appBox.getUserProfile() != null;
+  }
+
+  @action
+  void readUserProfile() {
+    if (_appBox.getUserProfile() != null) {
+      userProfile = _appBox.getUserProfile();
+    }
+  }
+
+  @action
+  Future saveUserProfile(UserProfile userProfile) async {
+    await _appBox.saveUserProfile(userProfile);
   }
 
   //Call this method after Selecting Language
