@@ -1,14 +1,17 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
+import 'package:m2mobile/models/company_info.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/res/styles.dart';
+import 'package:m2mobile/stores/store_app.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutWidget extends StatefulWidget {
@@ -71,81 +74,87 @@ class _AboutWidgetState extends State<AboutWidget> {
         ));
   }
 
-  Widget _buildM2AboutArea() => Align(
-        child: Container(
-          margin: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height * 0.03,
-              left: Dimens.marginLarge,
-              right: Dimens.marginLarge),
-          child: Column(
-            children: <Widget>[
-              Hero(
-                tag: AboutWidget.heroTag,
-                child: SvgPicture.asset(
-                  "lib/res/svgs/m2_logo.svg",
-                  width: MediaQuery.of(context).size.width * 0.3,
+  Widget _buildM2AboutArea() => Observer(
+    builder: (_){
+      final storeApp = Modular.get<StoreApp>();
+      CompanyInfo companyInfo = storeApp.companyInfo;
+      return Align(
+          child: Container(
+            margin: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.03,
+                left: Dimens.marginLarge,
+                right: Dimens.marginLarge),
+            child: Column(
+              children: <Widget>[
+                Hero(
+                  tag: AboutWidget.heroTag,
+                  child: SvgPicture.asset(
+                    "lib/res/svgs/m2_logo.svg",
+                    width: MediaQuery.of(context).size.width * 0.3,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(Dimens.marginMedium2),
-                child: Text(
-                  "M2 Mobile",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.w400,
-                      fontSize: Dimens.textHeading1x),
+                Padding(
+                  padding: const EdgeInsets.all(Dimens.marginMedium2),
+                  child: Text(
+                    "M2 Mobile",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.w400,
+                        fontSize: Dimens.textHeading1x),
+                  ),
                 ),
-              ),
-              SizedBox(height: Dimens.marginLargeX),
-              Container(
-                margin: const EdgeInsets.only(bottom: Dimens.marginLarge),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Icon(
-                      M2Icon.phone,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(
-                      width: Dimens.marginLarge,
-                    ),
-                    Expanded(
-                        child: Text("09 683619391, 09 450255553,\n09 5230214",
-                            style: Styles.m2TextTheme.copyWith(
-                                fontWeight: FontWeight.w600,
-                                fontSize: Dimens.textRegular2x,
-                                height: 1.5)))
-                  ],
+                SizedBox(height: Dimens.marginLargeX),
+                Container(
+                  margin: const EdgeInsets.only(bottom: Dimens.marginLarge),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Icon(
+                        M2Icon.phone,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(
+                        width: Dimens.marginLarge,
+                      ),
+                      Expanded(
+                          child: Text("${companyInfo.phone}",
+                              style: Styles.m2TextTheme.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: Dimens.textRegular2x,
+                                  height: 1.5)))
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(bottom: Dimens.marginLargeX),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Icon(
-                      M2Icon.location,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(
-                      width: Dimens.marginLarge,
-                    ),
-                    Expanded(
-                        child: Text(
-                            "Mandalay 69 Street, Between 37 and 38\nMandalay MaNawHaRi Street, Between 57 and 58\nMandalay 56 Street, Corner of 104A",
-                            textAlign: TextAlign.start,
-                            style: Styles.m2TextTheme.copyWith(
-                                fontWeight: FontWeight.w600,
-                                fontSize: Dimens.textRegular2x,
-                                height: 1.5)))
-                  ],
+                Container(
+                  margin: const EdgeInsets.only(bottom: Dimens.marginLargeX),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Icon(
+                        M2Icon.location,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(
+                        width: Dimens.marginLarge,
+                      ),
+                      Expanded(
+                          child: Text(
+                              "${companyInfo.address}",
+                              textAlign: TextAlign.start,
+                              style: Styles.m2TextTheme.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: Dimens.textRegular2x,
+                                  height: 1.5)))
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      );
+        );
+    },
+  );
 
   Widget _buildMapArea() => Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
