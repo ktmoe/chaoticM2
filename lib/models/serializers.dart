@@ -5,6 +5,7 @@ import 'package:m2mobile/models/responses/force_update_response.dart';
 import 'package:m2mobile/models/responses/help_response.dart';
 import 'package:m2mobile/models/help.dart';
 import 'package:m2mobile/models/product.dart';
+import 'package:m2mobile/models/responses/login_response.dart';
 import 'package:m2mobile/models/responses/product_response.dart';
 import 'package:m2mobile/models/company_info.dart';
 import 'package:m2mobile/models/responses/company_info_response.dart';
@@ -13,9 +14,13 @@ import 'package:m2mobile/models/m2_category.dart';
 import 'package:m2mobile/models/responses/m2_category_response.dart';
 import 'package:m2mobile/models/responses/sub_category_response.dart';
 import 'package:m2mobile/models/sub_category.dart';
+import 'package:m2mobile/models/user_profile.dart';
+import 'package:m2mobile/models/responses/file_upload_response.dart';
+import 'package:m2mobile/models/responses/post_profile_response.dart';
 part 'serializers.g.dart';
 
 @SerializersFor([
+  UserProfile,
   Product,
   ProductResponse,
   HelpResponse,
@@ -27,7 +32,10 @@ part 'serializers.g.dart';
   M2Category,
   M2CategoryResponse,
   SubCategory,
-  SubCategoryResponse
+  SubCategoryResponse,
+  FileUploadResponse,
+  PostProfileResponse,
+  LoginResponse
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

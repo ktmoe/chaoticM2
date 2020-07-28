@@ -5,6 +5,7 @@ import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
 import 'package:m2mobile/pages/main/more/profile/edit_profile_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
+import 'package:m2mobile/stores/store_app.dart';
 
 class ProfileWidget extends StatefulWidget {
   static const route = "/main/more/profile";
@@ -13,6 +14,8 @@ class ProfileWidget extends StatefulWidget {
 }
 
 class _ProfileWidgetState extends State<ProfileWidget> {
+  final StoreApp _storeApp = Modular.get<StoreApp>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,8 +48,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               height: 100,
               fit: BoxFit.cover,
               placeholder: AssetImage("lib/res/images/earth.jpg"),
-              image: NetworkImage(
-                  "https://pyxis.nymag.com/v1/imgs/57d/5f1/4e4dae00f150e36a22a13ffa956d4301d8-07-timothee-chalamet.rvertical.w600.jpg")),
+              image: NetworkImage(_storeApp.userProfile.imageurl ?? "")),
         ),
       );
 
@@ -63,8 +65,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               ),
               Padding(
                 padding: const EdgeInsets.all(Dimens.marginMedium2),
-                child: const Text(
-                  "Ko Khin Maung Soe",
+                child: Text(
+                  _storeApp.userProfile.name,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
@@ -77,15 +79,10 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Icon(
-                      M2Icon.phone,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(
-                      width: Dimens.marginLarge,
-                    ),
-                    const Text(
-                      "09 49350513",
+                    const Icon(M2Icon.phone, color: Colors.grey),
+                    const SizedBox(width: Dimens.marginLarge),
+                    Text(
+                      _storeApp.userProfile.phone,
                       style: TextStyle(fontWeight: FontWeight.w600),
                     )
                   ],
@@ -96,17 +93,12 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Icon(
-                      M2Icon.location,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(
-                      width: Dimens.marginLarge,
-                    ),
+                    const Icon(M2Icon.location, color: Colors.grey),
+                    const SizedBox(width: Dimens.marginLarge),
                     Expanded(
-                      child: const Text(
-                        "အမှတ် ၁၆၊ (၃) ရပ်ကွက်၊ မင်းညိုစံလမ်း နှင့် အောင်ဇေယျလမ်း ထောင့်၊ ရွှေဘိုမြို့။",
-                        textAlign: TextAlign.center,
+                      child: Text(
+                        _storeApp.userProfile.address,
+                        textAlign: TextAlign.start,
                         overflow: TextOverflow.visible,
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),

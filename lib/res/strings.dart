@@ -1,1 +1,3 @@
-abstract class Strings {}
+abstract class Strings {
+  static const errorTextFieldEmpty = "Should not be empty";
+}

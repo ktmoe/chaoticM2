@@ -85,8 +85,6 @@ dependencies:
   lottie:
   #redirect to PlayStore and AppStore
   store_redirect:
-  #money Formatter
-  flutter_money_formatter:
   #firebase integrate
   firebase_core: ^0.4.0+9
   firebase_analytics: ^5.0.2

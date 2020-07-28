@@ -23,6 +23,12 @@ mixin _$StoreApp on _StoreApp, Store {
           Computed<String>(() => super.connectivityMessage,
               name: '_StoreApp.connectivityMessage'))
       .value;
+  Computed<bool> _$isLoggedInComputed;
+
+  @override
+  bool get isLoggedIn => (_$isLoggedInComputed ??=
+          Computed<bool>(() => super.isLoggedIn, name: '_StoreApp.isLoggedIn'))
+      .value;
   Computed<Map<M2Category, List<SubCategory>>> _$subCategoryMapComputed;
 
   @override
@@ -105,21 +111,6 @@ mixin _$StoreApp on _StoreApp, Store {
   set isFirstTime(bool value) {
     _$isFirstTimeAtom.reportWrite(value, super.isFirstTime, () {
       super.isFirstTime = value;
-    });
-  }
-
-  final _$isLoggedInAtom = Atom(name: '_StoreApp.isLoggedIn');
-
-  @override
-  bool get isLoggedIn {
-    _$isLoggedInAtom.reportRead();
-    return super.isLoggedIn;
-  }
-
-  @override
-  set isLoggedIn(bool value) {
-    _$isLoggedInAtom.reportWrite(value, super.isLoggedIn, () {
-      super.isLoggedIn = value;
     });
   }
 
@@ -242,6 +233,14 @@ mixin _$StoreApp on _StoreApp, Store {
         .run(() => super.saveUserProfile(userProfile));
   }
 
+  final _$deleteUserProfileAsyncAction =
+      AsyncAction('_StoreApp.deleteUserProfile');
+
+  @override
+  Future<dynamic> deleteUserProfile() {
+    return _$deleteUserProfileAsyncAction.run(() => super.deleteUserProfile());
+  }
+
   final _$changeFirstTimeAsyncAction = AsyncAction('_StoreApp.changeFirstTime');
 
   @override
@@ -279,6 +278,17 @@ mixin _$StoreApp on _StoreApp, Store {
         name: '_StoreApp._companyInfoChanged');
     try {
       return super._companyInfoChanged();
+    } finally {
+      _$_StoreAppActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _userProfileChanged() {
+    final _$actionInfo = _$_StoreAppActionController.startAction(
+        name: '_StoreApp._userProfileChanged');
+    try {
+      return super._userProfileChanged();
     } finally {
       _$_StoreAppActionController.endAction(_$actionInfo);
     }
@@ -340,17 +350,6 @@ mixin _$StoreApp on _StoreApp, Store {
   }
 
   @override
-  void readIsLoggedIn() {
-    final _$actionInfo = _$_StoreAppActionController.startAction(
-        name: '_StoreApp.readIsLoggedIn');
-    try {
-      return super.readIsLoggedIn();
-    } finally {
-      _$_StoreAppActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void readUserProfile() {
     final _$actionInfo = _$_StoreAppActionController.startAction(
         name: '_StoreApp.readUserProfile');
@@ -380,13 +379,13 @@ companyInfo: ${companyInfo},
 exception: ${exception},
 forceUpdate: ${forceUpdate},
 isFirstTime: ${isFirstTime},
-isLoggedIn: ${isLoggedIn},
 chosenLanguage: ${chosenLanguage},
 userProfile: ${userProfile},
 categoryList: ${categoryList},
 subCategoryList: ${subCategoryList},
 isNetworkOn: ${isNetworkOn},
 connectivityMessage: ${connectivityMessage},
+isLoggedIn: ${isLoggedIn},
 subCategoryMap: ${subCategoryMap}
     ''';
   }

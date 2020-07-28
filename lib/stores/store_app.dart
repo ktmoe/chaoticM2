@@ -49,8 +49,8 @@ abstract class _StoreApp with Store {
   @observable
   bool isFirstTime;
 
-  @observable
-  bool isLoggedIn;
+  @computed
+  bool get isLoggedIn => userProfile != null ?? false;
 
   @observable
   Language chosenLanguage;
@@ -87,8 +87,8 @@ abstract class _StoreApp with Store {
     await _createBoxes();
     _setupBoxListeners();
     readIsFirstTime();
-    readIsLoggedIn();
     readIsUnicode();
+    readUserProfile();
     if (!isFirstTime) {
       await _preloadAppData();
     }
@@ -98,6 +98,9 @@ abstract class _StoreApp with Store {
   void _setupBoxListeners() {
     _appBox.listenable.addListener(() {
       _appBoxChanged();
+    });
+    _appBox.userProfileListenable.addListener(() {
+      _userProfileChanged();
     });
     _appBox.companyInfoListenable.addListener(() {
       _companyInfoChanged();
@@ -174,6 +177,12 @@ abstract class _StoreApp with Store {
   }
 
   @action
+  void _userProfileChanged() {
+    userProfile =
+        _appBox.userProfileListenable.value.get(AppBox.userProfileKey);
+  }
+
+  @action
   void _boxCategoryChanged() {
     categoryList = ObservableList.of(_boxCategory.listenable.value.values);
   }
@@ -205,11 +214,6 @@ abstract class _StoreApp with Store {
   }
 
   @action
-  void readIsLoggedIn() {
-    isLoggedIn = _appBox.getUserProfile() != null;
-  }
-
-  @action
   void readUserProfile() {
     if (_appBox.getUserProfile() != null) {
       userProfile = _appBox.getUserProfile();
@@ -219,6 +223,11 @@ abstract class _StoreApp with Store {
   @action
   Future saveUserProfile(UserProfile userProfile) async {
     await _appBox.saveUserProfile(userProfile);
+  }
+
+  @action
+  Future deleteUserProfile() async {
+    await _appBox.deleteUserProfile();
   }
 
   //Call this method after Selecting Language

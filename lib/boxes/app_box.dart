@@ -32,6 +32,9 @@ class AppBox implements Disposable {
   ValueListenable<Box> get companyInfoListenable =>
       _box.listenable(keys: [companyInfoKey]);
 
+  ValueListenable<Box> get userProfileListenable =>
+      _box.listenable(keys: [userProfileKey]);
+
   Future changeFirstTime(bool isFirstTime) async {
     await _box.put(firstTimeKey, isFirstTime);
   }
@@ -62,6 +65,10 @@ class AppBox implements Disposable {
 
   UserProfile getUserProfile() {
     return _box.get(userProfileKey) ?? null;
+  }
+
+  Future deleteUserProfile() async {
+    await _box.delete(userProfileKey);
   }
 
   Future saveCompanyInfo(CompanyInfo companyInfo) async {

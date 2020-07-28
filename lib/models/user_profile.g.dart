@@ -18,10 +18,8 @@ class _$UserProfileSerializer implements StructuredSerializer<UserProfile> {
   Iterable<Object> serialize(Serializers serializers, UserProfile object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'id',
-      serializers.serialize(object.id, specifiedType: const FullType(String)),
       'imageurl',
-      serializers.serialize(object.image,
+      serializers.serialize(object.imageurl,
           specifiedType: const FullType(String)),
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
@@ -32,7 +30,30 @@ class _$UserProfileSerializer implements StructuredSerializer<UserProfile> {
       serializers.serialize(object.address,
           specifiedType: const FullType(String)),
     ];
-
+    if (object.id != null) {
+      result
+        ..add('id')
+        ..add(serializers.serialize(object.id,
+            specifiedType: const FullType(String)));
+    }
+    if (object.password != null) {
+      result
+        ..add('password')
+        ..add(serializers.serialize(object.password,
+            specifiedType: const FullType(String)));
+    }
+    if (object.createddate != null) {
+      result
+        ..add('createddate')
+        ..add(serializers.serialize(object.createddate,
+            specifiedType: const FullType(String)));
+    }
+    if (object.updateddate != null) {
+      result
+        ..add('updateddate')
+        ..add(serializers.serialize(object.updateddate,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
@@ -52,7 +73,7 @@ class _$UserProfileSerializer implements StructuredSerializer<UserProfile> {
               specifiedType: const FullType(String)) as String;
           break;
         case 'imageurl':
-          result.image = serializers.deserialize(value,
+          result.imageurl = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'name':
@@ -67,6 +88,18 @@ class _$UserProfileSerializer implements StructuredSerializer<UserProfile> {
           result.address = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'password':
+          result.password = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'createddate':
+          result.createddate = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'updateddate':
+          result.updateddate = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
       }
     }
 
@@ -78,24 +111,35 @@ class _$UserProfile extends UserProfile {
   @override
   final String id;
   @override
-  final String image;
+  final String imageurl;
   @override
   final String name;
   @override
   final String phone;
   @override
   final String address;
+  @override
+  final String password;
+  @override
+  final String createddate;
+  @override
+  final String updateddate;
 
   factory _$UserProfile([void Function(UserProfileBuilder) updates]) =>
       (new UserProfileBuilder()..update(updates)).build();
 
-  _$UserProfile._({this.id, this.image, this.name, this.phone, this.address})
+  _$UserProfile._(
+      {this.id,
+      this.imageurl,
+      this.name,
+      this.phone,
+      this.address,
+      this.password,
+      this.createddate,
+      this.updateddate})
       : super._() {
-    if (id == null) {
-      throw new BuiltValueNullFieldError('UserProfile', 'id');
-    }
-    if (image == null) {
-      throw new BuiltValueNullFieldError('UserProfile', 'image');
+    if (imageurl == null) {
+      throw new BuiltValueNullFieldError('UserProfile', 'imageurl');
     }
     if (name == null) {
       throw new BuiltValueNullFieldError('UserProfile', 'name');
@@ -120,28 +164,42 @@ class _$UserProfile extends UserProfile {
     if (identical(other, this)) return true;
     return other is UserProfile &&
         id == other.id &&
-        image == other.image &&
+        imageurl == other.imageurl &&
         name == other.name &&
         phone == other.phone &&
-        address == other.address;
+        address == other.address &&
+        password == other.password &&
+        createddate == other.createddate &&
+        updateddate == other.updateddate;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc($jc(0, id.hashCode), image.hashCode), name.hashCode),
-            phone.hashCode),
-        address.hashCode));
+        $jc(
+            $jc(
+                $jc(
+                    $jc(
+                        $jc($jc($jc(0, id.hashCode), imageurl.hashCode),
+                            name.hashCode),
+                        phone.hashCode),
+                    address.hashCode),
+                password.hashCode),
+            createddate.hashCode),
+        updateddate.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('UserProfile')
           ..add('id', id)
-          ..add('image', image)
+          ..add('imageurl', imageurl)
           ..add('name', name)
           ..add('phone', phone)
-          ..add('address', address))
+          ..add('address', address)
+          ..add('password', password)
+          ..add('createddate', createddate)
+          ..add('updateddate', updateddate))
         .toString();
   }
 }
@@ -153,9 +211,9 @@ class UserProfileBuilder implements Builder<UserProfile, UserProfileBuilder> {
   String get id => _$this._id;
   set id(String id) => _$this._id = id;
 
-  String _image;
-  String get image => _$this._image;
-  set image(String image) => _$this._image = image;
+  String _imageurl;
+  String get imageurl => _$this._imageurl;
+  set imageurl(String imageurl) => _$this._imageurl = imageurl;
 
   String _name;
   String get name => _$this._name;
@@ -169,15 +227,30 @@ class UserProfileBuilder implements Builder<UserProfile, UserProfileBuilder> {
   String get address => _$this._address;
   set address(String address) => _$this._address = address;
 
+  String _password;
+  String get password => _$this._password;
+  set password(String password) => _$this._password = password;
+
+  String _createddate;
+  String get createddate => _$this._createddate;
+  set createddate(String createddate) => _$this._createddate = createddate;
+
+  String _updateddate;
+  String get updateddate => _$this._updateddate;
+  set updateddate(String updateddate) => _$this._updateddate = updateddate;
+
   UserProfileBuilder();
 
   UserProfileBuilder get _$this {
     if (_$v != null) {
       _id = _$v.id;
-      _image = _$v.image;
+      _imageurl = _$v.imageurl;
       _name = _$v.name;
       _phone = _$v.phone;
       _address = _$v.address;
+      _password = _$v.password;
+      _createddate = _$v.createddate;
+      _updateddate = _$v.updateddate;
       _$v = null;
     }
     return this;
@@ -200,7 +273,14 @@ class UserProfileBuilder implements Builder<UserProfile, UserProfileBuilder> {
   _$UserProfile build() {
     final _$result = _$v ??
         new _$UserProfile._(
-            id: id, image: image, name: name, phone: phone, address: address);
+            id: id,
+            imageurl: imageurl,
+            name: name,
+            phone: phone,
+            address: address,
+            password: password,
+            createddate: createddate,
+            updateddate: updateddate);
     replace(_$result);
     return _$result;
   }
@@ -224,26 +304,35 @@ class UserProfileAdapter extends TypeAdapter<UserProfile> {
     };
     return (UserProfileBuilder()
           ..id = fields[0] as String
-          ..image = fields[1] as String
+          ..imageurl = fields[1] as String
           ..name = fields[2] as String
           ..phone = fields[3] as String
-          ..address = fields[4] as String)
+          ..address = fields[4] as String
+          ..password = fields[5] as String
+          ..createddate = fields[6] as String
+          ..updateddate = fields[7] as String)
         .build();
   }
 
   @override
   void write(BinaryWriter writer, UserProfile obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.image)
+      ..write(obj.imageurl)
       ..writeByte(2)
       ..write(obj.name)
       ..writeByte(3)
       ..write(obj.phone)
       ..writeByte(4)
-      ..write(obj.address);
+      ..write(obj.address)
+      ..writeByte(5)
+      ..write(obj.password)
+      ..writeByte(6)
+      ..write(obj.createddate)
+      ..writeByte(7)
+      ..write(obj.updateddate);
   }
 }

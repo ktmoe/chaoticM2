@@ -108,7 +108,8 @@ class _MoreWidgetState extends State<MoreWidget> {
   }
 
   void _logOutApp() {
-    _storeApp.isLoggedIn = false;
+    // _storeApp.isLoggedIn = false;
+    _storeApp.deleteUserProfile();
     Modular.to.pushReplacementNamed('/');
   }
 }

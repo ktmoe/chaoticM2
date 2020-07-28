@@ -8,7 +8,6 @@ import 'package:m2mobile/pages/main/more/profile/edit_profile_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/stores/authenticate_store.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:m2mobile/stores/store_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:m2mobile/utils/extensions.dart';
 
@@ -21,7 +20,7 @@ class AuthenticateWidget extends StatefulWidget {
 class _AuthenticateWidgetState extends State<AuthenticateWidget> {
   final _pageController = PageController();
   final AuthenticateStore _storeAuthenticate = Modular.get<AuthenticateStore>();
-  final StoreApp _storeApp = Modular.get<StoreApp>();
+  // final StoreApp _storeApp = Modular.get<StoreApp>();
 
   Future _registerUser(String mobile, BuildContext context) async {
     FirebaseAuth _auth = FirebaseAuth.instance;
@@ -31,7 +30,7 @@ class _AuthenticateWidgetState extends State<AuthenticateWidget> {
         verificationCompleted: (_authCredential) async {
           _auth.signInWithCredential(_authCredential).then((_authResult) {
             if (_authResult.user != null) {
-              _storeApp.isLoggedIn = true;
+              // _storeApp.isLoggedIn = true;
               Modular.to.pushReplacementNamed(EditProfileWidget.route,
                   arguments: true);
             }
@@ -159,7 +158,7 @@ class _AuthenticateWidgetState extends State<AuthenticateWidget> {
         smsCode: _storeAuthenticate.inputOtp);
     await _auth.signInWithCredential(_credential).then((_authResult) {
       if (_authResult.user != null) {
-        _storeAuthenticate.savePhoneNumber(_storeAuthenticate.phone);
+        _storeAuthenticate.savePhoneNumber();
         Modular.to
             .pushReplacementNamed(EditProfileWidget.route, arguments: true);
       }

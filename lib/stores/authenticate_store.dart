@@ -46,8 +46,8 @@ abstract class _AuthenticateStoreBase with Store {
   }
 
   @action
-  Future savePhoneNumber(String phoneNumber) async {
-    await _appBox.savePhoneNumber(phoneNumber);
+  Future savePhoneNumber() async {
+    await _appBox.savePhoneNumber(fullPhone);
   }
 
   @action

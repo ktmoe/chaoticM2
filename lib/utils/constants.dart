@@ -6,3 +6,6 @@ const basicAuth =
 const newWaveSiteUrl = "www.newwave-tech.com";
 
 const maxPhoneLength = 11;
+
+const dummyFirebaseToken =
+    'd136lGXLtJQ:APA91bEEI1TqcYsU1BYEKY5930Hk2MaOBS6EDrYcAni8zdfop3MWv-x8Xmr8Wh0Fjx7vYEjwRR03j2JlTBoTWrfEYwKEcnd7IQKnDM_XusoFuQqhgFdwtdiycbmo0Yzuc_3Whie19CDw';

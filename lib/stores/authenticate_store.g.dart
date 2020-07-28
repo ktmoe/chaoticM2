@@ -140,9 +140,8 @@ mixin _$AuthenticateStore on _AuthenticateStoreBase, Store {
       AsyncAction('_AuthenticateStoreBase.savePhoneNumber');
 
   @override
-  Future<dynamic> savePhoneNumber(String phoneNumber) {
-    return _$savePhoneNumberAsyncAction
-        .run(() => super.savePhoneNumber(phoneNumber));
+  Future<dynamic> savePhoneNumber() {
+    return _$savePhoneNumberAsyncAction.run(() => super.savePhoneNumber());
   }
 
   final _$_AuthenticateStoreBaseActionController =

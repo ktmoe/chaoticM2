@@ -5,9 +5,11 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerUtils {
-  static Future<File> getGalleryImage() async {
+  static Future<File> getImagePicker({bool gallery = false}) async {
     final _imagePicker = Modular.get<ImagePicker>();
-    final imageFile = await _imagePicker.getImage(source: ImageSource.gallery);
+    final imageFile = gallery
+        ? await _imagePicker.getImage(source: ImageSource.gallery)
+        : await _imagePicker.getImage(source: ImageSource.camera);
     if (imageFile != null) {
       return await _cropImage(imageFile);
     } else

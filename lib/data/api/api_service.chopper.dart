@@ -104,4 +104,57 @@ class _$ApiService extends ApiService {
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<SubCategoryResponse, SubCategoryResponse>($request);
   }
+
+  @override
+  Future<Response<PostProfileResponse>> saveProfile(String imageUrl,
+      String name, String phone, String address, String password) {
+    final $url = '/api/customerview/saveProfile';
+    final $params = <String, dynamic>{
+      'imageurl': imageUrl,
+      'name': name,
+      'phone': phone,
+      'address': address,
+      'password': password
+    };
+    final $request = Request('POST', $url, client.baseUrl, parameters: $params);
+    return client.send<PostProfileResponse, PostProfileResponse>($request);
+  }
+
+  @override
+  Future<Response<PostProfileResponse>> editProfile(
+      String id, String imageUrl, String name, String phone, String address) {
+    final $url = '/api/customerview/editProfile';
+    final $params = <String, dynamic>{
+      'id': id,
+      'imageurl': imageUrl,
+      'name': name,
+      'phone': phone,
+      'address': address
+    };
+    final $request = Request('POST', $url, client.baseUrl, parameters: $params);
+    return client.send<PostProfileResponse, PostProfileResponse>($request);
+  }
+
+  @override
+  Future<Response<LoginResponse>> login(
+      {String phone,
+      String password,
+      String firebaseToken = dummyFirebaseToken}) {
+    final $url = '/api/authview/login';
+    final $params = <String, dynamic>{
+      'phone': phone,
+      'password': password,
+      'firebase_token': firebaseToken
+    };
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<LoginResponse, LoginResponse>($request);
+  }
+
+  @override
+  Future<Response<PostProfileResponse>> customerProfile(String customerId) {
+    final $url = '/api/customerview/customerProfile';
+    final $params = <String, dynamic>{'customerid': customerId};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<PostProfileResponse, PostProfileResponse>($request);
+  }
 }

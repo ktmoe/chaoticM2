@@ -3,17 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:m2mobile/custom_widgets/one_call_away_widget.dart';
+import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:m2mobile/pages/main/main_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/pages/authenticate/authenticate_widget.dart';
 import 'package:m2mobile/stores/store_app.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/res/styles.dart';
+import 'package:m2mobile/stores/store_login.dart';
 import 'package:mobx/mobx.dart';
 import 'package:m2mobile/utils/extensions.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:m2mobile/utils/constants.dart';
+import 'package:m2mobile/res/strings.dart';
 
 class LoginWidget extends StatefulWidget {
   static const route = "/login";
@@ -23,6 +26,7 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   final StoreApp _storeApp = Modular.get<StoreApp>();
+  final StoreLogin _storeLogin = Modular.get<StoreLogin>();
   final _phoneFieldController = TextEditingController();
   final _passwordFieldController = TextEditingController();
 
@@ -32,6 +36,32 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   List<ReactionDisposer> _disposers = [];
 
+  ReactionDisposer _onAppException() =>
+      reaction<AppException>((_) => _storeLogin.exception, (e) {
+        context.successFailDialog(dialogType: e.message);
+      });
+
+  ReactionDisposer _onLoadingApiChanged() {
+    return reaction<bool>((_) => _storeLogin.loadingApi, (loading) {
+      if (loading) {
+        context.loadingDialog();
+      } else {
+        Navigator.of(context).pop();
+      }
+    });
+  }
+
+  ReactionDisposer _onUserProfileChanged() {
+    return reaction<bool>((_) => _storeApp.isLoggedIn, (loggedin) async {
+      if (loggedin) {
+        await context.successFailDialog(
+            dialogType: "Logged in as ${_storeApp.userProfile.name}",
+            success: true);
+        Modular.to.pushReplacementNamed(MainWidget.route);
+      }
+    });
+  }
+
   ReactionDisposer _onConnectivityChanged() => autorun((_) {
         if (!_storeApp.isNetworkOn)
           "You are offline.".makeSnack(_scaffoldState);
@@ -40,7 +70,13 @@ class _LoginWidgetState extends State<LoginWidget> {
   @override
   void initState() {
     super.initState();
-    _disposers.addAll([_onConnectivityChanged()]);
+    _disposers.addAll([
+      _onConnectivityChanged(),
+      _onAppException(),
+      _onLoadingApiChanged(),
+      _onUserProfileChanged()
+    ]);
+    _storeLogin.init();
   }
 
   @override
@@ -118,11 +154,16 @@ class _LoginWidgetState extends State<LoginWidget> {
           decoration: InputDecoration(
               hintText: "Mobile Number",
               errorText: _phoneFieldController.text.isEmpty
-                  ? "Should not be empty"
+                  ? Strings.errorTextFieldEmpty
                   : null),
-          validator: (value) =>
-              (value.isEmpty || value == null) ? "Should not be empty" : null,
+          validator: (value) => (value.isEmpty || value == null)
+              ? Strings.errorTextFieldEmpty
+              : null,
+          onChanged: (value) {
+            _storeLogin.phone = value;
+          },
           onFieldSubmitted: (value) {
+            _storeLogin.phone = value;
             FocusScope.of(context).nextFocus();
           },
         ),
@@ -137,7 +178,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           decoration: InputDecoration(
               hintText: "Password",
               errorText: _passwordFieldController.text.isEmpty
-                  ? "Should not be empty"
+                  ? Strings.errorTextFieldEmpty
                   : null,
               suffixIcon: InkWell(
                   onTap: () {
@@ -148,9 +189,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                   child: _obscure
                       ? Icon(M2Icon.visibility_off)
                       : Icon(M2Icon.visibility))),
-          validator: (value) =>
-              (value.isEmpty || value == null) ? "Should not be empty" : null,
+          validator: (value) => (value.isEmpty || value == null)
+              ? Strings.errorTextFieldEmpty
+              : null,
+          onChanged: (value) {
+            _storeLogin.password = value;
+          },
           onFieldSubmitted: (value) {
+            _storeLogin.password = value;
             FocusScope.of(context).nextFocus();
           },
         ),
@@ -163,10 +209,9 @@ class _LoginWidgetState extends State<LoginWidget> {
         color: Theme.of(context).buttonColor,
         textColor: Colors.white,
         disabledTextColor: Colors.white,
-        onPressed: _passwordFieldController.text.isEmpty ||
-                _phoneFieldController.text.isEmpty
-            ? null
-            : _onLoginClicked,
+        onPressed: () async {
+          await _storeLogin.login();
+        },
         child: const Text("Login"),
       );
 
@@ -214,17 +259,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                 },
                 child: const Text("Forgot Password?"))),
       );
-
-  void _onLoginClicked() {
-    if (_phoneFieldController.text == '1' &&
-        _passwordFieldController.text == 'a') {
-      _storeApp.isLoggedIn = true;
-      Modular.to.pushReplacementNamed(MainWidget.route);
-    } else {
-      context.successFailDialog(
-          dialogType: WarningDialogType.loginFailedDialog);
-    }
-  }
 
   Future<void> _phoneCallWorks() async {
     final status = await Permission.phone.status;

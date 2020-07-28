@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+import 'package:m2mobile/utils/constants.dart';
+import 'package:intl/intl.dart';
 
 extension StringX on String {
   void makeSnack(GlobalKey<ScaffoldState> state) {
@@ -12,14 +13,13 @@ extension StringX on String {
 
   SnackBar snackBar() =>
       SnackBar(content: Text(this), duration: Duration(seconds: 3));
+
+  String createImageUrl() => "$baseUrl/$this";
 }
 
-extension DoubleX on double {
-  String money() =>
-      FlutterMoneyFormatter(amount: this)
-          .output
-          .symbolOnRight
-          .split('.')
-          .first +
-      ' MMK';
+extension DoubleX on num {
+  String money() {
+    final format = NumberFormat("#,###");
+    return format.format(this);
+  }
 }

@@ -6,6 +6,26 @@ import 'package:m2mobile/res/styles.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 extension OneCallAwayWidget on BuildContext {
+  void loadingDialog() {
+    // return
+    showDialog(
+        context: this,
+        barrierDismissible: false,
+        child: AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.all(Radius.circular(Dimens.marginMedium2))),
+            content: Container(
+              alignment: Alignment.center,
+              width: 100,
+              height: 100,
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[CircularProgressIndicator()]),
+            )));
+  }
+
   Future<bool> appLeaveWarning({bool logOut = false}) {
     return showDialog(
           context: this,
@@ -68,6 +88,7 @@ extension OneCallAwayWidget on BuildContext {
 
   Future<bool> standardWarningDialog({@required String dialogType}) {
     return showDialog(
+          barrierDismissible: true,
           context: this,
           builder: (context) => AlertDialog(
             shape: RoundedRectangleBorder(
@@ -169,17 +190,23 @@ extension OneCallAwayWidget on BuildContext {
         context: this,
         builder: (context) => AlertDialog(
                 content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 InkWell(
                     onTap: () {
                       Navigator.of(this).pop(0);
                     },
-                    child: const Text("Pick Image from Gallery.")),
+                    child: Container(
+                        padding: const EdgeInsets.all(Dimens.marginMedium2),
+                        child: const Text("Pick Image from Gallery."))),
                 InkWell(
                     onTap: () {
                       Navigator.of(this).pop(1);
                     },
-                    child: const Text("Take New Image."))
+                    child: Container(
+                        padding: const EdgeInsets.all(Dimens.marginMedium2),
+                        child: const Text("Take New Image.")))
               ],
             )));
   }
@@ -197,4 +224,6 @@ abstract class WarningDialogType {
 
   static const loginFailedDialog = 'UserName or Password Wrong';
   static const forceUpdateDialog = 'The new version is available';
+
+  static const userProfileSaved = 'User Profile is saved';
 }

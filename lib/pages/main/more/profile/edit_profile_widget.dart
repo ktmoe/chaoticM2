@@ -8,6 +8,9 @@ import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/custom_widgets/one_call_away_widget.dart';
 import 'package:m2mobile/utils/image_picker_utils.dart';
 import 'package:m2mobile/stores/store_profile.dart';
+import 'package:m2mobile/exceptions/app_exception.dart';
+import 'package:m2mobile/res/strings.dart';
+import 'package:mobx/mobx.dart';
 
 class EditProfileWidget extends StatefulWidget {
   static const route = "/main/more/profile/edit_profile";
@@ -29,13 +32,57 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   final StoreProfile _storeProfile = Modular.get<StoreProfile>();
+  final List<ReactionDisposer> _disposers = [];
 
   bool _obscure = true;
+
+  ReactionDisposer _onOldDataLoadingChanged() {
+    return reaction<bool>((_) => _storeProfile.oldDataLoaded.value, (done) {
+      if (done) {
+        _autofillOldData();
+      }
+    });
+  }
+
+  ReactionDisposer _onApiLoadingChanged() {
+    return reaction<bool>((_) => _storeProfile.apiLoading, (loading) {
+      if (loading) {
+        context.loadingDialog();
+      } else
+        Navigator.of(context).pop();
+    });
+  }
+
+  ReactionDisposer _onAppExceptionChanged() {
+    return reaction<AppException>((_) => _storeProfile.exception, (e) {
+      debugPrint(e.message);
+      context.successFailDialog(dialogType: e.message);
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    _storeProfile.init(widget.register);
+    _disposers.addAll([
+      _onAppExceptionChanged(),
+      _onOldDataLoadingChanged(),
+      _onApiLoadingChanged()
+    ]);
+    Future.wait([_storeProfile.initEditProfile(widget.register)]);
+  }
+
+  void _autofillOldData() {
+    _nameController.text = _storeProfile.name;
+    _phoneController.text = _storeProfile.phoneNo;
+    _addressController.text = _storeProfile.address;
+  }
+
+  @override
+  void dispose() {
+    _disposers.forEach((element) {
+      element();
+    });
+    super.dispose();
   }
 
   @override
@@ -89,16 +136,19 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
             onTap: () async {
               // 0 -> from gallery, 1-> camera
               final source = await context.imagePickerDialog();
-              source == 0
-                  ? ImagePickerUtils.getGalleryImage()
-                  : ImagePickerUtils.getGalleryImage();
+              final file = source == 0
+                  ? await ImagePickerUtils.getImagePicker(gallery: true)
+                  : await ImagePickerUtils.getImagePicker(gallery: false);
+              if (file != null) {
+                await _storeProfile.uploadProfileImage(file);
+              }
             },
             child: Container(
               width: 100,
               height: 100,
               margin: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.15 - 50),
-              child: widget.register
+              child: _storeProfile.imageUrl.isEmpty
                   ? Card(
                       elevation: Dimens.cardElevation,
                       shape: RoundedRectangleBorder(
@@ -117,8 +167,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                         child: FadeInImage(
                             fit: BoxFit.cover,
                             placeholder: AssetImage("lib/res/images/earth.jpg"),
-                            image: NetworkImage(
-                                "https://pyxis.nymag.com/v1/imgs/57d/5f1/4e4dae00f150e36a22a13ffa956d4301d8-07-timothee-chalamet.rvertical.w600.jpg")),
+                            image: NetworkImage(_storeProfile.imageUrl)),
                       ),
                     ),
             ),
@@ -157,9 +206,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                 ? Container(
                     margin: const EdgeInsets.only(bottom: Dimens.marginMedium2),
                     child: _buildPasswordTextField())
-                : Container(
-                    margin: const EdgeInsets.only(bottom: Dimens.marginMedium2),
-                    child: _buildPasswordTextField()),
+                : Container(),
             SizedBox(height: Dimens.marginLargeX),
             _buildCorrectDoneButton()
           ],
@@ -169,17 +216,19 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   Widget _buildNameTextField() {
     return TextFormField(
       textInputAction: TextInputAction.next,
-      controller: _nameController..text = _storeProfile.name,
+      controller: _nameController,
       decoration: InputDecoration(
-        hintText: "Name",
-      ),
+          hintText: "Name",
+          errorText: _nameController.text.isEmpty
+              ? Strings.errorTextFieldEmpty
+              : null),
       validator: (value) =>
-          (value.isEmpty || value == null) ? "Should not be empty" : null,
+          (value.isEmpty || value == null) ? Strings.errorTextFieldEmpty : null,
       onChanged: (value) {
-        // _authenticateStore.phone = value;
+        _storeProfile.name = value;
       },
       onFieldSubmitted: (value) {
-        // _authenticateStore.phone = value;
+        _storeProfile.name = value;
         FocusScope.of(context).nextFocus();
       },
     );
@@ -188,17 +237,19 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   Widget _buildPhoneNoTextField() {
     return TextFormField(
       textInputAction: TextInputAction.next,
-      controller: _phoneController..text = _storeProfile.phoneNo,
+      controller: _phoneController,
       decoration: InputDecoration(
-        hintText: "Phone No.",
-      ),
+          hintText: "Phone No.",
+          errorText: _phoneController.text.isEmpty
+              ? Strings.errorTextFieldEmpty
+              : null),
       validator: (value) =>
-          (value.isEmpty || value == null) ? "Should not be empty" : null,
+          (value.isEmpty || value == null) ? Strings.errorTextFieldEmpty : null,
       onChanged: (value) {
-        // _authenticateStore.phone = value;
+        _storeProfile.phoneNo = value;
       },
       onFieldSubmitted: (value) {
-        // _authenticateStore.phone = value;
+        _storeProfile.phoneNo = value;
         FocusScope.of(context).nextFocus();
       },
     );
@@ -207,17 +258,19 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   Widget _buildAddressTextField() {
     return TextFormField(
       textInputAction: TextInputAction.next,
-      controller: _addressController..text = _storeProfile.address,
+      controller: _addressController,
       decoration: InputDecoration(
-        hintText: "Address",
-      ),
+          hintText: "Address",
+          errorText: _addressController.text.isEmpty
+              ? Strings.errorTextFieldEmpty
+              : null),
       validator: (value) =>
-          (value.isEmpty || value == null) ? "Should not be empty" : null,
+          (value.isEmpty || value == null) ? Strings.errorTextFieldEmpty : null,
       onChanged: (value) {
-        // _authenticateStore.phone = value;
+        _storeProfile.address = value;
       },
       onFieldSubmitted: (value) {
-        // _authenticateStore.phone = value;
+        _storeProfile.address = value;
         FocusScope.of(context).nextFocus();
       },
     );
@@ -229,8 +282,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
         obscureText: _obscure,
         decoration: InputDecoration(
             hintText: "Password",
-            errorText:
-                _passwordController.text.isEmpty ? "Should not be empty" : null,
+            errorText: _passwordController.text.isEmpty
+                ? Strings.errorTextFieldEmpty
+                : null,
             suffixIcon: InkWell(
                 onTap: () {
                   setState(() {
@@ -240,9 +294,14 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                 child: _obscure
                     ? Icon(M2Icon.visibility_off)
                     : Icon(M2Icon.visibility))),
-        validator: (value) =>
-            (value.isEmpty || value == null) ? "Should not be empty" : null,
+        validator: (value) => (value.isEmpty || value == null)
+            ? Strings.errorTextFieldEmpty
+            : null,
+        onChanged: (value) {
+          _storeProfile.password = value;
+        },
         onFieldSubmitted: (value) {
+          _storeProfile.password = value;
           FocusScope.of(context).nextFocus();
         },
       );
@@ -257,12 +316,16 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
       color: Theme.of(context).buttonColor,
       textColor: Colors.white,
       disabledTextColor: Colors.white,
-      onPressed: () {
-        if (widget.register) {
-          Modular.to.pushReplacementNamed(MainWidget.route);
-        } else {
-          Modular.to.pop();
-        }
+      onPressed: () async {
+        await _storeProfile.uploadProfile(widget.register, () async {
+          await context.successFailDialog(
+              dialogType: WarningDialogType.userProfileSaved, success: true);
+          if (widget.register) {
+            Modular.to.pushReplacementNamed(MainWidget.route);
+          } else {
+            Modular.to.pop();
+          }
+        });
       },
       child: widget.register
           ? const Text("Create Account")

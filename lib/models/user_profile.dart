@@ -14,13 +14,14 @@ abstract class UserProfile implements Built<UserProfile, UserProfileBuilder> {
 
   factory UserProfile([updates(UserProfileBuilder b)]) = _$UserProfile;
 
+  @nullable
   @HiveField(0)
   @BuiltValueField(wireName: 'id')
   String get id;
 
   @HiveField(1)
   @BuiltValueField(wireName: 'imageurl')
-  String get image;
+  String get imageurl;
 
   @HiveField(2)
   @BuiltValueField(wireName: 'name')
@@ -33,6 +34,21 @@ abstract class UserProfile implements Built<UserProfile, UserProfileBuilder> {
   @HiveField(4)
   @BuiltValueField(wireName: 'address')
   String get address;
+
+  @nullable
+  @HiveField(5)
+  @BuiltValueField(wireName: 'password')
+  String get password;
+
+  @nullable
+  @HiveField(6)
+  @BuiltValueField(wireName: 'createddate')
+  String get createddate;
+
+  @nullable
+  @HiveField(7)
+  @BuiltValueField(wireName: 'updateddate')
+  String get updateddate;
 
   String toJson() {
     return json.encode(serializers.serializeWith(UserProfile.serializer, this));

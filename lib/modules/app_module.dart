@@ -14,6 +14,7 @@ import 'package:m2mobile/utils/constants.dart';
 import 'package:m2mobile/stores/store_app.dart';
 import 'package:m2mobile/route_guard.dart';
 import 'package:m2mobile/utils/connectivity_service.dart';
+import 'package:m2mobile/data/api/file_upload_service.dart';
 
 import 'package:m2mobile/utils/custom_json_converter.dart';
 
@@ -32,10 +33,11 @@ class AppModule extends MainModule {
               baseUrl: baseUrl,
               converter: const CustomJsonConverter(),
               errorConverter: const CustomJsonConverter(),
-              services: [ApiService.create()],
+              services: [ApiService.create(), FileUploadService.create()],
             )),
         Bind((i) => JwtService.create()),
-        Bind((i) => ApiService.create(i.get<ChopperClient>()))
+        Bind((i) => ApiService.create(i.get<ChopperClient>())),
+        Bind((i) => FileUploadService.create(i.get<ChopperClient>()))
       ];
 
   @override
