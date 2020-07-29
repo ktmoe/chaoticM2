@@ -37,7 +37,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   bool _obscure = true;
 
   ReactionDisposer _onOldDataLoadingChanged() {
-    return reaction<bool>((_) => _storeProfile.oldDataLoaded.value, (done) {
+    return reaction<bool>((_) => _storeProfile.oldDataLoaded,(done){
+      print("old data loaded => $done");
       if (done) {
         _autofillOldData();
       }
@@ -59,6 +60,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
       context.successFailDialog(dialogType: e.message);
     });
   }
+
+
 
   @override
   void initState() {
@@ -82,6 +85,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
     _disposers.forEach((element) {
       element();
     });
+    _storeProfile.oldDataLoaded = false;
     super.dispose();
   }
 

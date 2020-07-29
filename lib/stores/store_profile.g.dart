@@ -139,13 +139,13 @@ mixin _$StoreProfile on _StoreProfileBase, Store {
   final _$oldDataLoadedAtom = Atom(name: '_StoreProfileBase.oldDataLoaded');
 
   @override
-  Observable<bool> get oldDataLoaded {
+  bool get oldDataLoaded {
     _$oldDataLoadedAtom.reportRead();
     return super.oldDataLoaded;
   }
 
   @override
-  set oldDataLoaded(Observable<bool> value) {
+  set oldDataLoaded(bool value) {
     _$oldDataLoadedAtom.reportWrite(value, super.oldDataLoaded, () {
       super.oldDataLoaded = value;
     });

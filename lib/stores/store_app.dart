@@ -216,6 +216,7 @@ abstract class _StoreApp with Store {
   @action
   void readUserProfile() {
     if (_appBox.getUserProfile() != null) {
+      print("userprofile is not null in store app");
       userProfile = _appBox.getUserProfile();
     }
   }

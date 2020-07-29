@@ -55,14 +55,14 @@ abstract class _StoreProfileBase with Store {
   bool hasInialized = false;
 
   @observable
-  Observable<bool> oldDataLoaded = Observable(false);
+  bool oldDataLoaded = false;
 
   @observable
   bool apiLoading = false;
 
   @action
   Future initEditProfile(bool isRegister) async {
-    oldDataLoaded = Observable(false);
+    print("init edit profile get called");
     if (!hasInialized) {
       _appBox = await AppBox.create();
       hasInialized = true;
@@ -70,13 +70,16 @@ abstract class _StoreProfileBase with Store {
     if (isRegister) {
       phoneNo = Modular.get<AuthenticateStore>().fullPhone;
     } else {
+      oldDataLoaded = true;
+      print("isRegistered => $isRegister");
       _reloadOldProfile();
     }
-    oldDataLoaded = Observable(true);
+    print("dataloaded => $oldDataLoaded");
   }
 
   @action
   void _reloadOldProfile() {
+    print("reload get called");
     final profile = Modular.get<StoreApp>().userProfile;
     id = profile.id;
     name = profile.name;
