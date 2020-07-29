@@ -240,6 +240,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
 
   Widget _buildPhoneNoTextField() {
     return TextFormField(
+      enabled: false,
       textInputAction: TextInputAction.next,
       controller: _phoneController,
       decoration: InputDecoration(

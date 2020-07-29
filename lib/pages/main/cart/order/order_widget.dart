@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/custom_widgets/m2_stepper.dart';
@@ -9,6 +10,8 @@ import 'package:m2mobile/custom_widgets/one_call_away_widget.dart';
 import 'package:m2mobile/models/ui_model/payment_methods_model.dart';
 import 'package:m2mobile/stores/store_order.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:m2mobile/res/icons/m2_icon_icons.dart';
+import 'package:m2mobile/utils/extensions.dart';
 
 class OrderWidget extends StatefulWidget {
   static const route = "/main/cart/order";
@@ -19,6 +22,13 @@ class OrderWidget extends StatefulWidget {
 
 class _OrderWidgetState extends State<OrderWidget> {
   final StoreOrder _storeOrder = Modular.get<StoreOrder>();
+
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _otpController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+
+  final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey();
+
   int currentStep;
   bool complete = false;
 
@@ -26,6 +36,13 @@ class _OrderWidgetState extends State<OrderWidget> {
   void initState() {
     super.initState();
     currentStep = 0;
+    _storeOrder.init();
+    _autoFillOldData();
+  }
+
+  void _autoFillOldData() {
+    _phoneController.text = _storeOrder.phoneNumber;
+    _addressController.text = _storeOrder.address;
   }
 
   @override
@@ -36,6 +53,7 @@ class _OrderWidgetState extends State<OrderWidget> {
             dialogType: WarningDialogType.orderCancelDialog);
       },
       child: Scaffold(
+        key: _scaffoldState,
         appBar: M2AppBar(
           showSearch: false,
           title: "Order",
@@ -53,25 +71,17 @@ class _OrderWidgetState extends State<OrderWidget> {
                       title: const Text('Phone Number',
                           style: TextStyle(fontSize: Dimens.textRegular2x)),
                       subtitle: const Text("ဖုန်းနံပါတ် - 09XXXXXXXX",
-                          style: TextStyle(fontSize: Dimens.textRegular2x)),
+                          style: TextStyle(fontSize: Dimens.textRegular)),
                       state: currentStep > 0
                           ? M2StepState.complete
                           : M2StepState.indexed,
                       content: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          const Text("Please fill in phone number."),
+                          const Text(
+                              "အော်ဒါပစ္စည်းများ လက်ခံမည့်ဖုန်းနံပါတ်ထည့်ပေးပါရန်"),
                           const SizedBox(height: Dimens.marginMedium),
-                          TextFormField(
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(width: 1),
-                                  borderRadius: const BorderRadius.all(
-                                    const Radius.circular(10.0),
-                                  ),
-                                ),
-                                labelText: 'Phone Number'),
-                          ),
+                          _buildPhoneTextField()
                         ],
                       ),
                       isLast: false),
@@ -83,23 +93,14 @@ class _OrderWidgetState extends State<OrderWidget> {
                       title: const Text('OTP Code',
                           style: TextStyle(fontSize: Dimens.textRegular2x)),
                       subtitle: const Text("One Time Password Code",
-                          style: TextStyle(fontSize: Dimens.textRegular2x)),
+                          style: TextStyle(fontSize: Dimens.textRegular)),
                       content: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          const Text(
-                              "We have send an OTP to your number\n +95 9790428136"),
+                          Text(
+                              "We have send an OTP to your number\n ${_storeOrder.phoneNumber}"),
                           const SizedBox(height: Dimens.marginMedium),
-                          TextFormField(
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(width: 1),
-                                  borderRadius: const BorderRadius.all(
-                                    const Radius.circular(10.0),
-                                  ),
-                                ),
-                                labelText: 'OTP Code'),
-                          ),
+                          _buildOtpTextField()
                         ],
                       ),
                       isLast: false),
@@ -110,20 +111,13 @@ class _OrderWidgetState extends State<OrderWidget> {
                           : M2StepState.indexed,
                       title: const Text('Address',
                           style: TextStyle(fontSize: Dimens.textRegular2x)),
-                      subtitle: const Text(
-                          "Address - Cloud 9, Eutopia, Euphoria Country.",
+                      subtitle: Text(
+                          currentStep != 2
+                              ? "Address - ${_storeOrder.address}."
+                              : "အော်ဒါပစ္စည်းများ ပေးပို့ရမည့်လိပ်စာထည့်ပေးပါရန်",
                           overflow: TextOverflow.visible,
-                          style: TextStyle(fontSize: Dimens.textRegular2x)),
-                      content: TextFormField(
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(width: 1),
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(10.0),
-                              ),
-                            ),
-                            labelText: 'Address'),
-                      ),
+                          style: TextStyle(fontSize: Dimens.textRegular)),
+                      content: _buildAddressTextField(),
                       isLast: false),
                   M2Step(
                       isActive: currentStep == 3,
@@ -153,6 +147,56 @@ class _OrderWidgetState extends State<OrderWidget> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildPhoneTextField() {
+    return TextFormField(
+        controller: _phoneController,
+        inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+        decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderSide: BorderSide(width: 1),
+              borderRadius: const BorderRadius.all(
+                const Radius.circular(10.0),
+              ),
+            ),
+            suffixIcon: const Icon(M2Icon.edit),
+            labelText: 'Phone Number'),
+        onChanged: (value) => _storeOrder.phoneNumber = value,
+        onFieldSubmitted: (value) => _storeOrder.phoneNumber = value);
+  }
+
+  Widget _buildOtpTextField() {
+    return TextFormField(
+        controller: _otpController,
+        inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+        decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderSide: BorderSide(width: 1),
+              borderRadius: const BorderRadius.all(
+                const Radius.circular(10.0),
+              ),
+            ),
+            labelText: 'OTP Code'),
+        onChanged: (value) => _storeOrder.otpCode = value,
+        onFieldSubmitted: (value) => _storeOrder.otpCode = value);
+  }
+
+  Widget _buildAddressTextField() {
+    return TextFormField(
+      controller: _addressController,
+      decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderSide: BorderSide(width: 1),
+            borderRadius: const BorderRadius.all(
+              const Radius.circular(10.0),
+            ),
+          ),
+          suffixIcon: const Icon(M2Icon.edit),
+          labelText: 'Address'),
+      onChanged: (value) => _storeOrder.address = value,
+      onFieldSubmitted: (value) => _storeOrder.address = value,
     );
   }
 
@@ -203,6 +247,33 @@ class _OrderWidgetState extends State<OrderWidget> {
   }
 
   goTo(int step) {
-    setState(() => currentStep = step);
+    var validity = _validateStep(step);
+    if (validity) {
+      setState(() => currentStep = step);
+    } else
+      "Please fill full info.".makeSnack(_scaffoldState);
+  }
+
+  bool _validateStep(int step) {
+    switch (step) {
+      case 1:
+        {
+          return _storeOrder.phoneNumber.isEmpty ? false : true;
+        }
+      case 2:
+        {
+          return _storeOrder.otpCode.isEmpty ? false : true;
+        }
+      case 3:
+        {
+          return _storeOrder.address.isEmpty ? false : true;
+        }
+      case 4:
+        {
+          return _storeOrder.selectedPaymentMethod.isEmpty ? false : true;
+        }
+      default:
+        return true;
+    }
   }
 }

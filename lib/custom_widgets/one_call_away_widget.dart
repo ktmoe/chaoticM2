@@ -217,7 +217,7 @@ abstract class WarningDialogType {
   static const leaveAppDialog = 'You are leaving! Are you sure?';
 
   static const orderCancelDialog =
-      'You are about to cancel your order. Are you sure?';
+      'All filled informations will be lost. Are you sure?';
 
   static const forgotPasswordDialog =
       'Forgot Password အတွက် M2 Mobile သို့အောက်ဖော်ပြပါ ဖုန်းနံပါတ်ဖြင့်ဆက်သွယ်အကြောင်းကြားနိုင်သည်။\nဖုန်း - 09 790428136';

@@ -131,7 +131,7 @@ abstract class _StoreProfileBase with Store {
     final response = await _apiService.saveProfile(imageUrl.trim(), name.trim(),
         phoneNo.trim(), address.trim(), password.trim());
     if (response.body.message.toLowerCase() == "success") {
-      _saveProfile(response.body.data);
+      await _saveProfile(response.body.data);
       apiLoading = false;
       onSuccess();
     }
@@ -142,7 +142,7 @@ abstract class _StoreProfileBase with Store {
     final response = await _apiService.editProfile(
         id, imageUrl.trim(), name.trim(), phoneNo.trim(), address.trim());
     if (response.body.message.toLowerCase() == "success") {
-      _refreshProfile(response.body.data);
+      await _refreshProfile(response.body.data);
       apiLoading = false;
       onSuccess();
     }
