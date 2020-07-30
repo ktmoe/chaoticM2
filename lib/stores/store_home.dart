@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/boxes/box_products.dart';
+import 'package:m2mobile/boxes/discount_products_box.dart';
 import 'package:m2mobile/data/api/api_service.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:m2mobile/models/product.dart';
@@ -13,6 +14,8 @@ abstract class _StoreHome with Store {
   final ApiService _api = Modular.get<ApiService>();
   BoxProduct _boxProduct;
 
+  DiscountProductBox _discountProductBox;
+
   _StoreHome() {
     init();
   }
@@ -23,13 +26,18 @@ abstract class _StoreHome with Store {
   @observable
   ObservableList<Product> products = ObservableList.of([]);
 
+  @observable
+  ObservableList<Product> discountProducts = ObservableList.of([]);
+
   @action
   Future init() async {
     _boxProduct = await BoxProduct.create();
+    _discountProductBox = await DiscountProductBox.create();
     updateProducts();
+    updateDiscountProdcucts();
     _boxProduct.listenable.addListener(updateProducts);
-
-    await getProductList();
+    _discountProductBox.listenable.addListener(updateDiscountProdcucts);
+    Future.wait([getLatestProducts(),getDiscountProducts()]);
   }
 
   @action
@@ -38,9 +46,14 @@ abstract class _StoreHome with Store {
   }
 
   @action
-  Future getProductList({bool refresh = true}) async {
+  void updateDiscountProdcucts(){
+    discountProducts = ObservableList.of(_discountProductBox.listenable.value.values);
+  }
+
+  @action
+  Future getLatestProducts({bool refresh = true}) async {
     try {
-      final productResponse = await _api.getProducts();
+      final productResponse = await _api.getLatestProducts();
       final products = productResponse.body.product.toList();
       if (refresh && _boxProduct != null) _boxProduct.deleteAll();
       _boxProduct.saveAll(products);
@@ -48,4 +61,19 @@ abstract class _StoreHome with Store {
       exception = AppException(message: e.toString());
     }
   }
+
+  @action
+  Future getDiscountProducts({bool refresh = true}) async {
+    try {
+      final productResponse = await _api.getDiscountProducts();
+      final products = productResponse.body.product.toList();
+      if (refresh && _discountProductBox != null) _discountProductBox.deleteAll();
+      _discountProductBox.saveAll(products);
+    } catch (e) {
+      print("err in getting discount products => ${e.toString()}");
+     //exception = AppException(message: e.toString());
+    }
+  }
+
+
 }

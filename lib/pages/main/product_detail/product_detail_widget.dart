@@ -27,11 +27,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
 
   @override
   void initState() {
-    _images = [
-      widget.product.imageurl1,
-      widget.product.imageurl2,
-      widget.product.imageurl3
-    ];
+    _images = widget.product.images;
     super.initState();
   }
 
@@ -40,7 +36,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
     return Scaffold(
       appBar: M2AppBar(
           showSearch: false,
-          title: widget.product.productname,
+          title: widget.product.productName,
           deleteOnly: false,
           onBackPressed: () => Modular.to.pop()),
       body: Flex(

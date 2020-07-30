@@ -81,9 +81,9 @@ class ProductCardHeader extends StatelessWidget {
                 child: FadeInImage(
                   fit: BoxFit.cover,
                   placeholder: AssetImage("lib/res/images/earth.jpg"),
-                  image: product.imageurl1 == null
+                  image: product.images[0] == null
                       ? NetworkImage('')
-                      : NetworkImage(baseUrl + '/' + product.imageurl1),
+                      : NetworkImage(baseUrl + '/' + product.images[0]),
                 ),
               ),
             ),
@@ -96,7 +96,7 @@ class ProductCardHeader extends StatelessWidget {
                         horizontal: Dimens.marginMedium,
                         vertical: Dimens.marginSmall),
                     child: Text(
-                      product.productname == null ? '' : product.productname,
+                      product.productName == null ? '' : product.productName,
                       style: TextStyle(fontWeight: FontWeight.bold),
                       overflow: TextOverflow.visible,
                     ),

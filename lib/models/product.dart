@@ -43,9 +43,26 @@ abstract class Product implements Built<Product, ProductBuilder> {
   @HiveField(7)
   @BuiltValueField(wireName: 'status')
   int get status;
+  @nullable
   @HiveField(8)
   @BuiltValueField(wireName: 'images')
   List<String> get images;
+  @nullable
+  @HiveField(9)
+  @BuiltValueField(wireName: 'percent_amount')
+  int get percentAmount;
+  @nullable
+  @HiveField(10)
+  @BuiltValueField(wireName: 'discount_price')
+  int get discountPrice;
+  @nullable
+  @HiveField(11)
+  @BuiltValueField(wireName: 'discount_type')
+  String get discountType;
+  @nullable
+  @HiveField(12)
+  @BuiltValueField(wireName: 'soldcount')
+  int get soldCount;
   
   String toJson() {
     return json.encode(serializers.serializeWith(Product.serializer, this));

@@ -30,7 +30,7 @@ class _HomeWidgetState extends State<HomeWidget>
 
   ReactionDisposer _onConnectivityChanged() =>
       when((_) => _storeApp.isNetworkOn, () async {
-        await _storeHome.getProductList(refresh: true);
+        await _storeHome.getLatestProducts(refresh: true);
       });
 
   ReactionDisposer _onException() {
@@ -61,7 +61,7 @@ class _HomeWidgetState extends State<HomeWidget>
         return RefreshIndicator(
             key: _refreshIndicatorState,
             onRefresh: () async {
-              await _storeHome.getProductList();
+              await _storeHome.getLatestProducts(refresh: true);
             },
             child: SingleChildScrollView(
               child: Column(

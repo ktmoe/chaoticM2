@@ -98,7 +98,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(widget.product.productname,
+          Text(widget.product.productName,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                   fontSize: Dimens.textRegular2x, fontWeight: FontWeight.w600)),
@@ -115,7 +115,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
           child: FadeInImage(
             fit: BoxFit.cover,
             placeholder: AssetImage("lib/res/images/earth.jpg"),
-            image: NetworkImage(baseUrl + '/' + widget.product.imageurl1 ?? ""),
+            image: NetworkImage(baseUrl + '/' + widget.product.images[0] ?? ""),
           ),
         ),
       );

@@ -24,8 +24,11 @@ abstract class ApiService extends ChopperService {
   @Get(path: '/productview/getProductByID')
   Future<Response<Product>> getProductById(@Query('productid') String id);
 
-  @Get(path: '')
+  @Get(path: '/productview/getLatestProducts')
   Future<Response<ProductResponse>> getLatestProducts();
+
+  @Get(path: '/productview/getDiscountProducts')
+  Future<Response<ProductResponse>> getDiscountProducts();
 
   /// help ///
   @Get(path: '/helpview')
