@@ -98,7 +98,7 @@ class _Authenticate1WidgetState extends State<Authenticate1Widget> {
   }
 
   void _validateLength(String value) {
-    if (value.length > 6 && value.length < 11) {
+    if (value.length > 6 && value.length <= 11) {
       _authenticateStore.phone = value;
     }
   }

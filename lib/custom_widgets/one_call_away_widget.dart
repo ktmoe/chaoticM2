@@ -173,8 +173,8 @@ extension OneCallAwayWidget on BuildContext {
                   onPressed: () => Navigator.of(context).pop(true),
                   padding: const EdgeInsets.only(
                       left: Dimens.marginMedium2, right: Dimens.marginMedium2),
-                  color: Theme.of(context).buttonColor,
-                  textColor: Colors.white,
+                  color: Colors.white,
+                  textColor: Theme.of(context).buttonColor,
                   child: const Text("OK"),
                 )
               ],

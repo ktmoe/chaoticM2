@@ -37,7 +37,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
   bool _obscure = true;
 
   ReactionDisposer _onOldDataLoadingChanged() {
-    return reaction<bool>((_) => _storeProfile.oldDataLoaded,(done){
+    return reaction<bool>((_) => _storeProfile.oldDataLoaded, (done) {
       print("old data loaded => $done");
       if (done) {
         _autofillOldData();
@@ -60,8 +60,6 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
       context.successFailDialog(dialogType: e.message);
     });
   }
-
-
 
   @override
   void initState() {
@@ -244,17 +242,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
       textInputAction: TextInputAction.next,
       controller: _phoneController,
       decoration: InputDecoration(
-          hintText: "Phone No.",
-          errorText: _phoneController.text.isEmpty
-              ? Strings.errorTextFieldEmpty
-              : null),
-      validator: (value) =>
-          (value.isEmpty || value == null) ? Strings.errorTextFieldEmpty : null,
-      onChanged: (value) {
-        _storeProfile.phoneNo = value;
-      },
+        hintText: "${_storeProfile.phoneNo}",
+      ),
       onFieldSubmitted: (value) {
-        _storeProfile.phoneNo = value;
         FocusScope.of(context).nextFocus();
       },
     );
@@ -323,12 +313,14 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
       disabledTextColor: Colors.white,
       onPressed: () async {
         await _storeProfile.uploadProfile(widget.register, () async {
-          await context.successFailDialog(
+          final flag = await context.successFailDialog(
               dialogType: WarningDialogType.userProfileSaved, success: true);
-          if (widget.register) {
-            Modular.to.pushReplacementNamed(MainWidget.route);
-          } else {
-            Modular.to.pop();
+          if (flag) {
+            if (widget.register) {
+              Modular.to.pushReplacementNamed(MainWidget.route);
+            } else {
+              Modular.to.pop();
+            }
           }
         });
       },

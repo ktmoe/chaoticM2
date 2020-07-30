@@ -6,6 +6,7 @@ import 'package:m2mobile/pages/main/more/profile/edit_profile_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/stores/store_app.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class ProfileWidget extends StatefulWidget {
   static const route = "/main/more/profile";
@@ -32,25 +33,13 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               margin: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.15),
               child: ScreenBgCard()),
-          _buildProfileInfoArea(),
+          Observer(
+            builder: (context) => _buildProfileInfoArea(),
+          ),
         ],
       ),
     );
   }
-
-  Widget _buildCircleProfilePhoto() => Card(
-        elevation: Dimens.cardElevation,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(50),
-          child: FadeInImage(
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-              placeholder: AssetImage("lib/res/images/earth.jpg"),
-              image: NetworkImage(_storeApp.userProfile.imageurl ?? "")),
-        ),
-      );
 
   Widget _buildProfileInfoArea() => Align(
         alignment: Alignment.center,
@@ -124,6 +113,20 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               )
             ],
           ),
+        ),
+      );
+
+  Widget _buildCircleProfilePhoto() => Card(
+        elevation: Dimens.cardElevation,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(50),
+          child: FadeInImage(
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+              placeholder: AssetImage("lib/res/images/earth.jpg"),
+              image: NetworkImage(_storeApp.userProfile.imageurl ?? "")),
         ),
       );
 

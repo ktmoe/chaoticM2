@@ -5,7 +5,6 @@ import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:m2mobile/boxes/app_box.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
-import 'package:m2mobile/stores/authenticate_store.dart';
 import 'package:m2mobile/stores/store_app.dart';
 import 'package:mobx/mobx.dart';
 import 'package:m2mobile/data/api/file_upload_service.dart';
@@ -68,7 +67,7 @@ abstract class _StoreProfileBase with Store {
       hasInialized = true;
     }
     if (isRegister) {
-      phoneNo = Modular.get<AuthenticateStore>().fullPhone;
+      phoneNo = _appBox.getPhoneNumber();
     } else {
       oldDataLoaded = true;
       print("isRegistered => $isRegister");
@@ -130,9 +129,10 @@ abstract class _StoreProfileBase with Store {
   Future _saveProfileApiCall(Function onSuccess) async {
     final response = await _apiService.saveProfile(imageUrl.trim(), name.trim(),
         phoneNo.trim(), address.trim(), password.trim());
+
+    apiLoading = false;
     if (response.body.message.toLowerCase() == "success") {
       await _saveProfile(response.body.data);
-      apiLoading = false;
       onSuccess();
     }
   }
@@ -141,9 +141,10 @@ abstract class _StoreProfileBase with Store {
   Future _ediProfileApiCall(Function onSuccess) async {
     final response = await _apiService.editProfile(
         id, imageUrl.trim(), name.trim(), phoneNo.trim(), address.trim());
+
+    apiLoading = false;
     if (response.body.message.toLowerCase() == "success") {
       await _refreshProfile(response.body.data);
-      apiLoading = false;
       onSuccess();
     }
   }

@@ -30,7 +30,7 @@ class _AuthenticateWidgetState extends State<AuthenticateWidget> {
         verificationCompleted: (_authCredential) async {
           _auth.signInWithCredential(_authCredential).then((_authResult) {
             if (_authResult.user != null) {
-              // _storeApp.isLoggedIn = true;
+              _storeAuthenticate.savePhoneNumber();
               Modular.to.pushReplacementNamed(EditProfileWidget.route,
                   arguments: true);
             }

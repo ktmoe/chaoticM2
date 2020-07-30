@@ -35,7 +35,8 @@ abstract class _AuthenticateStoreBase with Store {
   AppException exception;
 
   @computed
-  String get fullPhone => "+" + countryCode.dialingCode + phone;
+  String get fullPhone =>
+      phone.startsWith('09') ? '+95${phone.substring(1)}' : '+95$phone';
 
   @computed
   bool get validPhone => countryCode != null && phone.trim().isNotEmpty;
@@ -47,7 +48,8 @@ abstract class _AuthenticateStoreBase with Store {
 
   @action
   Future savePhoneNumber() async {
-    await _appBox.savePhoneNumber(fullPhone);
+    final tosave = phone.startsWith('09') ? phone : '0$phone';
+    await _appBox.savePhoneNumber(tosave);
   }
 
   @action
