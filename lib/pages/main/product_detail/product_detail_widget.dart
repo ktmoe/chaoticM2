@@ -24,10 +24,14 @@ class ProductDetailWidget extends StatefulWidget {
 
 class _ProductDetailWidgetState extends State<ProductDetailWidget> {
   List<String> _images;
+  bool _discountItem;
+  Product _product;
 
   @override
   void initState() {
-    _images = [widget.product.images];
+    _product = widget.product;
+    _discountItem = widget.product.discountPrice != null;
+    _images = [_product.images];
     super.initState();
   }
 
@@ -36,7 +40,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
     return Scaffold(
       appBar: M2AppBar(
           showSearch: false,
-          title: widget.product.productName,
+          title: _product.productName,
           deleteOnly: false,
           onBackPressed: () => Modular.to.pop()),
       body: Flex(
@@ -74,14 +78,8 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                 padding: const EdgeInsets.all(Dimens.marginMedium),
                 child: Row(
                   children: <Widget>[
-                    Text(
-                      widget.product.discountPrice.toDouble().money(),
-                      style: TextStyle(
-                          color: Theme.of(context).accentColor,
-                          fontWeight: FontWeight.w500,
-                          fontSize: Dimens.textRegular2x),
-                    ),
-                    _buildDeletedOldPrice(oldPrice: widget.product.price)
+                    _buildCurrentPrice(),
+                    _buildDeletedOldPrice()
                   ],
                 )),
             const Divider(thickness: 1),
@@ -94,9 +92,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                         color: Theme.of(context).textTheme.headline1.color))),
             Padding(
               padding: const EdgeInsets.all(Dimens.marginMedium),
-              child: Text(
-                  widget.product.description,
-                  style: Styles.m2TextTheme),
+              child: Text(_product.description, style: Styles.m2TextTheme),
             ),
             const Divider(
               thickness: 1,
@@ -167,31 +163,58 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
         ],
       );
 
-  Widget _buildDiscountPercentTag() => Material(
-        color: const Color(0xFF92C038),
-        borderRadius: BorderRadius.only(
-            topRight: Radius.circular(Dimens.marginMedium2),
-            bottomLeft: Radius.circular(Dimens.marginMedium2)),
-        elevation: Dimens.cardElevation,
-        child: Container(
-          padding: const EdgeInsets.all(Dimens.marginMedium),
-          child: Text((widget.product.discountType != "amount")? "${widget.product.percentAmount} % off" : "${widget.product.percentAmount} kyats off",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                  fontSize: Dimens.textRegular2x)),
-        ),
-      );
+  Widget _buildDiscountPercentTag() => _discountItem
+      ? Material(
+          color: const Color(0xFF92C038),
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(Dimens.marginMedium2),
+              bottomLeft: Radius.circular(Dimens.marginMedium2)),
+          elevation: Dimens.cardElevation,
+          child: Container(
+            padding: const EdgeInsets.all(Dimens.marginMedium),
+            child: Text(
+                (_product.discountType != "amount")
+                    ? "$_product.percentAmount} % off"
+                    : "${_product.percentAmount.toDouble().money()} off",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    fontSize: Dimens.textRegular2x)),
+          ),
+        )
+      : Container();
 
-  Widget _buildDeletedOldPrice({int oldPrice}) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Text(
-          '${oldPrice.toDouble().money()} MMK',
-          style: TextStyle(
-              decoration: TextDecoration.lineThrough,
-              fontSize: Dimens.textRegular_small),
-        ),
-      );
+  Widget _buildCurrentPrice() {
+    return _discountItem
+        ? Text(
+            _product.discountPrice.toDouble().money(),
+            style: TextStyle(
+                color: Theme.of(context).accentColor,
+                fontWeight: FontWeight.w500,
+                fontSize: Dimens.textRegular2x),
+          )
+        : Text(
+            _product.price.toDouble().money(),
+            style: TextStyle(
+                color: Theme.of(context).accentColor,
+                fontWeight: FontWeight.w500,
+                fontSize: Dimens.textRegular2x),
+          );
+  }
+
+  Widget _buildDeletedOldPrice() {
+    return _discountItem
+        ? Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Text(
+              _product.price.toDouble().money(),
+              style: TextStyle(
+                  decoration: TextDecoration.lineThrough,
+                  fontSize: Dimens.textRegular_small),
+            ),
+          )
+        : Container();
+  }
 
   final List<String> specifications = [
     "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",

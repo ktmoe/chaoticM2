@@ -195,10 +195,12 @@ abstract class _StoreApp with Store {
 
   @action
   void _appBoxChanged() {
-    isFirstTime = _appBox.listenable.value.get(AppBox.firstTimeKey);
-    chosenLanguage = _appBox.listenable.value.get(AppBox.isUnicodeKey)
-        ? Language.Unicode
-        : Language.Zawgyi;
+    isFirstTime =
+        _appBox.listenable.value.get(AppBox.firstTimeKey, defaultValue: true);
+    chosenLanguage =
+        _appBox.listenable.value.get(AppBox.isUnicodeKey, defaultValue: true)
+            ? Language.Unicode
+            : Language.Zawgyi;
   }
 
   @action

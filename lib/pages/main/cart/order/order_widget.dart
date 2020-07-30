@@ -140,7 +140,11 @@ class _OrderWidgetState extends State<OrderWidget> {
                 ],
                 currentStep: currentStep,
                 onStepContinue: next,
-                onStepTapped: (step) => goTo(step),
+                onStepTapped: (step) {
+                  if (step < currentStep) {
+                    goTo(step);
+                  }
+                },
                 onStepCancel: cancel,
               );
             })
@@ -170,6 +174,7 @@ class _OrderWidgetState extends State<OrderWidget> {
   Widget _buildOtpTextField() {
     return TextFormField(
         controller: _otpController,
+        keyboardType: TextInputType.number,
         inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
         decoration: InputDecoration(
             border: OutlineInputBorder(

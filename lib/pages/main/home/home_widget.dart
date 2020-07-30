@@ -3,8 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_page_indicator/flutter_page_indicator.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
-import 'package:m2mobile/models/product.dart';
-import 'package:m2mobile/pages/main/product_detail/product_detail_widget.dart';
+import 'package:m2mobile/custom_widgets/one_call_away_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
 import 'package:m2mobile/custom_widgets/product_card.dart';
@@ -61,7 +60,10 @@ class _HomeWidgetState extends State<HomeWidget>
         return RefreshIndicator(
             key: _refreshIndicatorState,
             onRefresh: () async {
-              Future.wait([_storeHome.getDiscountProducts(refresh: true),_storeHome.getLatestProducts(refresh: true)]);
+              Future.wait([
+                _storeHome.getDiscountProducts(refresh: true),
+                _storeHome.getLatestProducts(refresh: true)
+              ]);
             },
             child: SingleChildScrollView(
               child: Column(
@@ -99,11 +101,12 @@ class _HomeWidgetState extends State<HomeWidget>
           builder: (_) {
             final discountItems = _storeHome.discountProducts;
             return ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: discountItems.length,
-              itemBuilder: (_, index) {
-                return ProductCard(discountItem: true, product: discountItems[index]);
-              });
+                scrollDirection: Axis.horizontal,
+                itemCount: discountItems.length,
+                itemBuilder: (_, index) {
+                  return ProductCard(
+                      discountItem: true, product: discountItems[index]);
+                });
           },
         ));
   }
@@ -113,16 +116,16 @@ class _HomeWidgetState extends State<HomeWidget>
       builder: (_) {
         final latestProducts = _storeHome.products;
         return GridView.count(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        crossAxisCount: 2,
-        padding: const EdgeInsets.all(Dimens.marginMedium),
-        childAspectRatio: (120 / 170),
-        children: List.generate(_storeHome.products.length, (index) {
-          return ProductCard(
-              product: latestProducts[index], discountItem: false);
-        }),
-      );
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          crossAxisCount: 2,
+          padding: const EdgeInsets.all(Dimens.marginMedium),
+          childAspectRatio: (120 / 170),
+          children: List.generate(_storeHome.products.length, (index) {
+            return ProductCard(
+                product: latestProducts[index], discountItem: false);
+          }),
+        );
       },
     );
   }
@@ -142,8 +145,8 @@ class _HomeWidgetState extends State<HomeWidget>
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
-                  Modular.to.pushNamed(ProductDetailWidget.route,
-                      arguments: ["name", "id"]);
+                  //todo route to productDetail
+                  context.standardWarningDialog(dialogType: "Coming Soon");
                 },
                 child: FadeInImage(
                   fit: BoxFit.cover,

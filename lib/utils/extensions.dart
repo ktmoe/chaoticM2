@@ -18,8 +18,12 @@ extension StringX on String {
 }
 
 extension DoubleX on num {
-  String money() {
+  String thousandSeparator() {
     final format = NumberFormat("#,###");
     return format.format(this);
+  }
+
+  String money() {
+    return this.thousandSeparator() + " MMK";
   }
 }

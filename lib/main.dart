@@ -22,7 +22,9 @@ Future<void> main() async {
 
 void _setupLogging() {
   Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen((rec) {});
+  Logger.root.onRecord.listen((rec) {
+    print("${rec.level.name}: ${rec.time}: ${rec.message}");
+  });
 }
 
 void _registerAdapters() {
