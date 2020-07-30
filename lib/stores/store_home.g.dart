@@ -39,6 +39,21 @@ mixin _$StoreHome on _StoreHome, Store {
     });
   }
 
+  final _$discountProductsAtom = Atom(name: '_StoreHome.discountProducts');
+
+  @override
+  ObservableList<Product> get discountProducts {
+    _$discountProductsAtom.reportRead();
+    return super.discountProducts;
+  }
+
+  @override
+  set discountProducts(ObservableList<Product> value) {
+    _$discountProductsAtom.reportWrite(value, super.discountProducts, () {
+      super.discountProducts = value;
+    });
+  }
+
   final _$initAsyncAction = AsyncAction('_StoreHome.init');
 
   @override
@@ -46,12 +61,22 @@ mixin _$StoreHome on _StoreHome, Store {
     return _$initAsyncAction.run(() => super.init());
   }
 
-  final _$getProductListAsyncAction = AsyncAction('_StoreHome.getProductList');
+  final _$getLatestProductsAsyncAction =
+      AsyncAction('_StoreHome.getLatestProducts');
 
   @override
-  Future<dynamic> getProductList({bool refresh = true}) {
-    return _$getProductListAsyncAction
-        .run(() => super.getProductList(refresh: refresh));
+  Future<dynamic> getLatestProducts({bool refresh = true}) {
+    return _$getLatestProductsAsyncAction
+        .run(() => super.getLatestProducts(refresh: refresh));
+  }
+
+  final _$getDiscountProductsAsyncAction =
+      AsyncAction('_StoreHome.getDiscountProducts');
+
+  @override
+  Future<dynamic> getDiscountProducts({bool refresh = true}) {
+    return _$getDiscountProductsAsyncAction
+        .run(() => super.getDiscountProducts(refresh: refresh));
   }
 
   final _$_StoreHomeActionController = ActionController(name: '_StoreHome');
@@ -68,10 +93,22 @@ mixin _$StoreHome on _StoreHome, Store {
   }
 
   @override
+  void updateDiscountProdcucts() {
+    final _$actionInfo = _$_StoreHomeActionController.startAction(
+        name: '_StoreHome.updateDiscountProdcucts');
+    try {
+      return super.updateDiscountProdcucts();
+    } finally {
+      _$_StoreHomeActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 exception: ${exception},
-products: ${products}
+products: ${products},
+discountProducts: ${discountProducts}
     ''';
   }
 }

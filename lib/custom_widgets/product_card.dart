@@ -102,41 +102,41 @@ class ProductCardHeader extends StatelessWidget {
                     ),
                   ),
                 ),
-                discountItem ? _buildSoldCountTag() : Container()
+                discountItem ? _buildSoldCountTag(soldCount: product.soldCount) : Container()
               ],
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
-                product.price == null ? '' : product.price.toDouble().money(),
+                discountItem ? '${product.discountPrice.toDouble().money()}' :  '${product.price.toDouble().money()}',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).accentColor),
               ),
             ),
-            discountItem ? _buildDeletedOldPrice() : Container()
+            discountItem ? _buildDeletedOldPrice(oldPrice: product.price) : Container()
           ],
         ),
         discountItem
             ? Align(
                 alignment: Alignment.topRight,
-                child: _buildDiscountPercentTag())
+                child: _buildDiscountPercentTag(discount: (product.discountType == "amount")? "${product.percentAmount}" : "${product.percentAmount} %"))
             : Container()
       ],
     );
   }
 
-  Widget _buildDeletedOldPrice() => Container(
+  Widget _buildDeletedOldPrice({int oldPrice}) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: const Text(
-          '2,100,000 MMK',
+        child: Text(
+          '$oldPrice MMK',
           style: TextStyle(
               decoration: TextDecoration.lineThrough,
               fontSize: Dimens.textRegular_small),
         ),
       );
 
-  Widget _buildDiscountPercentTag() => Material(
+  Widget _buildDiscountPercentTag({String discount}) => Material(
         color: const Color(0xFF92C038),
         borderRadius: BorderRadius.only(
             topRight: Radius.circular(Dimens.marginMedium2),
@@ -144,7 +144,7 @@ class ProductCardHeader extends StatelessWidget {
         elevation: Dimens.cardElevation,
         child: Container(
           padding: const EdgeInsets.all(Dimens.marginMedium),
-          child: const Text("10 % off",
+          child: Text("$discount off",
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w800,
@@ -152,7 +152,7 @@ class ProductCardHeader extends StatelessWidget {
         ),
       );
 
-  Widget _buildSoldCountTag() => Expanded(
+  Widget _buildSoldCountTag({int soldCount}) => Expanded(
         child: Material(
           color: const Color(0xFF92C038),
           borderRadius: BorderRadius.only(
@@ -161,7 +161,7 @@ class ProductCardHeader extends StatelessWidget {
           elevation: Dimens.cardElevation,
           child: Container(
             padding: const EdgeInsets.all(Dimens.marginSmall),
-            child: const Text("45 sold",
+            child: Text("$soldCount sold",
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,

@@ -46,7 +46,7 @@ abstract class Product implements Built<Product, ProductBuilder> {
   @nullable
   @HiveField(8)
   @BuiltValueField(wireName: 'images')
-  List<String> get images;
+  String get images;
   @nullable
   @HiveField(9)
   @BuiltValueField(wireName: 'percent_amount')

@@ -61,7 +61,7 @@ class _HomeWidgetState extends State<HomeWidget>
         return RefreshIndicator(
             key: _refreshIndicatorState,
             onRefresh: () async {
-              await _storeHome.getLatestProducts(refresh: true);
+              Future.wait([_storeHome.getDiscountProducts(refresh: true),_storeHome.getLatestProducts(refresh: true)]);
             },
             child: SingleChildScrollView(
               child: Column(
@@ -83,7 +83,7 @@ class _HomeWidgetState extends State<HomeWidget>
                       child: Text('Latest Items',
                           style: Styles.m2TextTheme
                               .copyWith(fontWeight: FontWeight.bold))),
-                  _buildLastestItemGrid(),
+                  _buildLatestItemGrid(),
                 ],
               ),
             ));
@@ -95,25 +95,35 @@ class _HomeWidgetState extends State<HomeWidget>
     return Container(
         constraints:
             BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.4),
-        child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 5,
-            itemBuilder: (_, index) {
-              return ProductCard(discountItem: true, product: Product());
-            }));
+        child: Observer(
+          builder: (_) {
+            final discountItems = _storeHome.discountProducts;
+            return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: discountItems.length,
+              itemBuilder: (_, index) {
+                return ProductCard(discountItem: true, product: discountItems[index]);
+              });
+          },
+        ));
   }
 
-  Widget _buildLastestItemGrid() {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      padding: const EdgeInsets.all(Dimens.marginMedium),
-      childAspectRatio: (120 / 170),
-      children: List.generate(_storeHome.products.length, (index) {
-        return ProductCard(
-            product: _storeHome.products[index], discountItem: false);
-      }),
+  Widget _buildLatestItemGrid() {
+    return Observer(
+      builder: (_) {
+        final latestProducts = _storeHome.products;
+        return GridView.count(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        crossAxisCount: 2,
+        padding: const EdgeInsets.all(Dimens.marginMedium),
+        childAspectRatio: (120 / 170),
+        children: List.generate(_storeHome.products.length, (index) {
+          return ProductCard(
+              product: latestProducts[index], discountItem: false);
+        }),
+      );
+      },
     );
   }
 

@@ -26,9 +26,6 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
           specifiedType: const FullType(String)),
       'status',
       serializers.serialize(object.status, specifiedType: const FullType(int)),
-      'images',
-      serializers.serialize(object.images,
-          specifiedType: const FullType(List, const [const FullType(String)])),
     ];
     if (object.id != null) {
       result
@@ -59,6 +56,12 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
         ..add('price')
         ..add(serializers.serialize(object.price,
             specifiedType: const FullType(int)));
+    }
+    if (object.images != null) {
+      result
+        ..add('images')
+        ..add(serializers.serialize(object.images,
+            specifiedType: const FullType(String)));
     }
     if (object.percentAmount != null) {
       result
@@ -132,9 +135,7 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
           break;
         case 'images':
           result.images = serializers.deserialize(value,
-                  specifiedType:
-                      const FullType(List, const [const FullType(String)]))
-              as List<String>;
+              specifiedType: const FullType(String)) as String;
           break;
         case 'percent_amount':
           result.percentAmount = serializers.deserialize(value,
@@ -177,7 +178,7 @@ class _$Product extends Product {
   @override
   final int status;
   @override
-  final List<String> images;
+  final String images;
   @override
   final int percentAmount;
   @override
@@ -213,9 +214,6 @@ class _$Product extends Product {
     }
     if (status == null) {
       throw new BuiltValueNullFieldError('Product', 'status');
-    }
-    if (images == null) {
-      throw new BuiltValueNullFieldError('Product', 'images');
     }
   }
 
@@ -330,9 +328,9 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
   int get status => _$this._status;
   set status(int status) => _$this._status = status;
 
-  List<String> _images;
-  List<String> get images => _$this._images;
-  set images(List<String> images) => _$this._images = images;
+  String _images;
+  String get images => _$this._images;
+  set images(String images) => _$this._images = images;
 
   int _percentAmount;
   int get percentAmount => _$this._percentAmount;
@@ -432,7 +430,7 @@ class ProductAdapter extends TypeAdapter<Product> {
           ..specification = fields[5] as String
           ..price = fields[6] as int
           ..status = fields[7] as int
-          ..images = (fields[8] as List)?.cast<String>()
+          ..images = fields[8] as String
           ..percentAmount = fields[9] as int
           ..discountPrice = fields[10] as int
           ..discountType = fields[11] as String

@@ -27,7 +27,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
 
   @override
   void initState() {
-    _images = widget.product.images;
+    _images = [widget.product.images];
     super.initState();
   }
 
@@ -75,13 +75,13 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      widget.product.price.toDouble().money(),
+                      widget.product.discountPrice.toDouble().money(),
                       style: TextStyle(
                           color: Theme.of(context).accentColor,
                           fontWeight: FontWeight.w500,
                           fontSize: Dimens.textRegular2x),
                     ),
-                    _buildDeletedOldPrice()
+                    _buildDeletedOldPrice(oldPrice: widget.product.price)
                   ],
                 )),
             const Divider(thickness: 1),
@@ -95,7 +95,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
             Padding(
               padding: const EdgeInsets.all(Dimens.marginMedium),
               child: Text(
-                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+                  widget.product.description,
                   style: Styles.m2TextTheme),
             ),
             const Divider(
@@ -175,7 +175,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
         elevation: Dimens.cardElevation,
         child: Container(
           padding: const EdgeInsets.all(Dimens.marginMedium),
-          child: const Text("10 % off",
+          child: Text((widget.product.discountType != "amount")? "${widget.product.percentAmount} % off" : "${widget.product.percentAmount} kyats off",
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w800,
@@ -183,10 +183,10 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
         ),
       );
 
-  Widget _buildDeletedOldPrice() => Container(
+  Widget _buildDeletedOldPrice({int oldPrice}) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: const Text(
-          '2,100,000 MMK',
+        child: Text(
+          '${oldPrice.toDouble().money()} MMK',
           style: TextStyle(
               decoration: TextDecoration.lineThrough,
               fontSize: Dimens.textRegular_small),
