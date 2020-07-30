@@ -17,29 +17,23 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
   @override
   Iterable<Object> serialize(Serializers serializers, Product object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[];
+    final result = <Object>[
+      'productname',
+      serializers.serialize(object.productName,
+          specifiedType: const FullType(String)),
+      'specification',
+      serializers.serialize(object.specification,
+          specifiedType: const FullType(String)),
+      'status',
+      serializers.serialize(object.status, specifiedType: const FullType(int)),
+      'images',
+      serializers.serialize(object.images,
+          specifiedType: const FullType(List, const [const FullType(String)])),
+    ];
     if (object.id != null) {
       result
         ..add('id')
         ..add(serializers.serialize(object.id,
-            specifiedType: const FullType(String)));
-    }
-    if (object.imageurl1 != null) {
-      result
-        ..add('imageurl1')
-        ..add(serializers.serialize(object.imageurl1,
-            specifiedType: const FullType(String)));
-    }
-    if (object.imageurl2 != null) {
-      result
-        ..add('imageurl2')
-        ..add(serializers.serialize(object.imageurl2,
-            specifiedType: const FullType(String)));
-    }
-    if (object.imageurl3 != null) {
-      result
-        ..add('imageurl3')
-        ..add(serializers.serialize(object.imageurl3,
             specifiedType: const FullType(String)));
     }
     if (object.categoryid != null) {
@@ -54,41 +48,17 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
         ..add(serializers.serialize(object.subcategoryid,
             specifiedType: const FullType(String)));
     }
-    if (object.productname != null) {
-      result
-        ..add('productname')
-        ..add(serializers.serialize(object.productname,
-            specifiedType: const FullType(String)));
-    }
     if (object.description != null) {
       result
         ..add('description')
         ..add(serializers.serialize(object.description,
             specifiedType: const FullType(String)));
     }
-    if (object.itemcount != null) {
-      result
-        ..add('itemcount')
-        ..add(serializers.serialize(object.itemcount,
-            specifiedType: const FullType(int)));
-    }
     if (object.price != null) {
       result
         ..add('price')
         ..add(serializers.serialize(object.price,
             specifiedType: const FullType(int)));
-    }
-    if (object.category != null) {
-      result
-        ..add('category')
-        ..add(serializers.serialize(object.category,
-            specifiedType: const FullType(String)));
-    }
-    if (object.subCategory != null) {
-      result
-        ..add('sub_category')
-        ..add(serializers.serialize(object.subCategory,
-            specifiedType: const FullType(String)));
     }
     return result;
   }
@@ -108,16 +78,8 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
           result.id = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'imageurl1':
-          result.imageurl1 = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'imageurl2':
-          result.imageurl2 = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'imageurl3':
-          result.imageurl3 = serializers.deserialize(value,
+        case 'productname':
+          result.productName = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'categoryid':
@@ -128,29 +90,27 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
           result.subcategoryid = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'productname':
-          result.productname = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
         case 'description':
           result.description = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'itemcount':
-          result.itemcount = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+        case 'specification':
+          result.specification = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
         case 'price':
           result.price = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
-        case 'category':
-          result.category = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+        case 'status':
+          result.status = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
           break;
-        case 'sub_category':
-          result.subCategory = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+        case 'images':
+          result.images = serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(List, const [const FullType(String)]))
+              as List<String>;
           break;
       }
     }
@@ -163,45 +123,49 @@ class _$Product extends Product {
   @override
   final String id;
   @override
-  final String imageurl1;
-  @override
-  final String imageurl2;
-  @override
-  final String imageurl3;
+  final String productName;
   @override
   final String categoryid;
   @override
   final String subcategoryid;
   @override
-  final String productname;
-  @override
   final String description;
   @override
-  final int itemcount;
+  final String specification;
   @override
   final int price;
   @override
-  final String category;
+  final int status;
   @override
-  final String subCategory;
+  final List<String> images;
 
   factory _$Product([void Function(ProductBuilder) updates]) =>
       (new ProductBuilder()..update(updates)).build();
 
   _$Product._(
       {this.id,
-      this.imageurl1,
-      this.imageurl2,
-      this.imageurl3,
+      this.productName,
       this.categoryid,
       this.subcategoryid,
-      this.productname,
       this.description,
-      this.itemcount,
+      this.specification,
       this.price,
-      this.category,
-      this.subCategory})
-      : super._();
+      this.status,
+      this.images})
+      : super._() {
+    if (productName == null) {
+      throw new BuiltValueNullFieldError('Product', 'productName');
+    }
+    if (specification == null) {
+      throw new BuiltValueNullFieldError('Product', 'specification');
+    }
+    if (status == null) {
+      throw new BuiltValueNullFieldError('Product', 'status');
+    }
+    if (images == null) {
+      throw new BuiltValueNullFieldError('Product', 'images');
+    }
+  }
 
   @override
   Product rebuild(void Function(ProductBuilder) updates) =>
@@ -215,17 +179,14 @@ class _$Product extends Product {
     if (identical(other, this)) return true;
     return other is Product &&
         id == other.id &&
-        imageurl1 == other.imageurl1 &&
-        imageurl2 == other.imageurl2 &&
-        imageurl3 == other.imageurl3 &&
+        productName == other.productName &&
         categoryid == other.categoryid &&
         subcategoryid == other.subcategoryid &&
-        productname == other.productname &&
         description == other.description &&
-        itemcount == other.itemcount &&
+        specification == other.specification &&
         price == other.price &&
-        category == other.category &&
-        subCategory == other.subCategory;
+        status == other.status &&
+        images == other.images;
   }
 
   @override
@@ -236,39 +197,28 @@ class _$Product extends Product {
                 $jc(
                     $jc(
                         $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc($jc(0, id.hashCode),
-                                                imageurl1.hashCode),
-                                            imageurl2.hashCode),
-                                        imageurl3.hashCode),
-                                    categoryid.hashCode),
-                                subcategoryid.hashCode),
-                            productname.hashCode),
+                            $jc($jc($jc(0, id.hashCode), productName.hashCode),
+                                categoryid.hashCode),
+                            subcategoryid.hashCode),
                         description.hashCode),
-                    itemcount.hashCode),
+                    specification.hashCode),
                 price.hashCode),
-            category.hashCode),
-        subCategory.hashCode));
+            status.hashCode),
+        images.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Product')
           ..add('id', id)
-          ..add('imageurl1', imageurl1)
-          ..add('imageurl2', imageurl2)
-          ..add('imageurl3', imageurl3)
+          ..add('productName', productName)
           ..add('categoryid', categoryid)
           ..add('subcategoryid', subcategoryid)
-          ..add('productname', productname)
           ..add('description', description)
-          ..add('itemcount', itemcount)
+          ..add('specification', specification)
           ..add('price', price)
-          ..add('category', category)
-          ..add('subCategory', subCategory))
+          ..add('status', status)
+          ..add('images', images))
         .toString();
   }
 }
@@ -280,17 +230,9 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
   String get id => _$this._id;
   set id(String id) => _$this._id = id;
 
-  String _imageurl1;
-  String get imageurl1 => _$this._imageurl1;
-  set imageurl1(String imageurl1) => _$this._imageurl1 = imageurl1;
-
-  String _imageurl2;
-  String get imageurl2 => _$this._imageurl2;
-  set imageurl2(String imageurl2) => _$this._imageurl2 = imageurl2;
-
-  String _imageurl3;
-  String get imageurl3 => _$this._imageurl3;
-  set imageurl3(String imageurl3) => _$this._imageurl3 = imageurl3;
+  String _productName;
+  String get productName => _$this._productName;
+  set productName(String productName) => _$this._productName = productName;
 
   String _categoryid;
   String get categoryid => _$this._categoryid;
@@ -301,46 +243,40 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
   set subcategoryid(String subcategoryid) =>
       _$this._subcategoryid = subcategoryid;
 
-  String _productname;
-  String get productname => _$this._productname;
-  set productname(String productname) => _$this._productname = productname;
-
   String _description;
   String get description => _$this._description;
   set description(String description) => _$this._description = description;
 
-  int _itemcount;
-  int get itemcount => _$this._itemcount;
-  set itemcount(int itemcount) => _$this._itemcount = itemcount;
+  String _specification;
+  String get specification => _$this._specification;
+  set specification(String specification) =>
+      _$this._specification = specification;
 
   int _price;
   int get price => _$this._price;
   set price(int price) => _$this._price = price;
 
-  String _category;
-  String get category => _$this._category;
-  set category(String category) => _$this._category = category;
+  int _status;
+  int get status => _$this._status;
+  set status(int status) => _$this._status = status;
 
-  String _subCategory;
-  String get subCategory => _$this._subCategory;
-  set subCategory(String subCategory) => _$this._subCategory = subCategory;
+  List<String> _images;
+  List<String> get images => _$this._images;
+  set images(List<String> images) => _$this._images = images;
 
   ProductBuilder();
 
   ProductBuilder get _$this {
     if (_$v != null) {
       _id = _$v.id;
-      _imageurl1 = _$v.imageurl1;
-      _imageurl2 = _$v.imageurl2;
-      _imageurl3 = _$v.imageurl3;
+      _productName = _$v.productName;
       _categoryid = _$v.categoryid;
       _subcategoryid = _$v.subcategoryid;
-      _productname = _$v.productname;
       _description = _$v.description;
-      _itemcount = _$v.itemcount;
+      _specification = _$v.specification;
       _price = _$v.price;
-      _category = _$v.category;
-      _subCategory = _$v.subCategory;
+      _status = _$v.status;
+      _images = _$v.images;
       _$v = null;
     }
     return this;
@@ -364,17 +300,14 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
     final _$result = _$v ??
         new _$Product._(
             id: id,
-            imageurl1: imageurl1,
-            imageurl2: imageurl2,
-            imageurl3: imageurl3,
+            productName: productName,
             categoryid: categoryid,
             subcategoryid: subcategoryid,
-            productname: productname,
             description: description,
-            itemcount: itemcount,
+            specification: specification,
             price: price,
-            category: category,
-            subCategory: subCategory);
+            status: status,
+            images: images);
     replace(_$result);
     return _$result;
   }
@@ -398,47 +331,38 @@ class ProductAdapter extends TypeAdapter<Product> {
     };
     return (ProductBuilder()
           ..id = fields[0] as String
-          ..imageurl1 = fields[1] as String
-          ..imageurl2 = fields[2] as String
-          ..imageurl3 = fields[3] as String
-          ..categoryid = fields[4] as String
-          ..subcategoryid = fields[5] as String
-          ..productname = fields[6] as String
-          ..description = fields[7] as String
-          ..itemcount = fields[8] as int
-          ..price = fields[9] as int
-          ..category = fields[10] as String
-          ..subCategory = fields[11] as String)
+          ..productName = fields[1] as String
+          ..categoryid = fields[2] as String
+          ..subcategoryid = fields[3] as String
+          ..description = fields[4] as String
+          ..specification = fields[5] as String
+          ..price = fields[6] as int
+          ..status = fields[7] as int
+          ..images = (fields[8] as List)?.cast<String>())
         .build();
   }
 
   @override
   void write(BinaryWriter writer, Product obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.imageurl1)
+      ..write(obj.productName)
       ..writeByte(2)
-      ..write(obj.imageurl2)
-      ..writeByte(3)
-      ..write(obj.imageurl3)
-      ..writeByte(4)
       ..write(obj.categoryid)
-      ..writeByte(5)
+      ..writeByte(3)
       ..write(obj.subcategoryid)
-      ..writeByte(6)
-      ..write(obj.productname)
-      ..writeByte(7)
+      ..writeByte(4)
       ..write(obj.description)
-      ..writeByte(8)
-      ..write(obj.itemcount)
-      ..writeByte(9)
+      ..writeByte(5)
+      ..write(obj.specification)
+      ..writeByte(6)
       ..write(obj.price)
-      ..writeByte(10)
-      ..write(obj.category)
-      ..writeByte(11)
-      ..write(obj.subCategory);
+      ..writeByte(7)
+      ..write(obj.status)
+      ..writeByte(8)
+      ..write(obj.images);
   }
 }

@@ -19,49 +19,34 @@ abstract class Product implements Built<Product, ProductBuilder> {
   @BuiltValueField(wireName: 'id')
   String get id;
   @HiveField(1)
-  @nullable
-  @BuiltValueField(wireName: 'imageurl1')
-  String get imageurl1;
+  @BuiltValueField(wireName: 'productname')
+  String get productName;
   @HiveField(2)
-  @nullable
-  @BuiltValueField(wireName: 'imageurl2')
-  String get imageurl2;
-  @HiveField(3)
-  @nullable
-  @BuiltValueField(wireName: 'imageurl3')
-  String get imageurl3;
-  @HiveField(4)
   @nullable
   @BuiltValueField(wireName: 'categoryid')
   String get categoryid;
-  @HiveField(5)
+  @HiveField(3)
   @nullable
   @BuiltValueField(wireName: 'subcategoryid')
   String get subcategoryid;
-  @HiveField(6)
-  @nullable
-  @BuiltValueField(wireName: 'productname')
-  String get productname;
-  @HiveField(7)
+  @HiveField(4)
   @nullable
   @BuiltValueField(wireName: 'description')
   String get description;
-  @HiveField(8)
-  @nullable
-  @BuiltValueField(wireName: 'itemcount')
-  int get itemcount;
-  @HiveField(9)
+  @HiveField(5)
+  @BuiltValueField(wireName: 'specification')
+  String get specification;
+  @HiveField(6)
   @nullable
   @BuiltValueField(wireName: 'price')
   int get price;
-  @HiveField(10)
-  @nullable
-  @BuiltValueField(wireName: 'category')
-  String get category;
-  @HiveField(11)
-  @nullable
-  @BuiltValueField(wireName: 'sub_category')
-  String get subCategory;
+  @HiveField(7)
+  @BuiltValueField(wireName: 'status')
+  int get status;
+  @HiveField(8)
+  @BuiltValueField(wireName: 'images')
+  List<String> get images;
+  
   String toJson() {
     return json.encode(serializers.serializeWith(Product.serializer, this));
   }
