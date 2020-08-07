@@ -25,9 +25,9 @@ class BoxProduct implements Disposable {
   }
 
   void saveAll(List<Product> products) {
-    for (final p in products) {
-      save(p);
-    }
+    products.forEach((element) {
+      save(element);
+    });
   }
 
   List<Product> getAllProducts() {

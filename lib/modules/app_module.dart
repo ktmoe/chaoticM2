@@ -1,10 +1,13 @@
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:logger/logger.dart';
 import 'package:m2mobile/app_widget.dart';
 import 'package:m2mobile/data/api/api_service.dart';
 import 'package:m2mobile/data/api/jwt_service.dart';
 import 'package:m2mobile/interceptors/jwt_interceptor.dart';
+import 'package:m2mobile/interceptors/logging_request_interceptor.dart';
+import 'package:m2mobile/interceptors/logging_response_interceptor.dart';
 import 'package:m2mobile/modules/authenticate_module.dart';
 import 'package:m2mobile/modules/login_module.dart';
 import 'package:m2mobile/modules/main_module.dart';
@@ -23,11 +26,14 @@ class AppModule extends MainModule {
   List<Bind> get binds => [
         Bind((i) => ConnectivityService()),
         Bind((i) => StoreApp()),
+        Bind((i) => Logger(printer: PrettyPrinter(methodCount: 0))),
         Bind((i) => ChopperClient(
               interceptors: [
                 JWTInterceptor(),
-                HttpLoggingInterceptor(),
-                CurlInterceptor(),
+                LoggingRequestInterceptor(i.get<Logger>()),
+                LoggingResponseInterceptor(i.get<Logger>())
+                // HttpLoggingInterceptor(),
+                // CurlInterceptor(),
                 // HeadersInterceptor({HttpHeaders.authorizationHeader: bearerToken})
               ],
               baseUrl: baseUrl,

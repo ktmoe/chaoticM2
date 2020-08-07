@@ -4,6 +4,7 @@ import 'package:m2mobile/boxes/discount_products_box.dart';
 import 'package:m2mobile/data/api/api_service.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:m2mobile/models/product.dart';
+import 'package:m2mobile/stores/store_app.dart';
 import 'package:mobx/mobx.dart';
 
 part 'store_home.g.dart';
@@ -37,7 +38,7 @@ abstract class _StoreHome with Store {
     updateDiscountProdcucts();
     _boxProduct.listenable.addListener(updateProducts);
     _discountProductBox.listenable.addListener(updateDiscountProdcucts);
-    Future.wait([getLatestProducts(),getDiscountProducts()]);
+    Future.wait([getLatestProducts(), getDiscountProducts()]);
   }
 
   @action
@@ -46,14 +47,16 @@ abstract class _StoreHome with Store {
   }
 
   @action
-  void updateDiscountProdcucts(){
-    discountProducts = ObservableList.of(_discountProductBox.listenable.value.values);
+  void updateDiscountProdcucts() {
+    discountProducts =
+        ObservableList.of(_discountProductBox.listenable.value.values);
   }
 
   @action
   Future getLatestProducts({bool refresh = true}) async {
     try {
-      final productResponse = await _api.getLatestProducts();
+      final productResponse =
+          await _api.getLatestProducts(Modular.get<StoreApp>().userProfile.id);
       final products = productResponse.body.product.toList();
       if (refresh && _boxProduct != null) _boxProduct.deleteAll();
       _boxProduct.saveAll(products);
@@ -65,15 +68,14 @@ abstract class _StoreHome with Store {
   @action
   Future getDiscountProducts({bool refresh = true}) async {
     try {
-      final productResponse = await _api.getDiscountProducts();
+      final productResponse = await _api
+          .getDiscountProducts(Modular.get<StoreApp>().userProfile.id);
       final products = productResponse.body.product.toList();
-      if (refresh && _discountProductBox != null) _discountProductBox.deleteAll();
+      if (refresh && _discountProductBox != null)
+        _discountProductBox.deleteAll();
       _discountProductBox.saveAll(products);
     } catch (e) {
-      print("err in getting discount products => ${e.toString()}");
-     //exception = AppException(message: e.toString());
+      exception = AppException(message: e.toString());
     }
   }
-
-
 }

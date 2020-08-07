@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:hive/hive.dart';
+import 'package:m2mobile/models/image_url_holder.dart';
 
 import 'package:m2mobile/models/serializers.dart';
 
@@ -43,27 +45,30 @@ abstract class Product implements Built<Product, ProductBuilder> {
   @HiveField(7)
   @BuiltValueField(wireName: 'status')
   int get status;
-  @nullable
   @HiveField(8)
-  @BuiltValueField(wireName: 'images')
-  String get images;
+  @BuiltValueField(wireName: 'favorite')
+  String get favorite;
   @nullable
   @HiveField(9)
+  @BuiltValueField(wireName: 'images')
+  BuiltList<ImageUrlHolder> get images;
+  @nullable
+  @HiveField(10)
   @BuiltValueField(wireName: 'percent_amount')
   int get percentAmount;
   @nullable
-  @HiveField(10)
+  @HiveField(11)
   @BuiltValueField(wireName: 'discount_price')
   int get discountPrice;
   @nullable
-  @HiveField(11)
+  @HiveField(12)
   @BuiltValueField(wireName: 'discount_type')
   String get discountType;
   @nullable
-  @HiveField(12)
+  @HiveField(13)
   @BuiltValueField(wireName: 'soldcount')
   int get soldCount;
-  
+
   String toJson() {
     return json.encode(serializers.serializeWith(Product.serializer, this));
   }

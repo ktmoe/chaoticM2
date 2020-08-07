@@ -115,7 +115,10 @@ class _OrderItemCardState extends State<OrderItemCard> {
           child: FadeInImage(
             fit: BoxFit.cover,
             placeholder: AssetImage("lib/res/images/earth.jpg"),
-            image: NetworkImage(baseUrl + '/' + widget.product.images[0] ?? ""),
+            image: widget.product.images.isNotEmpty
+                ? NetworkImage(
+                    baseUrl + '/' + widget.product.images[0].url ?? "")
+                : AssetImage("lib/res/images/earth.jpg"),
           ),
         ),
       );

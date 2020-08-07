@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
+import 'package:m2mobile/models/image_url_holder.dart';
 import 'package:m2mobile/models/user_profile.dart';
 import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/models/company_info.dart';
@@ -34,4 +35,5 @@ void _registerAdapters() {
   Hive.registerAdapter<M2Category>(M2CategoryAdapter()); //HiveType 3
   Hive.registerAdapter<SubCategory>(SubCategoryAdapter()); //HiveType 4
   Hive.registerAdapter<Help>(HelpAdapter()); //HiveType 5
+  Hive.registerAdapter<ImageUrlHolder>(ImageUrlHolderAdapter()); //HiveType 6
 }

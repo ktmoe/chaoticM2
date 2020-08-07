@@ -14,6 +14,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(ForceUpdateResponse.serializer)
       ..add(Help.serializer)
       ..add(HelpResponse.serializer)
+      ..add(ImageUrlHolder.serializer)
       ..add(LoginResponse.serializer)
       ..add(M2Category.serializer)
       ..add(M2CategoryResponse.serializer)
@@ -23,6 +24,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(SubCategory.serializer)
       ..add(SubCategoryResponse.serializer)
       ..add(UserProfile.serializer)
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(ImageUrlHolder)]),
+          () => new ListBuilder<ImageUrlHolder>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(M2Category)]),
           () => new ListBuilder<M2Category>())

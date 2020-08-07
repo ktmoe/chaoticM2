@@ -20,6 +20,9 @@ class _$ProductResponseSerializer
   Iterable<Object> serialize(Serializers serializers, ProductResponse object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
+      'message',
+      serializers.serialize(object.message,
+          specifiedType: const FullType(String)),
       'data',
       serializers.serialize(object.product,
           specifiedType:
@@ -41,6 +44,10 @@ class _$ProductResponseSerializer
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'message':
+          result.message = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'data':
           result.product.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
@@ -56,12 +63,17 @@ class _$ProductResponseSerializer
 
 class _$ProductResponse extends ProductResponse {
   @override
+  final String message;
+  @override
   final BuiltList<Product> product;
 
   factory _$ProductResponse([void Function(ProductResponseBuilder) updates]) =>
       (new ProductResponseBuilder()..update(updates)).build();
 
-  _$ProductResponse._({this.product}) : super._() {
+  _$ProductResponse._({this.message, this.product}) : super._() {
+    if (message == null) {
+      throw new BuiltValueNullFieldError('ProductResponse', 'message');
+    }
     if (product == null) {
       throw new BuiltValueNullFieldError('ProductResponse', 'product');
     }
@@ -78,17 +90,20 @@ class _$ProductResponse extends ProductResponse {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is ProductResponse && product == other.product;
+    return other is ProductResponse &&
+        message == other.message &&
+        product == other.product;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, product.hashCode));
+    return $jf($jc($jc(0, message.hashCode), product.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('ProductResponse')
+          ..add('message', message)
           ..add('product', product))
         .toString();
   }
@@ -97,6 +112,10 @@ class _$ProductResponse extends ProductResponse {
 class ProductResponseBuilder
     implements Builder<ProductResponse, ProductResponseBuilder> {
   _$ProductResponse _$v;
+
+  String _message;
+  String get message => _$this._message;
+  set message(String message) => _$this._message = message;
 
   ListBuilder<Product> _product;
   ListBuilder<Product> get product =>
@@ -107,6 +126,7 @@ class ProductResponseBuilder
 
   ProductResponseBuilder get _$this {
     if (_$v != null) {
+      _message = _$v.message;
       _product = _$v.product?.toBuilder();
       _$v = null;
     }
@@ -130,7 +150,8 @@ class ProductResponseBuilder
   _$ProductResponse build() {
     _$ProductResponse _$result;
     try {
-      _$result = _$v ?? new _$ProductResponse._(product: product.build());
+      _$result = _$v ??
+          new _$ProductResponse._(message: message, product: product.build());
     } catch (_) {
       String _$failedField;
       try {

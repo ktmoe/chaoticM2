@@ -31,7 +31,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
   void initState() {
     _product = widget.product;
     _discountItem = widget.product.discountPrice != null;
-    _images = [_product.images];
+    _images = _product.images.map((i) => i.url);
     super.initState();
   }
 

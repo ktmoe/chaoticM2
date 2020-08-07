@@ -8,6 +8,7 @@ import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
 import 'package:m2mobile/custom_widgets/product_card.dart';
 import 'package:m2mobile/stores/store_home.dart';
+import 'package:m2mobile/utils/constants.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:m2mobile/utils/extensions.dart';
@@ -20,7 +21,10 @@ class HomeWidget extends StatefulWidget {
 
 class _HomeWidgetState extends State<HomeWidget>
     with AutomaticKeepAliveClientMixin<HomeWidget> {
-  List<String> _images = ["", ""];
+  List<String> _images = [
+    "$baseUrl/upload/product/akrales_181019_3014_0770-(1).jpg",
+    "$baseUrl/upload/product/akrales_181019_3014_0770-(1).jpg"
+  ];
 
   final StoreApp _storeApp = Modular.get<StoreApp>();
   final StoreHome _storeHome = Modular.get<StoreHome>();

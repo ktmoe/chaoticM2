@@ -32,16 +32,18 @@ class _$ApiService extends ApiService {
   }
 
   @override
-  Future<Response<ProductResponse>> getLatestProducts() {
+  Future<Response<ProductResponse>> getLatestProducts(String customerId) {
     final $url = '/api/productview/getLatestProducts';
-    final $request = Request('GET', $url, client.baseUrl);
+    final $params = <String, dynamic>{'customerid': customerId};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<ProductResponse, ProductResponse>($request);
   }
 
   @override
-  Future<Response<ProductResponse>> getDiscountProducts() {
+  Future<Response<ProductResponse>> getDiscountProducts(String customerId) {
     final $url = '/api/productview/getDiscountProducts';
-    final $request = Request('GET', $url, client.baseUrl);
+    final $params = <String, dynamic>{'customerid': customerId};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<ProductResponse, ProductResponse>($request);
   }
 

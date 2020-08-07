@@ -29,7 +29,7 @@ dependencies:
   package_info:
   flutter_swiper:
   share_content_facebook:
-  flutter_svg: 
+  flutter_svg:
   shared_preferences:
   image_cropper:
   image_picker:
@@ -68,6 +68,7 @@ dependencies:
   carousel_slider:
   # tools
   logging:
+  logger:
   badges:
   timeago:
   http_multi_server:

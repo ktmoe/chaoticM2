@@ -94,12 +94,14 @@ class _CartWidgetState extends State<CartWidget> {
 
   Widget _buildOrderRow(Product product, int count) => Container(
         padding: const EdgeInsets.only(bottom: Dimens.marginMedium3),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          direction: Axis.horizontal,
           children: <Widget>[
-            _storeCart.showSelect
-                ? Checkbox(
+            AnimatedCrossFade(
+                duration: Duration(milliseconds: 400),
+                firstChild: Checkbox(
                     activeColor: Colors.green,
                     value:
                         _storeCart.selectedProducts.contains(product) ?? false,
@@ -107,8 +109,11 @@ class _CartWidgetState extends State<CartWidget> {
                       val
                           ? _storeCart.selectedProducts.add(product)
                           : _storeCart.selectedProducts.remove(product);
-                    })
-                : Container(),
+                    }),
+                secondChild: Container(width: 20),
+                crossFadeState: _storeCart.showSelect
+                    ? CrossFadeState.showFirst
+                    : CrossFadeState.showSecond),
             InkWell(
                 onLongPress: () {
                   if (!_storeCart.showSelect) {

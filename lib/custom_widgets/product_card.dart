@@ -81,9 +81,9 @@ class ProductCardHeader extends StatelessWidget {
                 child: FadeInImage(
                   fit: BoxFit.cover,
                   placeholder: AssetImage("lib/res/images/earth.jpg"),
-                  image: product.images[0] == null
-                      ? NetworkImage('')
-                      : NetworkImage(baseUrl + '/' + product.images[0]),
+                  image: product.images.toList().isEmpty
+                      ? AssetImage("lib/res/images/earth.jpg")
+                      : NetworkImage(baseUrl + '/' + product.images[0].url),
                 ),
               ),
             ),

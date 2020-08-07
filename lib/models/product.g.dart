@@ -26,6 +26,9 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
           specifiedType: const FullType(String)),
       'status',
       serializers.serialize(object.status, specifiedType: const FullType(int)),
+      'favorite',
+      serializers.serialize(object.favorite,
+          specifiedType: const FullType(String)),
     ];
     if (object.id != null) {
       result
@@ -61,7 +64,8 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
       result
         ..add('images')
         ..add(serializers.serialize(object.images,
-            specifiedType: const FullType(String)));
+            specifiedType: const FullType(
+                BuiltList, const [const FullType(ImageUrlHolder)])));
     }
     if (object.percentAmount != null) {
       result
@@ -133,9 +137,15 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
           result.status = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
-        case 'images':
-          result.images = serializers.deserialize(value,
+        case 'favorite':
+          result.favorite = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'images':
+          result.images.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(ImageUrlHolder)]))
+              as BuiltList<Object>);
           break;
         case 'percent_amount':
           result.percentAmount = serializers.deserialize(value,
@@ -178,7 +188,9 @@ class _$Product extends Product {
   @override
   final int status;
   @override
-  final String images;
+  final String favorite;
+  @override
+  final BuiltList<ImageUrlHolder> images;
   @override
   final int percentAmount;
   @override
@@ -200,6 +212,7 @@ class _$Product extends Product {
       this.specification,
       this.price,
       this.status,
+      this.favorite,
       this.images,
       this.percentAmount,
       this.discountPrice,
@@ -214,6 +227,9 @@ class _$Product extends Product {
     }
     if (status == null) {
       throw new BuiltValueNullFieldError('Product', 'status');
+    }
+    if (favorite == null) {
+      throw new BuiltValueNullFieldError('Product', 'favorite');
     }
   }
 
@@ -236,6 +252,7 @@ class _$Product extends Product {
         specification == other.specification &&
         price == other.price &&
         status == other.status &&
+        favorite == other.favorite &&
         images == other.images &&
         percentAmount == other.percentAmount &&
         discountPrice == other.discountPrice &&
@@ -256,14 +273,16 @@ class _$Product extends Product {
                                     $jc(
                                         $jc(
                                             $jc(
-                                                $jc($jc(0, id.hashCode),
-                                                    productName.hashCode),
-                                                categoryid.hashCode),
-                                            subcategoryid.hashCode),
-                                        description.hashCode),
-                                    specification.hashCode),
-                                price.hashCode),
-                            status.hashCode),
+                                                $jc(
+                                                    $jc($jc(0, id.hashCode),
+                                                        productName.hashCode),
+                                                    categoryid.hashCode),
+                                                subcategoryid.hashCode),
+                                            description.hashCode),
+                                        specification.hashCode),
+                                    price.hashCode),
+                                status.hashCode),
+                            favorite.hashCode),
                         images.hashCode),
                     percentAmount.hashCode),
                 discountPrice.hashCode),
@@ -282,6 +301,7 @@ class _$Product extends Product {
           ..add('specification', specification)
           ..add('price', price)
           ..add('status', status)
+          ..add('favorite', favorite)
           ..add('images', images)
           ..add('percentAmount', percentAmount)
           ..add('discountPrice', discountPrice)
@@ -328,9 +348,14 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
   int get status => _$this._status;
   set status(int status) => _$this._status = status;
 
-  String _images;
-  String get images => _$this._images;
-  set images(String images) => _$this._images = images;
+  String _favorite;
+  String get favorite => _$this._favorite;
+  set favorite(String favorite) => _$this._favorite = favorite;
+
+  ListBuilder<ImageUrlHolder> _images;
+  ListBuilder<ImageUrlHolder> get images =>
+      _$this._images ??= new ListBuilder<ImageUrlHolder>();
+  set images(ListBuilder<ImageUrlHolder> images) => _$this._images = images;
 
   int _percentAmount;
   int get percentAmount => _$this._percentAmount;
@@ -360,7 +385,8 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
       _specification = _$v.specification;
       _price = _$v.price;
       _status = _$v.status;
-      _images = _$v.images;
+      _favorite = _$v.favorite;
+      _images = _$v.images?.toBuilder();
       _percentAmount = _$v.percentAmount;
       _discountPrice = _$v.discountPrice;
       _discountType = _$v.discountType;
@@ -385,21 +411,35 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
 
   @override
   _$Product build() {
-    final _$result = _$v ??
-        new _$Product._(
-            id: id,
-            productName: productName,
-            categoryid: categoryid,
-            subcategoryid: subcategoryid,
-            description: description,
-            specification: specification,
-            price: price,
-            status: status,
-            images: images,
-            percentAmount: percentAmount,
-            discountPrice: discountPrice,
-            discountType: discountType,
-            soldCount: soldCount);
+    _$Product _$result;
+    try {
+      _$result = _$v ??
+          new _$Product._(
+              id: id,
+              productName: productName,
+              categoryid: categoryid,
+              subcategoryid: subcategoryid,
+              description: description,
+              specification: specification,
+              price: price,
+              status: status,
+              favorite: favorite,
+              images: _images?.build(),
+              percentAmount: percentAmount,
+              discountPrice: discountPrice,
+              discountType: discountType,
+              soldCount: soldCount);
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'images';
+        _images?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'Product', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }
@@ -430,18 +470,19 @@ class ProductAdapter extends TypeAdapter<Product> {
           ..specification = fields[5] as String
           ..price = fields[6] as int
           ..status = fields[7] as int
-          ..images = fields[8] as String
-          ..percentAmount = fields[9] as int
-          ..discountPrice = fields[10] as int
-          ..discountType = fields[11] as String
-          ..soldCount = fields[12] as int)
+          ..favorite = fields[8] as String
+          ..images = ListBuilder<ImageUrlHolder>(fields[9] as List)
+          ..percentAmount = fields[10] as int
+          ..discountPrice = fields[11] as int
+          ..discountType = fields[12] as String
+          ..soldCount = fields[13] as int)
         .build();
   }
 
   @override
   void write(BinaryWriter writer, Product obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -459,14 +500,16 @@ class ProductAdapter extends TypeAdapter<Product> {
       ..writeByte(7)
       ..write(obj.status)
       ..writeByte(8)
-      ..write(obj.images)
+      ..write(obj.favorite)
       ..writeByte(9)
-      ..write(obj.percentAmount)
+      ..write(obj.images)
       ..writeByte(10)
-      ..write(obj.discountPrice)
+      ..write(obj.percentAmount)
       ..writeByte(11)
-      ..write(obj.discountType)
+      ..write(obj.discountPrice)
       ..writeByte(12)
+      ..write(obj.discountType)
+      ..writeByte(13)
       ..write(obj.soldCount);
   }
 }
