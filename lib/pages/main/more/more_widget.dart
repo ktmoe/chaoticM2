@@ -23,7 +23,7 @@ final _optionMap = {
   'Profile': ProfileWidget.route,
   'အော်ဒါ': OrderListWidget.route,
   'ဆိုင်အကြောင်း': AboutWidget.route,
-  'သင်ကြိုက်နှစ်သက်သောပစ္စည်းများ': FavouriteWidget.route,
+  'သင်ကြိုက်နှစ်သက်သော ပစ္စည်းများ': FavouriteWidget.route,
   'အကူအညီရယူရန်': HelpWidget.route,
   'ပြင်ဆင်ရန်': SettingsWidget.route,
   'အကောင့်ထွက်ရန်': ''

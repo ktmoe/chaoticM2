@@ -8,6 +8,7 @@ import 'package:m2mobile/res/dimens.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/stores/store_fav.dart';
 import 'package:m2mobile/utils/extensions.dart';
+import 'package:m2mobile/custom_widgets/list_empty_widget.dart';
 import 'package:mobx/mobx.dart';
 
 class FavouriteWidget extends StatefulWidget {
@@ -64,18 +65,22 @@ class _FavouriteWidgetState extends State<FavouriteWidget> {
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Observer(builder: (_) {
-                  return GridView.count(
-                    crossAxisCount: 2,
-                    padding: const EdgeInsets.all(Dimens.marginMedium),
-                    shrinkWrap: true,
-                    childAspectRatio: (120 / 170),
-                    children: List.generate(_storeFav.favs.length, (index) {
-                      var product = _storeFav.favs[index];
-                      return ProductCard(
-                          product: product,
-                          discountItem: product.discountPrice != null);
-                    }),
-                  );
+                  return _storeFav.favs.isNotEmpty
+                      ? GridView.count(
+                          crossAxisCount: 2,
+                          padding: const EdgeInsets.all(Dimens.marginMedium),
+                          shrinkWrap: true,
+                          childAspectRatio: (120 / 170),
+                          children:
+                              List.generate(_storeFav.favs.length, (index) {
+                            var product = _storeFav.favs[index];
+                            return ProductCard(
+                                product: product,
+                                discountItem: product.discountPrice != null);
+                          }),
+                        )
+                      : ListEmptyWidget(
+                          message: 'သင်ကြိုက်နှစ်သက်သော ပစ္စည်းများ မရှိသေးပါ');
                 }),
               ))
         ],

@@ -39,6 +39,37 @@ mixin _$StoreLogin on _StoreLoginBase, Store {
     });
   }
 
+  final _$phoneErrorStringAtom = Atom(name: '_StoreLoginBase.phoneErrorString');
+
+  @override
+  String get phoneErrorString {
+    _$phoneErrorStringAtom.reportRead();
+    return super.phoneErrorString;
+  }
+
+  @override
+  set phoneErrorString(String value) {
+    _$phoneErrorStringAtom.reportWrite(value, super.phoneErrorString, () {
+      super.phoneErrorString = value;
+    });
+  }
+
+  final _$passwordErrorStringAtom =
+      Atom(name: '_StoreLoginBase.passwordErrorString');
+
+  @override
+  String get passwordErrorString {
+    _$passwordErrorStringAtom.reportRead();
+    return super.passwordErrorString;
+  }
+
+  @override
+  set passwordErrorString(String value) {
+    _$passwordErrorStringAtom.reportWrite(value, super.passwordErrorString, () {
+      super.passwordErrorString = value;
+    });
+  }
+
   final _$exceptionAtom = Atom(name: '_StoreLoginBase.exception');
 
   @override
@@ -129,6 +160,8 @@ mixin _$StoreLogin on _StoreLoginBase, Store {
     return '''
 phone: ${phone},
 password: ${password},
+phoneErrorString: ${phoneErrorString},
+passwordErrorString: ${passwordErrorString},
 exception: ${exception},
 loadingApi: ${loadingApi},
 userProfileChanged: ${userProfileChanged}

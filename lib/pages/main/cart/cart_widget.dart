@@ -5,13 +5,18 @@ import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/custom_widgets/order_item_card.dart';
 import 'package:m2mobile/pages/main/cart/order/order_widget.dart';
+import 'package:m2mobile/pages/main/more/order_list/complete_order/complete_order_widget.dart';
 import 'package:m2mobile/stores/store_cart.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/utils/extensions.dart';
 
 class CartWidget extends StatefulWidget {
+  final bool isSummary;
+
   static const route = "/main/cart";
+
+  const CartWidget({Key key, this.isSummary}) : super(key: key);
 
   @override
   _CartWidgetState createState() => _CartWidgetState();
@@ -29,12 +34,12 @@ class _CartWidgetState extends State<CartWidget> {
               appBar: M2AppBar(
                 showSearch: false,
                 title: "My Cart",
-                deleteOnly: true,
+                deleteOnly: !widget.isSummary,
                 onBackPressed: () async {
                   final pop = await _cartBackPressed();
                   if (pop) Modular.to.pop();
                 },
-                onDeletePressed: _cartDeletePressed,
+                onDeletePressed: widget.isSummary ? null : _cartDeletePressed,
               ),
               body: _storeCart.cartCount == 0
                   ? _buildEmptyBody()
@@ -45,7 +50,9 @@ class _CartWidgetState extends State<CartWidget> {
   Widget _buildNonEmptyBody() => Stack(
         children: <Widget>[
           _buildOrderList(),
-          Align(alignment: Alignment.bottomCenter, child: BottomSheet())
+          Align(
+              alignment: Alignment.bottomCenter,
+              child: BottomSheet(isSummary: widget.isSummary))
         ],
       );
 
@@ -116,9 +123,11 @@ class _CartWidgetState extends State<CartWidget> {
                     : CrossFadeState.showSecond),
             InkWell(
                 onLongPress: () {
-                  if (!_storeCart.showSelect) {
-                    _storeCart.showSelect = true;
-                    _storeCart.selectedProducts.add(product);
+                  if (!widget.isSummary) {
+                    if (!_storeCart.showSelect) {
+                      _storeCart.showSelect = true;
+                      _storeCart.selectedProducts.add(product);
+                    }
                   }
                 },
                 child: OrderItemCard(product: product, count: count))
@@ -179,6 +188,9 @@ class _CartWidgetState extends State<CartWidget> {
 }
 
 class BottomSheet extends StatefulWidget {
+  final bool isSummary;
+
+  const BottomSheet({Key key, this.isSummary}) : super(key: key);
   @override
   _BottomSheetState createState() => _BottomSheetState();
 }
@@ -319,9 +331,12 @@ class _BottomSheetState extends State<BottomSheet> {
                     textColor: Colors.white,
                     disabledTextColor: Colors.white,
                     onPressed: () {
-                      Modular.to.pushNamed(OrderWidget.route);
+                      widget.isSummary
+                          ? Modular.to.pushNamed(CompleteOrderWidget.route)
+                          : Modular.to.pushNamed(OrderWidget.route);
                     },
-                    child: const Text("Order"),
+                    child: Text(
+                        widget.isSummary ? '‌ငွေလွှဲစလစ်ပို့ရန်' : 'Order'),
                   )
                 ],
               ),

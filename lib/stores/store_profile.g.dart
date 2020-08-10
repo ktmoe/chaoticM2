@@ -106,6 +106,53 @@ mixin _$StoreProfile on _StoreProfileBase, Store {
     });
   }
 
+  final _$nameErrorStringAtom = Atom(name: '_StoreProfileBase.nameErrorString');
+
+  @override
+  String get nameErrorString {
+    _$nameErrorStringAtom.reportRead();
+    return super.nameErrorString;
+  }
+
+  @override
+  set nameErrorString(String value) {
+    _$nameErrorStringAtom.reportWrite(value, super.nameErrorString, () {
+      super.nameErrorString = value;
+    });
+  }
+
+  final _$addressErrorStringAtom =
+      Atom(name: '_StoreProfileBase.addressErrorString');
+
+  @override
+  String get addressErrorString {
+    _$addressErrorStringAtom.reportRead();
+    return super.addressErrorString;
+  }
+
+  @override
+  set addressErrorString(String value) {
+    _$addressErrorStringAtom.reportWrite(value, super.addressErrorString, () {
+      super.addressErrorString = value;
+    });
+  }
+
+  final _$passwordErrorStringAtom =
+      Atom(name: '_StoreProfileBase.passwordErrorString');
+
+  @override
+  String get passwordErrorString {
+    _$passwordErrorStringAtom.reportRead();
+    return super.passwordErrorString;
+  }
+
+  @override
+  set passwordErrorString(String value) {
+    _$passwordErrorStringAtom.reportWrite(value, super.passwordErrorString, () {
+      super.passwordErrorString = value;
+    });
+  }
+
   final _$exceptionAtom = Atom(name: '_StoreProfileBase.exception');
 
   @override
@@ -251,6 +298,9 @@ imageUrl: ${imageUrl},
 phoneNo: ${phoneNo},
 address: ${address},
 password: ${password},
+nameErrorString: ${nameErrorString},
+addressErrorString: ${addressErrorString},
+passwordErrorString: ${passwordErrorString},
 exception: ${exception},
 hasInialized: ${hasInialized},
 oldDataLoaded: ${oldDataLoaded},

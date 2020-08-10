@@ -17,6 +17,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:m2mobile/utils/constants.dart';
 import 'package:m2mobile/res/strings.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class LoginWidget extends StatefulWidget {
   static const route = "/login";
@@ -35,6 +36,18 @@ class _LoginWidgetState extends State<LoginWidget> {
   bool _obscure = true;
 
   List<ReactionDisposer> _disposers = [];
+
+  ReactionDisposer _onPhoneNumberChanged() =>
+      reaction<String>((_) => _storeLogin.phone, (phone) {
+        _storeLogin.phoneErrorString =
+            phone.isEmpty ? Strings.errorTextFieldEmpty : null;
+      });
+
+  ReactionDisposer _onPasswordChanged() =>
+      reaction<String>((_) => _storeLogin.password, (password) {
+        _storeLogin.passwordErrorString =
+            password.isEmpty ? Strings.errorTextFieldEmpty : null;
+      });
 
   ReactionDisposer _onAppException() =>
       reaction<AppException>((_) => _storeLogin.exception, (e) {
@@ -74,7 +87,9 @@ class _LoginWidgetState extends State<LoginWidget> {
       _onConnectivityChanged(),
       _onAppException(),
       _onLoadingApiChanged(),
-      _onUserProfileChanged()
+      _onUserProfileChanged(),
+      _onPhoneNumberChanged(),
+      _onPasswordChanged()
     ]);
     _storeLogin.init();
   }
@@ -102,40 +117,42 @@ class _LoginWidgetState extends State<LoginWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                SvgPicture.asset(
-                  "lib/res/svgs/m2_logo.svg",
-                  width: MediaQuery.of(context).size.width * 0.4,
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: Dimens.marginLarge),
-                  child: Text(
-                    'Welcome! Signin to continue.',
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(
-                        fontSize: Dimens.textHeading1x,
-                        fontWeight: FontWeight.w500),
+            Observer(builder: (_) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  SvgPicture.asset(
+                    "lib/res/svgs/m2_logo.svg",
+                    width: MediaQuery.of(context).size.width * 0.4,
                   ),
-                ),
-                const SizedBox(
-                  height: Dimens.marginLarge,
-                ),
-                _buildMobileNumberField(),
-                const SizedBox(
-                  height: Dimens.marginMedium2,
-                ),
-                _buildPasswordField(),
-                const SizedBox(
-                  height: Dimens.marginLargeX,
-                ),
-                _buildLoginBtn(),
-                _buildForgotPassword()
-              ],
-            ),
+                  Container(
+                    padding: const EdgeInsets.only(top: Dimens.marginLarge),
+                    child: Text(
+                      'Welcome! Signin to continue.',
+                      textAlign: TextAlign.start,
+                      style: const TextStyle(
+                          fontSize: Dimens.textHeading1x,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: Dimens.marginLarge,
+                  ),
+                  _buildMobileNumberField(),
+                  const SizedBox(
+                    height: Dimens.marginMedium2,
+                  ),
+                  _buildPasswordField(),
+                  const SizedBox(
+                    height: Dimens.marginLargeX,
+                  ),
+                  _buildLoginBtn(),
+                  _buildForgotPassword()
+                ],
+              );
+            }),
             _buildSignUpText()
           ],
         )),
@@ -153,12 +170,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
           decoration: InputDecoration(
               hintText: "Mobile Number",
-              errorText: _phoneFieldController.text.isEmpty
-                  ? Strings.errorTextFieldEmpty
-                  : null),
-          validator: (value) => (value.isEmpty || value == null)
-              ? Strings.errorTextFieldEmpty
-              : null,
+              errorText: _storeLogin.phoneErrorString),
           onChanged: (value) {
             _storeLogin.phone = value;
           },
@@ -177,9 +189,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           obscureText: _obscure,
           decoration: InputDecoration(
               hintText: "Password",
-              errorText: _passwordFieldController.text.isEmpty
-                  ? Strings.errorTextFieldEmpty
-                  : null,
+              errorText: _storeLogin.passwordErrorString,
               suffixIcon: InkWell(
                   onTap: () {
                     setState(() {
@@ -189,9 +199,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                   child: _obscure
                       ? Icon(M2Icon.visibility_off)
                       : Icon(M2Icon.visibility))),
-          validator: (value) => (value.isEmpty || value == null)
-              ? Strings.errorTextFieldEmpty
-              : null,
           onChanged: (value) {
             _storeLogin.password = value;
           },

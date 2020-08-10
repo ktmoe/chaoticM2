@@ -8,6 +8,10 @@ void main() {
   initModules([AppModule()]);
   ApiService _apiService = Modular.get<ApiService>();
 
+  test('LoginTest', () async {
+    await _apiService.login(phone: "09961637594", password: "berryberry");
+  });
+
   test('LatestProducts', () async {
     await _apiService.getLatestProducts("6bc0cd5e-f193-42f6-bbcd-618e985670f0");
   });

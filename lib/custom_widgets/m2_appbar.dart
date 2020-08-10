@@ -87,7 +87,8 @@ class M2AppBarState extends State<M2AppBar> {
                                 right: Dimens.marginMedium),
                             child: InkWell(
                               onTap: () {
-                                Modular.to.pushNamed(CartWidget.route);
+                                Modular.to.pushNamed(CartWidget.route,
+                                    arguments: false);
                               },
                               child: Badge(
                                 animationDuration:

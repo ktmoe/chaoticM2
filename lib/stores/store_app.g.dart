@@ -174,6 +174,21 @@ mixin _$StoreApp on _StoreApp, Store {
     });
   }
 
+  final _$perloadDoneAtom = Atom(name: '_StoreApp.perloadDone');
+
+  @override
+  bool get perloadDone {
+    _$perloadDoneAtom.reportRead();
+    return super.perloadDone;
+  }
+
+  @override
+  set perloadDone(bool value) {
+    _$perloadDoneAtom.reportWrite(value, super.perloadDone, () {
+      super.perloadDone = value;
+    });
+  }
+
   final _$initAsyncAction = AsyncAction('_StoreApp.init');
 
   @override
@@ -383,6 +398,7 @@ chosenLanguage: ${chosenLanguage},
 userProfile: ${userProfile},
 categoryList: ${categoryList},
 subCategoryList: ${subCategoryList},
+perloadDone: ${perloadDone},
 isNetworkOn: ${isNetworkOn},
 connectivityMessage: ${connectivityMessage},
 isLoggedIn: ${isLoggedIn},

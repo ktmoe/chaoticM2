@@ -4,7 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/custom_widgets/m2_stepper.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
-import 'package:m2mobile/pages/main/more/order_list/order_list_widget.dart';
+import 'package:m2mobile/pages/main/cart/cart_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/custom_widgets/one_call_away_widget.dart';
 import 'package:m2mobile/models/ui_model/payment_methods_model.dart';
@@ -240,9 +240,11 @@ class _OrderWidgetState extends State<OrderWidget> {
           ]);
 
   next() {
-    currentStep + 1 != 5
-        ? goTo(currentStep + 1)
-        : Modular.to.pushReplacementNamed(OrderListWidget.route);
+    currentStep + 1 != 5 ? goTo(currentStep + 1) : _nextPage();
+  }
+
+  _nextPage() {
+    Modular.to.pushNamed(CartWidget.route, arguments: true);
   }
 
   cancel() async {

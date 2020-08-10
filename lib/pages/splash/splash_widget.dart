@@ -33,24 +33,26 @@ class _SplashWidgetState extends State<SplashWidget>
   }
 
   ReactionDisposer _onForceUpdateChanged() {
-    return autorun((_) async {
-      if (_storeApp.forceUpdate != null) {
-        if (_storeApp.forceUpdate.value) {
-          final a = await context.successFailDialog(
-              dialogType: WarningDialogType.forceUpdateDialog);
-          //TODO add iosAppId Here
-          if (a) {
-            StoreRedirect.redirect(
-                androidAppId: "com.gnwt.m2mobile", iOSAppId: "");
-          }
-        } else {
-          Future.delayed(Duration(seconds: 2)).whenComplete(() {
-            try {
-              Modular.to.pushReplacementNamed(MainWidget.route);
-            } catch (e) {}
-          });
+    return reaction((_) => _storeApp.forceUpdate.value, (update) async {
+      if (update != null && update == true) {
+        final a = await context.successFailDialog(
+            dialogType: WarningDialogType.forceUpdateDialog);
+        //TODO add iosAppId Here
+        if (a) {
+          StoreRedirect.redirect(
+              androidAppId: "com.gnwt.m2mobile", iOSAppId: "");
         }
       }
+    });
+  }
+
+  ReactionDisposer _onPreloadDone() {
+    return when((_) => _storeApp.perloadDone, () {
+      Future.delayed(Duration(seconds: 2)).whenComplete(() {
+        try {
+          Modular.to.pushReplacementNamed(MainWidget.route);
+        } catch (e) {}
+      });
     });
   }
 
@@ -68,8 +70,12 @@ class _SplashWidgetState extends State<SplashWidget>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _storeApp.init();
-    _disposers.addAll(
-        [_onConnectivityChanged(), _onForceUpdateChanged(), _onException()]);
+    _disposers.addAll([
+      _onConnectivityChanged(),
+      _onForceUpdateChanged(),
+      _onException(),
+      _onPreloadDone()
+    ]);
   }
 
   @override

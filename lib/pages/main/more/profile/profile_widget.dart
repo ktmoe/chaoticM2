@@ -121,12 +121,14 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(50),
-          child: FadeInImage(
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-              placeholder: AssetImage("lib/res/images/earth.jpg"),
-              image: NetworkImage(_storeApp.userProfile.imageurl ?? "")),
+          child: _storeApp.userProfile.imageurl.isNotEmpty
+              ? FadeInImage(
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                  placeholder: AssetImage("lib/res/images/profile.png"),
+                  image: NetworkImage(_storeApp.userProfile.imageurl))
+              : AssetImage("lib/res/images/profile.png"),
         ),
       );
 

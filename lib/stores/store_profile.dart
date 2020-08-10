@@ -40,12 +40,20 @@ abstract class _StoreProfileBase with Store {
   String password = "";
 
   @observable
+  String nameErrorString = "";
+
+  @observable
+  String addressErrorString = "";
+
+  @observable
+  String passwordErrorString = "";
+
+  @observable
   AppException exception;
 
   @computed
   bool get valid =>
       name.isNotEmpty &&
-      imageUrl.isNotEmpty &&
       phoneNo.isNotEmpty &&
       address.isNotEmpty &&
       password.isNotEmpty;
@@ -61,7 +69,6 @@ abstract class _StoreProfileBase with Store {
 
   @action
   Future initEditProfile(bool isRegister) async {
-    print("init edit profile get called");
     if (!hasInialized) {
       _appBox = await AppBox.create();
       hasInialized = true;
@@ -70,19 +77,16 @@ abstract class _StoreProfileBase with Store {
       phoneNo = _appBox.getPhoneNumber();
     } else {
       oldDataLoaded = true;
-      print("isRegistered => $isRegister");
       _reloadOldProfile();
     }
-    print("dataloaded => $oldDataLoaded");
   }
 
   @action
   void _reloadOldProfile() {
-    print("reload get called");
     final profile = Modular.get<StoreApp>().userProfile;
     id = profile.id;
     name = profile.name;
-    imageUrl = profile.imageurl;
+    imageUrl = profile.imageurl ?? "";
     phoneNo = profile.phone;
     address = profile.address;
     password = profile.password;

@@ -18,9 +18,6 @@ class _$UserProfileSerializer implements StructuredSerializer<UserProfile> {
   Iterable<Object> serialize(Serializers serializers, UserProfile object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'imageurl',
-      serializers.serialize(object.imageurl,
-          specifiedType: const FullType(String)),
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
       'phone',
@@ -34,6 +31,12 @@ class _$UserProfileSerializer implements StructuredSerializer<UserProfile> {
       result
         ..add('id')
         ..add(serializers.serialize(object.id,
+            specifiedType: const FullType(String)));
+    }
+    if (object.imageurl != null) {
+      result
+        ..add('imageurl')
+        ..add(serializers.serialize(object.imageurl,
             specifiedType: const FullType(String)));
     }
     if (object.password != null) {
@@ -138,9 +141,6 @@ class _$UserProfile extends UserProfile {
       this.createddate,
       this.updateddate})
       : super._() {
-    if (imageurl == null) {
-      throw new BuiltValueNullFieldError('UserProfile', 'imageurl');
-    }
     if (name == null) {
       throw new BuiltValueNullFieldError('UserProfile', 'name');
     }

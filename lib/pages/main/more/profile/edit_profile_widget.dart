@@ -36,9 +36,26 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
 
   bool _obscure = true;
 
+  ReactionDisposer _onNameChanged() =>
+      reaction<String>((_) => _storeProfile.name, (name) {
+        _storeProfile.nameErrorString =
+            name.isEmpty ? Strings.errorTextFieldEmpty : null;
+      });
+
+  ReactionDisposer _onAddressChanged() =>
+      reaction<String>((_) => _storeProfile.address, (address) {
+        _storeProfile.addressErrorString =
+            address.isEmpty ? Strings.errorTextFieldEmpty : null;
+      });
+
+  ReactionDisposer _onPasswordChanged() =>
+      reaction<String>((_) => _storeProfile.password, (password) {
+        _storeProfile.passwordErrorString =
+            password.isEmpty ? Strings.errorTextFieldEmpty : null;
+      });
+
   ReactionDisposer _onOldDataLoadingChanged() {
     return reaction<bool>((_) => _storeProfile.oldDataLoaded, (done) {
-      print("old data loaded => $done");
       if (done) {
         _autofillOldData();
       }
@@ -67,7 +84,10 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
     _disposers.addAll([
       _onAppExceptionChanged(),
       _onOldDataLoadingChanged(),
-      _onApiLoadingChanged()
+      _onApiLoadingChanged(),
+      _onNameChanged(),
+      _onAddressChanged(),
+      _onPasswordChanged()
     ]);
     Future.wait([_storeProfile.initEditProfile(widget.register)]);
   }
@@ -166,10 +186,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                           borderRadius: BorderRadius.circular(50)),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(50),
-                        child: FadeInImage(
-                            fit: BoxFit.cover,
-                            placeholder: AssetImage("lib/res/images/earth.jpg"),
-                            image: NetworkImage(_storeProfile.imageUrl)),
+                        child: _storeProfile.imageUrl.isNotEmpty
+                            ? FadeInImage(
+                                fit: BoxFit.cover,
+                                placeholder:
+                                    AssetImage("lib/res/images/profile.png"),
+                                image: NetworkImage(_storeProfile.imageUrl))
+                            : AssetImage("lib/res/images/profile.png"),
                       ),
                     ),
             ),
@@ -220,12 +243,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
       textInputAction: TextInputAction.next,
       controller: _nameController,
       decoration: InputDecoration(
-          hintText: "Name",
-          errorText: _nameController.text.isEmpty
-              ? Strings.errorTextFieldEmpty
-              : null),
-      validator: (value) =>
-          (value.isEmpty || value == null) ? Strings.errorTextFieldEmpty : null,
+          hintText: "Name", errorText: _storeProfile.nameErrorString),
       onChanged: (value) {
         _storeProfile.name = value;
       },
@@ -255,12 +273,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
       textInputAction: TextInputAction.next,
       controller: _addressController,
       decoration: InputDecoration(
-          hintText: "Address",
-          errorText: _addressController.text.isEmpty
-              ? Strings.errorTextFieldEmpty
-              : null),
-      validator: (value) =>
-          (value.isEmpty || value == null) ? Strings.errorTextFieldEmpty : null,
+          hintText: "Address", errorText: _storeProfile.addressErrorString),
       onChanged: (value) {
         _storeProfile.address = value;
       },
@@ -277,9 +290,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
         obscureText: _obscure,
         decoration: InputDecoration(
             hintText: "Password",
-            errorText: _passwordController.text.isEmpty
-                ? Strings.errorTextFieldEmpty
-                : null,
+            errorText: _storeProfile.passwordErrorString,
             suffixIcon: InkWell(
                 onTap: () {
                   setState(() {
@@ -289,9 +300,6 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                 child: _obscure
                     ? Icon(M2Icon.visibility_off)
                     : Icon(M2Icon.visibility))),
-        validator: (value) => (value.isEmpty || value == null)
-            ? Strings.errorTextFieldEmpty
-            : null,
         onChanged: (value) {
           _storeProfile.password = value;
         },

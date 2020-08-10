@@ -19,6 +19,7 @@ abstract class UserProfile implements Built<UserProfile, UserProfileBuilder> {
   @BuiltValueField(wireName: 'id')
   String get id;
 
+  @nullable
   @HiveField(1)
   @BuiltValueField(wireName: 'imageurl')
   String get imageurl;

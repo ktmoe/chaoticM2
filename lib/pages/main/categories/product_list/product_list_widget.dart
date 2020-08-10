@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
-import 'package:m2mobile/custom_widgets/product_card.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
-import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -25,6 +23,11 @@ class ProductListWidget extends StatefulWidget {
 
 class _ProductListWidgetState extends State<ProductListWidget> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorState = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +55,10 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                       childAspectRatio: 120 / 170,
                       padding: const EdgeInsets.all(Dimens.marginMedium),
                       shrinkWrap: true,
-                      children: List.generate(17, (index) {
-                        return ProductCard(
-                            product: Product(), discountItem: false);
+                      children: List.generate(0, (index) {
+                        return Container();
+                        // ProductCard(
+                        //     product: Product(), discountItem: false);
                       }),
                     ),
                   ],

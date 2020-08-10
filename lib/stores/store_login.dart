@@ -18,6 +18,12 @@ abstract class _StoreLoginBase with Store {
   String password = "";
 
   @observable
+  String phoneErrorString = "";
+
+  @observable
+  String passwordErrorString = "";
+
+  @observable
   AppException exception;
 
   @observable

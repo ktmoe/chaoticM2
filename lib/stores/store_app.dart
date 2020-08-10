@@ -44,7 +44,7 @@ abstract class _StoreApp with Store {
   AppException exception;
 
   @observable
-  Observable<bool> forceUpdate;
+  Observable<bool> forceUpdate = Observable(null);
 
   @observable
   bool isFirstTime;
@@ -63,6 +63,9 @@ abstract class _StoreApp with Store {
 
   @observable
   ObservableList<SubCategory> subCategoryList;
+
+  @observable
+  bool perloadDone = false;
 
   @computed
   Map<M2Category, List<SubCategory>> get subCategoryMap {
@@ -91,6 +94,7 @@ abstract class _StoreApp with Store {
     readUserProfile();
     if (!isFirstTime) {
       await _preloadAppData();
+      perloadDone = true;
     }
   }
 

@@ -11,11 +11,13 @@ import 'package:m2mobile/modules/app_module.dart';
 import 'package:m2mobile/models/m2_category.dart';
 import 'package:m2mobile/models/sub_category.dart';
 import 'package:m2mobile/models/help.dart';
+import 'package:flutter/services.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
   _registerAdapters();
   _setupLogging();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(ModularApp(
     module: AppModule(),
   ));

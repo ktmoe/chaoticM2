@@ -8,7 +8,8 @@ class CartModule extends ChildModule {
 
   @override
   List<Router> get routers => [
-        Router(Modular.initialRoute, child: (context, args) => CartWidget()),
+        Router(Modular.initialRoute,
+            child: (context, args) => CartWidget(isSummary: args.data as bool)),
         Router('/order', module: OrderModule())
       ];
 }
