@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_page_indicator/flutter_page_indicator.dart';
@@ -7,6 +8,7 @@ import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/res/styles.dart';
+import 'package:m2mobile/stores/store_home.dart';
 import 'package:m2mobile/utils/constants.dart';
 import 'package:m2mobile/utils/extensions.dart';
 import 'package:m2mobile/stores/store_cart.dart';
@@ -31,7 +33,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
   void initState() {
     _product = widget.product;
     _discountItem = widget.product.discountPrice != null;
-    _images = _product.images.map((i) => i.url);
+    _images = _product.images.toList();
     super.initState();
   }
 
@@ -47,18 +49,18 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
         direction: Axis.vertical,
         children: <Widget>[
           Flexible(
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  _buildProductImagesSlider(),
-                  _buildProductDetailInfos()
-                ],
-              ),
-            ),
-          ),
-          Align(alignment: Alignment.bottomCenter, child: BottomSheet())
+              child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      _buildProductImagesSlider(),
+                      _buildProductDetailInfos()
+                    ],
+                  ))),
+          Align(
+              alignment: Alignment.bottomCenter,
+              child: BottomSheet(product: _product))
         ],
       ),
     );
@@ -138,9 +140,9 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                   topLeft: Radius.circular(Dimens.marginMedium2),
                   topRight: Radius.circular(Dimens.marginMedium2)),
               child: Swiper(
-                itemCount: _images.length,
+                itemCount: _images.isEmpty ? 1 : _images.length,
                 indicatorLayout: PageIndicatorLayout.NONE,
-                autoplay: true,
+                autoplay: _images.isNotEmpty && _images.length > 1,
                 autoplayDelay: 2000,
                 pagination: SwiperPagination(
                     builder: DotSwiperPaginationBuilder(
@@ -152,7 +154,9 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                   return FadeInImage(
                     fit: BoxFit.cover,
                     placeholder: AssetImage("lib/res/images/earth.jpg"),
-                    image: NetworkImage(baseUrl + '/' + _images[index]),
+                    image: _images.isEmpty
+                        ? AssetImage("lib/res/images/earth.jpg")
+                        : NetworkImage(baseUrl + '/' + _images[index]),
                   );
                 },
               ),
@@ -173,8 +177,8 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
           child: Container(
             padding: const EdgeInsets.all(Dimens.marginMedium),
             child: Text(
-                (_product.discountType != "amount")
-                    ? "$_product.percentAmount} % off"
+                (_product.discountType == "percent")
+                    ? "${_product.percentAmount} % off"
                     : "${_product.percentAmount.toDouble().money()} off",
                 style: TextStyle(
                     color: Colors.white,
@@ -232,6 +236,13 @@ class BottomSheet extends StatefulWidget {
 
 class _BottomSheetState extends State<BottomSheet> {
   final StoreCart _storeCart = Modular.get<StoreCart>();
+  String _favorite = "false";
+  @override
+  void initState() {
+    _favorite = widget.product.favorite;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -239,48 +250,69 @@ class _BottomSheetState extends State<BottomSheet> {
       child: Container(
         height: 60,
         color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            _buildAddToCartBtn(),
-            IconButton(
-                icon: Icon(
-                  M2Icon.favourite,
-                  color: Theme.of(context).iconTheme.color.withOpacity(0.5),
-                ),
-                onPressed: () {}),
-            IconButton(
-                icon: Icon(
-                  M2Icon.messenger,
-                  color: Colors.blueAccent,
-                ),
-                onPressed: () {})
-          ],
-        ),
+        child: Observer(builder: (_) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _buildAddToCartBtn(),
+              _buildFavoriteBtn(),
+              IconButton(
+                  icon: Icon(
+                    M2Icon.messenger,
+                    color: Colors.blueAccent,
+                  ),
+                  onPressed: () {})
+            ],
+          );
+        }),
       ),
     );
   }
 
+  Widget _buildFavoriteBtn() => IconButton(
+      icon: Icon(
+        M2Icon.favourite,
+        color: _favorite == 'true'
+            ? Theme.of(context).iconTheme.color
+            : const Color(0x8AE9E9E9),
+      ),
+      onPressed: () async {
+        await Modular.get<StoreHome>().operateFavorite(widget.product);
+        setState(() {
+          if (_favorite == "true") {
+            _favorite = "false";
+          } else {
+            _favorite = "true";
+          }
+        });
+      });
+
   Widget _buildAddToCartBtn() => RaisedButton(
-        elevation: Dimens.marginMedium2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        disabledColor: Colors.white,
-        onPressed: () {
+      elevation: Dimens.marginMedium2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      disabledColor: Colors.white,
+      onPressed: () {
+        if (_storeCart.cartProducts.containsKey(widget.product)) {
+          _storeCart.removeFromCart(widget.product);
+        } else {
           _storeCart.addToCart(widget.product);
-        },
-        color: Colors.white,
-        textColor: Theme.of(context).accentColor,
-        child: Row(
+        }
+      },
+      color: Colors.white,
+      textColor: Theme.of(context).accentColor,
+      child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Icon(M2Icon.cart_plus),
+            Icon(_storeCart.cartProducts.containsKey(widget.product)
+                ? M2Icon.cart_cross
+                : M2Icon.cart_plus),
             Container(
                 margin: const EdgeInsets.only(left: 10),
                 child: Text(
-                  'ADD TO CART',
+                  _storeCart.cartProducts.containsKey(widget.product)
+                      ? 'REMOVE FROM CART'
+                      : 'ADD TO CART',
                   style: TextStyle(color: Theme.of(context).accentColor),
                 ))
-          ],
-        ),
-      );
+          ]));
 }

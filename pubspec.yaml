@@ -53,7 +53,7 @@ dependencies:
   built_value:
   built_collection:
   # Database
-  hive:
+  hive: ^1.4.1
   hive_flutter:
     git:
       url: git://github.com/min-wai/hive.git
@@ -103,7 +103,7 @@ dev_dependencies:
   chopper_generator:
   built_value_generator:
   hive_generator:
-    git: https://github.com/min-wai/hive_generator
+    git: https://github.com/htetaunglin/hive_generator
   flutter_test:
     sdk: flutter
 

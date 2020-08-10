@@ -56,7 +56,7 @@ class _$ApiService extends ApiService {
 
   @override
   Future<Response<ProductResponse>> getFavList(String id) {
-    final $url = '/api/customerview/favoriteList';
+    final $url = '/api/customerview/getFavoriteList';
     final $params = <String, dynamic>{'customerid': id};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<ProductResponse, ProductResponse>($request);
@@ -172,5 +172,18 @@ class _$ApiService extends ApiService {
     final $params = <String, dynamic>{'customerid': customerId};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<PostProfileResponse, PostProfileResponse>($request);
+  }
+
+  @override
+  Future<Response<FavoriteOperateResponse>> operateFavorite(
+      String customerId, String productId) {
+    final $url = '/api/customerview/operateFavorite';
+    final $params = <String, dynamic>{
+      'customerid': customerId,
+      'productid': productId
+    };
+    final $request = Request('POST', $url, client.baseUrl, parameters: $params);
+    return client
+        .send<FavoriteOperateResponse, FavoriteOperateResponse>($request);
   }
 }

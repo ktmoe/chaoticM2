@@ -24,11 +24,19 @@ class BoxFav implements Disposable {
 
   ValueListenable<Box<Product>> get listenable => _box.listenable();
 
-  void addAll(List<Product> favs) {
+  Future<void> addAll(List<Product> favs) async {
     for (final fav in favs) {
-      _box.add(fav);
+      await add(fav);
     }
   }
 
-  void delete() => _box.delete(_box.keys);
+  Future<void> add(Product product) async {
+    await _box.put(product.id, product);
+  }
+
+  Future<void> remove(Product product) async {
+    await _box.delete(product.id);
+  }
+
+  void delete() => _box.deleteAll(_box.keys);
 }

@@ -12,15 +12,30 @@ mixin _$StoreFav on _StoreFav, Store {
   final _$favsAtom = Atom(name: '_StoreFav.favs');
 
   @override
-  List<Product> get favs {
+  ObservableList<Product> get favs {
     _$favsAtom.reportRead();
     return super.favs;
   }
 
   @override
-  set favs(List<Product> value) {
+  set favs(ObservableList<Product> value) {
     _$favsAtom.reportWrite(value, super.favs, () {
       super.favs = value;
+    });
+  }
+
+  final _$exceptionAtom = Atom(name: '_StoreFav.exception');
+
+  @override
+  AppException<dynamic> get exception {
+    _$exceptionAtom.reportRead();
+    return super.exception;
+  }
+
+  @override
+  set exception(AppException<dynamic> value) {
+    _$exceptionAtom.reportWrite(value, super.exception, () {
+      super.exception = value;
     });
   }
 
@@ -34,7 +49,7 @@ mixin _$StoreFav on _StoreFav, Store {
   final _$fetchFavListAsyncAction = AsyncAction('_StoreFav.fetchFavList');
 
   @override
-  Future<dynamic> fetchFavList({bool refresh = false}) {
+  Future<dynamic> fetchFavList({bool refresh = true}) {
     return _$fetchFavListAsyncAction
         .run(() => super.fetchFavList(refresh: refresh));
   }
@@ -55,7 +70,8 @@ mixin _$StoreFav on _StoreFav, Store {
   @override
   String toString() {
     return '''
-favs: ${favs}
+favs: ${favs},
+exception: ${exception}
     ''';
   }
 }

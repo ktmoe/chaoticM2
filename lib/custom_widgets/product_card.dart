@@ -5,16 +5,14 @@ import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/pages/main/product_detail/product_detail_widget.dart';
 import 'package:m2mobile/stores/store_cart.dart';
+import 'package:m2mobile/stores/store_home.dart';
 import 'package:m2mobile/utils/constants.dart';
 import 'package:m2mobile/utils/extensions.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'dart:math';
 
 class ProductCard extends StatefulWidget {
   final Product product;
   final bool discountItem;
-
-  static const String heroTag = "Product-image-Hero";
 
   const ProductCard(
       {Key key, @required this.product, @required this.discountItem})
@@ -32,8 +30,8 @@ class _ProductCardState extends State<ProductCard> {
           borderRadius: BorderRadius.circular(Dimens.marginMedium2)),
       margin: const EdgeInsets.all(Dimens.marginMedium),
       child: Container(
-        width: min(MediaQuery.of(context).size.width * 0.4, 180),
-        height: min(MediaQuery.of(context).size.height * 0.3, 200),
+        width: 180,
+        height: 230,
         child: Column(
           children: <Widget>[
             Expanded(
@@ -83,7 +81,7 @@ class ProductCardHeader extends StatelessWidget {
                   placeholder: AssetImage("lib/res/images/earth.jpg"),
                   image: product.images.toList().isEmpty
                       ? AssetImage("lib/res/images/earth.jpg")
-                      : NetworkImage(baseUrl + '/' + product.images[0].url),
+                      : NetworkImage(baseUrl + '/' + product.images[0]),
                 ),
               ),
             ),
@@ -108,7 +106,7 @@ class ProductCardHeader extends StatelessWidget {
               ],
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
               child: Text(
                 discountItem
                     ? '${product.discountPrice.toDouble().money()}'
@@ -136,7 +134,7 @@ class ProductCardHeader extends StatelessWidget {
   }
 
   Widget _buildDeletedOldPrice({int oldPrice}) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
         child: Text(
           '$oldPrice MMK',
           style: TextStyle(
@@ -207,11 +205,15 @@ class _ProductCardBottomState extends State<ProductCardBottom> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             InkWell(
-              onTap: () {},
+              onTap: () async {
+                await Modular.get<StoreHome>().operateFavorite(widget.product);
+              },
               child: Icon(
                 M2Icon.favourite,
                 size: 16,
-                // color: addToFav? Colors.white : const Color(0x8AE9E9E9),
+                color: widget.product.favorite != 'true'
+                    ? Colors.white
+                    : Theme.of(context).iconTheme.color,
               ),
             ),
             VerticalDivider(

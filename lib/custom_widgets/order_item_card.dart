@@ -27,11 +27,10 @@ class _OrderItemCardState extends State<OrderItemCard> {
           ? MediaQuery.of(context).size.width -
               (Dimens.marginLargeX * 2) +
               Dimens.marginMedium2
-          : MediaQuery.of(context).size.width - Dimens.marginLarge,
+          : MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.2,
       child: Card(
         elevation: Dimens.cardElevation * 2,
-        margin: const EdgeInsets.only(right: Dimens.marginMedium),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Flex(
           direction: Axis.horizontal,
@@ -116,8 +115,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
             fit: BoxFit.cover,
             placeholder: AssetImage("lib/res/images/earth.jpg"),
             image: widget.product.images.isNotEmpty
-                ? NetworkImage(
-                    baseUrl + '/' + widget.product.images[0].url ?? "")
+                ? NetworkImage(baseUrl + '/' + widget.product.images[0] ?? "")
                 : AssetImage("lib/res/images/earth.jpg"),
           ),
         ),

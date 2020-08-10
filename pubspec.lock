@@ -541,8 +541,8 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "7a03102e0e8c9d03b7782569191adffa5584458e"
-      url: "https://github.com/min-wai/hive_generator"
+      resolved-ref: a8d722df953e7d5cc309cc4b40d3c5e4f79e0ac9
+      url: "https://github.com/htetaunglin/hive_generator"
     source: git
     version: "0.7.1"
   html:

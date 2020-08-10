@@ -9,6 +9,7 @@ import 'package:m2mobile/models/responses/company_info_response.dart';
 import 'package:m2mobile/models/responses/m2_category_response.dart';
 import 'package:m2mobile/models/responses/sub_category_response.dart';
 import 'package:m2mobile/utils/constants.dart';
+import 'package:m2mobile/models/responses/favorite_operate_response.dart';
 
 part 'api_service.chopper.dart';
 
@@ -37,7 +38,7 @@ abstract class ApiService extends ChopperService {
   Future<Response<HelpResponse>> getHelpInfo();
 
   /// Favorite ///
-  @Get(path: '/customerview/favoriteList')
+  @Get(path: '/customerview/getFavoriteList')
   Future<Response<ProductResponse>> getFavList(@Query('customerid') String id);
 
   @Post(path: '/customerview/favorite')
@@ -94,4 +95,9 @@ abstract class ApiService extends ChopperService {
   @Get(path: '/customerview/customerProfile')
   Future<Response<PostProfileResponse>> customerProfile(
       @Query('customerid') String customerId);
+
+  @Post(path: '/customerview/operateFavorite')
+  Future<Response<FavoriteOperateResponse>> operateFavorite(
+      @Query('customerid') String customerId,
+      @Query('productid') String productId);
 }

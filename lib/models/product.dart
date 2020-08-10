@@ -4,7 +4,6 @@ import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:hive/hive.dart';
-import 'package:m2mobile/models/image_url_holder.dart';
 
 import 'package:m2mobile/models/serializers.dart';
 
@@ -46,12 +45,13 @@ abstract class Product implements Built<Product, ProductBuilder> {
   @BuiltValueField(wireName: 'status')
   int get status;
   @HiveField(8)
+  @nullable
   @BuiltValueField(wireName: 'favorite')
   String get favorite;
   @nullable
   @HiveField(9)
   @BuiltValueField(wireName: 'images')
-  BuiltList<ImageUrlHolder> get images;
+  BuiltList<String> get images;
   @nullable
   @HiveField(10)
   @BuiltValueField(wireName: 'percent_amount')

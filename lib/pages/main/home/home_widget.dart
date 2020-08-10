@@ -13,6 +13,7 @@ import 'package:mobx/mobx.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:m2mobile/utils/extensions.dart';
 import 'package:m2mobile/stores/store_app.dart';
+import 'package:logger/logger.dart';
 
 class HomeWidget extends StatefulWidget {
   @override
@@ -38,6 +39,7 @@ class _HomeWidgetState extends State<HomeWidget>
 
   ReactionDisposer _onException() {
     return reaction<AppException>((_) => _storeHome.exception, (exception) {
+      Modular.get<Logger>().e(exception.message);
       exception.message.showSnack(context);
     });
   }
@@ -101,6 +103,7 @@ class _HomeWidgetState extends State<HomeWidget>
     return Container(
         constraints:
             BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.4),
+        margin: const EdgeInsets.only(left: Dimens.marginMedium),
         child: Observer(
           builder: (_) {
             final discountItems = _storeHome.discountProducts;
@@ -109,7 +112,8 @@ class _HomeWidgetState extends State<HomeWidget>
                 itemCount: discountItems.length,
                 itemBuilder: (_, index) {
                   return ProductCard(
-                      discountItem: true, product: discountItems[index]);
+                      discountItem: discountItems[index].discountPrice != null,
+                      product: discountItems[index]);
                 });
           },
         ));
@@ -127,7 +131,8 @@ class _HomeWidgetState extends State<HomeWidget>
           childAspectRatio: (120 / 170),
           children: List.generate(_storeHome.products.length, (index) {
             return ProductCard(
-                product: latestProducts[index], discountItem: false);
+                product: latestProducts[index],
+                discountItem: latestProducts[index].discountPrice != null);
           }),
         );
       },

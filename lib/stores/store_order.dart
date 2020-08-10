@@ -2,6 +2,7 @@ import 'package:mobx/mobx.dart';
 import 'package:m2mobile/stores/store_app.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/models/user_profile.dart';
+import 'package:m2mobile/models/ui_model/payment_methods_model.dart';
 part 'store_order.g.dart';
 
 class StoreOrder = _StoreOrderBase with _$StoreOrder;
@@ -19,7 +20,7 @@ abstract class _StoreOrderBase with Store {
   String address;
 
   @observable
-  String selectedPaymentMethod = '';
+  String selectedPaymentMethod = PaymentMethodsModel.bankPay;
 
   @action
   void init() {

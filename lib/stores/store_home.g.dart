@@ -79,6 +79,33 @@ mixin _$StoreHome on _StoreHome, Store {
         .run(() => super.getDiscountProducts(refresh: refresh));
   }
 
+  final _$operateFavoriteAsyncAction =
+      AsyncAction('_StoreHome.operateFavorite');
+
+  @override
+  Future<dynamic> operateFavorite(Product product) {
+    return _$operateFavoriteAsyncAction
+        .run(() => super.operateFavorite(product));
+  }
+
+  final _$_onFavoriteSyncProductsAsyncAction =
+      AsyncAction('_StoreHome._onFavoriteSyncProducts');
+
+  @override
+  Future<void> _onFavoriteSyncProducts(Product product) {
+    return _$_onFavoriteSyncProductsAsyncAction
+        .run(() => super._onFavoriteSyncProducts(product));
+  }
+
+  final _$_syncFavoriteBoxAsyncAction =
+      AsyncAction('_StoreHome._syncFavoriteBox');
+
+  @override
+  Future<dynamic> _syncFavoriteBox(Product product) {
+    return _$_syncFavoriteBoxAsyncAction
+        .run(() => super._syncFavoriteBox(product));
+  }
+
   final _$_StoreHomeActionController = ActionController(name: '_StoreHome');
 
   @override
@@ -93,11 +120,11 @@ mixin _$StoreHome on _StoreHome, Store {
   }
 
   @override
-  void updateDiscountProdcucts() {
+  void updateDiscountProducts() {
     final _$actionInfo = _$_StoreHomeActionController.startAction(
-        name: '_StoreHome.updateDiscountProdcucts');
+        name: '_StoreHome.updateDiscountProducts');
     try {
-      return super.updateDiscountProdcucts();
+      return super.updateDiscountProducts();
     } finally {
       _$_StoreHomeActionController.endAction(_$actionInfo);
     }

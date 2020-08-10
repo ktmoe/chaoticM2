@@ -95,7 +95,7 @@ class _CartWidgetState extends State<CartWidget> {
   Widget _buildOrderRow(Product product, int count) => Container(
         padding: const EdgeInsets.only(bottom: Dimens.marginMedium3),
         child: Wrap(
-          alignment: WrapAlignment.spaceBetween,
+          alignment: WrapAlignment.spaceAround,
           crossAxisAlignment: WrapCrossAlignment.center,
           direction: Axis.horizontal,
           children: <Widget>[

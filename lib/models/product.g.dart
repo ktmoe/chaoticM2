@@ -26,9 +26,6 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
           specifiedType: const FullType(String)),
       'status',
       serializers.serialize(object.status, specifiedType: const FullType(int)),
-      'favorite',
-      serializers.serialize(object.favorite,
-          specifiedType: const FullType(String)),
     ];
     if (object.id != null) {
       result
@@ -60,12 +57,18 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
         ..add(serializers.serialize(object.price,
             specifiedType: const FullType(int)));
     }
+    if (object.favorite != null) {
+      result
+        ..add('favorite')
+        ..add(serializers.serialize(object.favorite,
+            specifiedType: const FullType(String)));
+    }
     if (object.images != null) {
       result
         ..add('images')
         ..add(serializers.serialize(object.images,
-            specifiedType: const FullType(
-                BuiltList, const [const FullType(ImageUrlHolder)])));
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(String)])));
     }
     if (object.percentAmount != null) {
       result
@@ -143,8 +146,8 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
           break;
         case 'images':
           result.images.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(
-                      BuiltList, const [const FullType(ImageUrlHolder)]))
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(String)]))
               as BuiltList<Object>);
           break;
         case 'percent_amount':
@@ -190,7 +193,7 @@ class _$Product extends Product {
   @override
   final String favorite;
   @override
-  final BuiltList<ImageUrlHolder> images;
+  final BuiltList<String> images;
   @override
   final int percentAmount;
   @override
@@ -227,9 +230,6 @@ class _$Product extends Product {
     }
     if (status == null) {
       throw new BuiltValueNullFieldError('Product', 'status');
-    }
-    if (favorite == null) {
-      throw new BuiltValueNullFieldError('Product', 'favorite');
     }
   }
 
@@ -352,10 +352,10 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
   String get favorite => _$this._favorite;
   set favorite(String favorite) => _$this._favorite = favorite;
 
-  ListBuilder<ImageUrlHolder> _images;
-  ListBuilder<ImageUrlHolder> get images =>
-      _$this._images ??= new ListBuilder<ImageUrlHolder>();
-  set images(ListBuilder<ImageUrlHolder> images) => _$this._images = images;
+  ListBuilder<String> _images;
+  ListBuilder<String> get images =>
+      _$this._images ??= new ListBuilder<String>();
+  set images(ListBuilder<String> images) => _$this._images = images;
 
   int _percentAmount;
   int get percentAmount => _$this._percentAmount;
@@ -471,7 +471,7 @@ class ProductAdapter extends TypeAdapter<Product> {
           ..price = fields[6] as int
           ..status = fields[7] as int
           ..favorite = fields[8] as String
-          ..images = ListBuilder<ImageUrlHolder>(fields[9] as List)
+          ..images = ListBuilder<String>(fields[9] as List)
           ..percentAmount = fields[10] as int
           ..discountPrice = fields[11] as int
           ..discountType = fields[12] as String
@@ -502,7 +502,7 @@ class ProductAdapter extends TypeAdapter<Product> {
       ..writeByte(8)
       ..write(obj.favorite)
       ..writeByte(9)
-      ..write(obj.images)
+      ..write(obj.images?.toList())
       ..writeByte(10)
       ..write(obj.percentAmount)
       ..writeByte(11)

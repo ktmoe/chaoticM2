@@ -9,12 +9,12 @@ part of 'serializers.dart';
 Serializers _$serializers = (new Serializers().toBuilder()
       ..add(CompanyInfo.serializer)
       ..add(CompanyInfoResponse.serializer)
+      ..add(FavoriteOperateResponse.serializer)
       ..add(FileUploadResponse.serializer)
       ..add(ForceUpdate.serializer)
       ..add(ForceUpdateResponse.serializer)
       ..add(Help.serializer)
       ..add(HelpResponse.serializer)
-      ..add(ImageUrlHolder.serializer)
       ..add(LoginResponse.serializer)
       ..add(M2Category.serializer)
       ..add(M2CategoryResponse.serializer)
@@ -25,14 +25,14 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(SubCategoryResponse.serializer)
       ..add(UserProfile.serializer)
       ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(ImageUrlHolder)]),
-          () => new ListBuilder<ImageUrlHolder>())
-      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(M2Category)]),
           () => new ListBuilder<M2Category>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Product)]),
           () => new ListBuilder<Product>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => new ListBuilder<String>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(SubCategory)]),
           () => new ListBuilder<SubCategory>()))

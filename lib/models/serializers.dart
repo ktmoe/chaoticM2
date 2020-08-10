@@ -1,7 +1,6 @@
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:m2mobile/models/force_update.dart';
-import 'package:m2mobile/models/image_url_holder.dart';
 import 'package:m2mobile/models/responses/force_update_response.dart';
 import 'package:m2mobile/models/responses/help_response.dart';
 import 'package:m2mobile/models/help.dart';
@@ -18,6 +17,7 @@ import 'package:m2mobile/models/sub_category.dart';
 import 'package:m2mobile/models/user_profile.dart';
 import 'package:m2mobile/models/responses/file_upload_response.dart';
 import 'package:m2mobile/models/responses/post_profile_response.dart';
+import 'package:m2mobile/models/responses/favorite_operate_response.dart';
 part 'serializers.g.dart';
 
 @SerializersFor([
@@ -36,7 +36,8 @@ part 'serializers.g.dart';
   SubCategoryResponse,
   FileUploadResponse,
   PostProfileResponse,
-  LoginResponse
+  LoginResponse,
+  FavoriteOperateResponse
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

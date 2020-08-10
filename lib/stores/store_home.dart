@@ -1,6 +1,8 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:logger/logger.dart';
 import 'package:m2mobile/boxes/box_products.dart';
 import 'package:m2mobile/boxes/discount_products_box.dart';
+import 'package:m2mobile/boxes/box_fav_products.dart';
 import 'package:m2mobile/data/api/api_service.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:m2mobile/models/product.dart';
@@ -13,9 +15,10 @@ class StoreHome = _StoreHome with _$StoreHome;
 
 abstract class _StoreHome with Store {
   final ApiService _api = Modular.get<ApiService>();
-  BoxProduct _boxProduct;
 
+  BoxProduct _boxProduct;
   DiscountProductBox _discountProductBox;
+  BoxFav _boxFav;
 
   _StoreHome() {
     init();
@@ -34,10 +37,11 @@ abstract class _StoreHome with Store {
   Future init() async {
     _boxProduct = await BoxProduct.create();
     _discountProductBox = await DiscountProductBox.create();
+    _boxFav = await BoxFav.create();
     updateProducts();
-    updateDiscountProdcucts();
+    updateDiscountProducts();
     _boxProduct.listenable.addListener(updateProducts);
-    _discountProductBox.listenable.addListener(updateDiscountProdcucts);
+    _discountProductBox.listenable.addListener(updateDiscountProducts);
     Future.wait([getLatestProducts(), getDiscountProducts()]);
   }
 
@@ -47,7 +51,7 @@ abstract class _StoreHome with Store {
   }
 
   @action
-  void updateDiscountProdcucts() {
+  void updateDiscountProducts() {
     discountProducts =
         ObservableList.of(_discountProductBox.listenable.value.values);
   }
@@ -76,6 +80,41 @@ abstract class _StoreHome with Store {
       _discountProductBox.saveAll(products);
     } catch (e) {
       exception = AppException(message: e.toString());
+    }
+  }
+
+  @action
+  Future operateFavorite(Product product) async {
+    try {
+      final favoriteOperateResponse = await _api.operateFavorite(
+          Modular.get<StoreApp>().userProfile.id, product.id);
+      if (favoriteOperateResponse.body.message.toLowerCase() == "success") {
+        _onFavoriteSyncProducts(product);
+      }
+    } catch (e) {
+      exception = AppException(message: e.toString());
+    }
+  }
+
+  @action
+  Future<void> _onFavoriteSyncProducts(Product product) async {
+    final renewedProduct = product
+        .rebuild((b) => b.favorite = b.favorite == 'true' ? 'false' : 'true');
+    Modular.get<Logger>().d(renewedProduct.toString());
+    await _syncFavoriteBox(renewedProduct);
+    if (product.discountPrice != null) {
+      _discountProductBox.save(renewedProduct);
+    } else {
+      _boxProduct.save(renewedProduct);
+    }
+  }
+
+  @action
+  Future _syncFavoriteBox(Product product) async {
+    if (product.favorite == 'true') {
+      await _boxFav.add(product);
+    } else {
+      await _boxFav.remove(product);
     }
   }
 }

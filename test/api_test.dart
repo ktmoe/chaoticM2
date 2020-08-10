@@ -16,4 +16,8 @@ void main() {
     await _apiService
         .getDiscountProducts("6bc0cd5e-f193-42f6-bbcd-618e985670f0");
   });
+
+  test("FavoriteProducts", () async {
+    await _apiService.getFavList("6bc0cd5e-f193-42f6-bbcd-618e985670f0");
+  });
 }
