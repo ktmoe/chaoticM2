@@ -8,7 +8,7 @@ import 'package:m2mobile/models/responses/product_response.dart';
 import 'package:m2mobile/models/responses/company_info_response.dart';
 import 'package:m2mobile/models/responses/m2_category_response.dart';
 import 'package:m2mobile/models/responses/sub_category_response.dart';
-import 'package:m2mobile/utils/constants.dart';
+import 'package:m2mobile/models/responses/refresh_token_response.dart';
 import 'package:m2mobile/models/responses/favorite_operate_response.dart';
 
 part 'api_service.chopper.dart';
@@ -88,9 +88,14 @@ abstract class ApiService extends ChopperService {
 
   @Get(path: '/authview/login')
   Future<Response<LoginResponse>> login(
-      {@Query('phone') String phone,
+      @Query('phone') String phone,
       @Query('password') String password,
-      @Query('firebase_token') String firebaseToken = dummyFirebaseToken});
+      @Query('firebase_token') String firebaseToken);
+
+  @Post(path: '/authview/refreshToken')
+  Future<Response<RefreshTokenResponse>> refreshToken(
+      @Query('customerid') String customerId,
+      @Query('firebase_token') String firebaseToken);
 
   @Get(path: '/customerview/customerProfile')
   Future<Response<PostProfileResponse>> customerProfile(

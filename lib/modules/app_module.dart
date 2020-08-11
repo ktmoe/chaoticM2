@@ -1,4 +1,5 @@
 import 'package:chopper/chopper.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:logger/logger.dart';
@@ -43,7 +44,8 @@ class AppModule extends MainModule {
             )),
         Bind((i) => JwtService.create()),
         Bind((i) => ApiService.create(i.get<ChopperClient>())),
-        Bind((i) => FileUploadService.create(i.get<ChopperClient>()))
+        Bind((i) => FileUploadService.create(i.get<ChopperClient>())),
+        Bind((i) => FirebaseMessaging())
       ];
 
   @override

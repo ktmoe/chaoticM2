@@ -153,9 +153,7 @@ class _$ApiService extends ApiService {
 
   @override
   Future<Response<LoginResponse>> login(
-      {String phone,
-      String password,
-      String firebaseToken = dummyFirebaseToken}) {
+      String phone, String password, String firebaseToken) {
     final $url = '/api/authview/login';
     final $params = <String, dynamic>{
       'phone': phone,
@@ -164,6 +162,18 @@ class _$ApiService extends ApiService {
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<LoginResponse, LoginResponse>($request);
+  }
+
+  @override
+  Future<Response<RefreshTokenResponse>> refreshToken(
+      String customerId, String firebaseToken) {
+    final $url = '/api/authview/refreshToken';
+    final $params = <String, dynamic>{
+      'customerid': customerId,
+      'firebase_token': firebaseToken
+    };
+    final $request = Request('POST', $url, client.baseUrl, parameters: $params);
+    return client.send<RefreshTokenResponse, RefreshTokenResponse>($request);
   }
 
   @override

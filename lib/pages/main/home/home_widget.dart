@@ -61,42 +61,36 @@ class _HomeWidgetState extends State<HomeWidget>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Observer(
-      builder: (context) {
-        return RefreshIndicator(
-            key: _refreshIndicatorState,
-            onRefresh: () async {
-              Future.wait([
-                _storeHome.getDiscountProducts(refresh: true),
-                _storeHome.getLatestProducts(refresh: true)
-              ]);
-            },
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _buildProductImagesSlider(),
-                  Container(
-                      margin: const EdgeInsets.only(
-                          left: Dimens.marginMedium2,
-                          right: Dimens.marginMedium2),
-                      child: Text('Discount Items',
-                          style: Styles.m2TextTheme
-                              .copyWith(fontWeight: FontWeight.bold))),
-                  _buildDiscountItemList(),
-                  Container(
-                      margin: const EdgeInsets.only(
-                          left: Dimens.marginMedium2,
-                          right: Dimens.marginMedium2),
-                      child: Text('Latest Items',
-                          style: Styles.m2TextTheme
-                              .copyWith(fontWeight: FontWeight.bold))),
-                  _buildLatestItemGrid(),
-                ],
-              ),
-            ));
-      },
-    );
+    return RefreshIndicator(
+        key: _refreshIndicatorState,
+        onRefresh: () async {
+          Future.wait([
+            _storeHome.getDiscountProducts(refresh: true),
+            _storeHome.getLatestProducts(refresh: true)
+          ]);
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              _buildProductImagesSlider(),
+              Container(
+                  margin: const EdgeInsets.only(
+                      left: Dimens.marginMedium2, right: Dimens.marginMedium2),
+                  child: Text('Discount Items',
+                      style: Styles.m2TextTheme
+                          .copyWith(fontWeight: FontWeight.bold))),
+              _buildDiscountItemList(),
+              Container(
+                  margin: const EdgeInsets.only(
+                      left: Dimens.marginMedium2, right: Dimens.marginMedium2),
+                  child: Text('Latest Items',
+                      style: Styles.m2TextTheme
+                          .copyWith(fontWeight: FontWeight.bold))),
+              _buildLatestItemGrid(),
+            ],
+          ),
+        ));
   }
 
   Widget _buildDiscountItemList() {
@@ -154,7 +148,6 @@ class _HomeWidgetState extends State<HomeWidget>
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
-                  //todo route to productDetail
                   context.standardWarningDialog(dialogType: "Coming Soon");
                 },
                 child: FadeInImage(

@@ -6,6 +6,7 @@ import 'package:m2mobile/models/responses/help_response.dart';
 import 'package:m2mobile/models/help.dart';
 import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/models/responses/login_response.dart';
+import 'package:m2mobile/models/responses/refresh_token_response.dart';
 import 'package:m2mobile/models/responses/product_response.dart';
 import 'package:m2mobile/models/company_info.dart';
 import 'package:m2mobile/models/responses/company_info_response.dart';
@@ -37,7 +38,8 @@ part 'serializers.g.dart';
   FileUploadResponse,
   PostProfileResponse,
   LoginResponse,
-  FavoriteOperateResponse
+  FavoriteOperateResponse,
+  RefreshTokenResponse
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

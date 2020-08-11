@@ -4,6 +4,7 @@ import 'package:m2mobile/data/api/api_service.dart';
 import 'package:m2mobile/models/user_profile.dart';
 import 'package:mobx/mobx.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 part 'store_login.g.dart';
 
 class StoreLogin = _StoreLoginBase with _$StoreLogin;
@@ -56,8 +57,9 @@ abstract class _StoreLoginBase with Store {
   Future _proceedLogin() async {
     loadingApi = true;
     try {
+      final token = await Modular.get<FirebaseMessaging>().getToken();
       final response =
-          await _apiService.login(phone: this.phone, password: this.password);
+          await _apiService.login(this.phone, this.password, token);
       if (response.body.data != null) {
         await _getUserProfile(response.body.data);
       } else
