@@ -6,10 +6,12 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 void main() {
   initModules([AppModule()]);
+
+  TestWidgetsFlutterBinding.ensureInitialized();
   ApiService _apiService = Modular.get<ApiService>();
 
   test('LoginTest', () async {
-    await _apiService.login(phone: "09961637594", password: "berryberry");
+    await _apiService.login("09961637594", "berryberry", "");
   });
 
   test('LatestProducts', () async {
