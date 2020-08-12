@@ -18,6 +18,7 @@ class JWTInterceptor implements RequestInterceptor {
     final response = getToken.body;
 
     final requestHeaders = {
+      if (true) HttpHeaders.contentTypeHeader: ContentType.json.value,
       HttpHeaders.authorizationHeader: "Bearer ${response['accessToken']}"
     };
 

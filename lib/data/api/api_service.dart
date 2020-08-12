@@ -1,11 +1,13 @@
 import 'package:chopper/chopper.dart';
 import 'package:m2mobile/models/responses/bank_info_response.dart';
+import 'package:m2mobile/models/responses/favorite_operate_response.dart';
 import 'package:m2mobile/models/responses/force_update_response.dart';
 import 'package:m2mobile/models/responses/help_response.dart';
 import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/models/responses/login_response.dart';
 import 'package:m2mobile/models/responses/post_profile_response.dart';
 import 'package:m2mobile/models/responses/product_response.dart';
+import 'package:m2mobile/models/responses/order_list_response.dart';
 import 'package:m2mobile/models/responses/company_info_response.dart';
 import 'package:m2mobile/models/responses/m2_category_response.dart';
 import 'package:m2mobile/models/responses/sub_category_response.dart';
@@ -42,8 +44,11 @@ abstract class ApiService extends ChopperService {
   Future<Response<ProductResponse>> getFavList(@Query('customerid') String id);
 
   @Post(path: '/favoriteview/addToFavorite')
-  Future<Response> addToFav(@Query('customerid') String customerId,
-      @Query('productid') String productId);
+  Future<Response<FavoriteOperateResponse>> addToFav(
+      @Body() String favoriteItem);
+
+  // @Delete(path: '/favoriteview/deleteFavorite')
+  // Future<Response> deleteFavorite()
 
   @Post(path: '/customerview/Removefavorite')
   Future<Response> removeFromFav(@Query('customerid') String customerId,
@@ -104,4 +109,9 @@ abstract class ApiService extends ChopperService {
   @Get(path: '/customerview/customerProfile')
   Future<Response<PostProfileResponse>> customerProfile(
       @Query('customerid') String customerId);
+
+  /// order ///
+  @Get(path: '/orderview/getOrderList')
+  Future<Response<OrderListResponse>> getOrderList(
+      @Query('customerId') String customerId);
 }

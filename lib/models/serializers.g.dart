@@ -22,6 +22,8 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(LoginResponse.serializer)
       ..add(M2Category.serializer)
       ..add(M2CategoryResponse.serializer)
+      ..add(Order.serializer)
+      ..add(OrderListResponse.serializer)
       ..add(PostProfileResponse.serializer)
       ..add(Product.serializer)
       ..add(ProductResponse.serializer)
@@ -35,6 +37,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(M2Category)]),
           () => new ListBuilder<M2Category>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(Order)]),
+          () => new ListBuilder<Order>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Product)]),
           () => new ListBuilder<Product>())

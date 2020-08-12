@@ -32,7 +32,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
   @override
   void initState() {
     _product = widget.product;
-    _discountItem = widget.product.discountPrice != null;
+    _discountItem = widget.product.discountPrice != 0;
     _images = _product.images.toList();
     super.initState();
   }
@@ -153,9 +153,9 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                 itemBuilder: (context, index) {
                   return FadeInImage(
                     fit: BoxFit.cover,
-                    placeholder: AssetImage("lib/res/images/earth.jpg"),
+                    placeholder: AssetImage("lib/res/images/placeholder.png"),
                     image: _images.isEmpty
-                        ? AssetImage("lib/res/images/earth.jpg")
+                        ? AssetImage("lib/res/images/placeholder.png")
                         : NetworkImage(baseUrl + '/' + _images[index]),
                   );
                 },

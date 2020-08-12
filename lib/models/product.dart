@@ -17,8 +17,8 @@ abstract class Product implements Built<Product, ProductBuilder> {
 
   @HiveField(0)
   @nullable
-  @BuiltValueField(wireName: 'id')
-  String get id;
+  @BuiltValueField(wireName: 'productid')
+  String get productId;
   @HiveField(1)
   @BuiltValueField(wireName: 'productcode')
   String get productCode;

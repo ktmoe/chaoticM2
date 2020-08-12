@@ -30,10 +30,10 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
       'status',
       serializers.serialize(object.status, specifiedType: const FullType(int)),
     ];
-    if (object.id != null) {
+    if (object.productId != null) {
       result
-        ..add('id')
-        ..add(serializers.serialize(object.id,
+        ..add('productid')
+        ..add(serializers.serialize(object.productId,
             specifiedType: const FullType(String)));
     }
     if (object.categoryid != null) {
@@ -111,8 +111,8 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'id':
-          result.id = serializers.deserialize(value,
+        case 'productid':
+          result.productId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'productcode':
@@ -182,7 +182,7 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
 
 class _$Product extends Product {
   @override
-  final String id;
+  final String productId;
   @override
   final String productCode;
   @override
@@ -216,7 +216,7 @@ class _$Product extends Product {
       (new ProductBuilder()..update(updates)).build();
 
   _$Product._(
-      {this.id,
+      {this.productId,
       this.productCode,
       this.productName,
       this.categoryid,
@@ -257,7 +257,7 @@ class _$Product extends Product {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Product &&
-        id == other.id &&
+        productId == other.productId &&
         productCode == other.productCode &&
         productName == other.productName &&
         categoryid == other.categoryid &&
@@ -290,7 +290,10 @@ class _$Product extends Product {
                                                 $jc(
                                                     $jc(
                                                         $jc(
-                                                            $jc(0, id.hashCode),
+                                                            $jc(
+                                                                0,
+                                                                productId
+                                                                    .hashCode),
                                                             productCode
                                                                 .hashCode),
                                                         productName.hashCode),
@@ -311,7 +314,7 @@ class _$Product extends Product {
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Product')
-          ..add('id', id)
+          ..add('productId', productId)
           ..add('productCode', productCode)
           ..add('productName', productName)
           ..add('categoryid', categoryid)
@@ -333,9 +336,9 @@ class _$Product extends Product {
 class ProductBuilder implements Builder<Product, ProductBuilder> {
   _$Product _$v;
 
-  String _id;
-  String get id => _$this._id;
-  set id(String id) => _$this._id = id;
+  String _productId;
+  String get productId => _$this._productId;
+  set productId(String productId) => _$this._productId = productId;
 
   String _productCode;
   String get productCode => _$this._productCode;
@@ -400,7 +403,7 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
 
   ProductBuilder get _$this {
     if (_$v != null) {
-      _id = _$v.id;
+      _productId = _$v.productId;
       _productCode = _$v.productCode;
       _productName = _$v.productName;
       _categoryid = _$v.categoryid;
@@ -439,7 +442,7 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
     try {
       _$result = _$v ??
           new _$Product._(
-              id: id,
+              productId: productId,
               productCode: productCode,
               productName: productName,
               categoryid: categoryid,
@@ -487,7 +490,7 @@ class ProductAdapter extends TypeAdapter<Product> {
       for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return (ProductBuilder()
-          ..id = fields[0] as String
+          ..productId = fields[0] as String
           ..productCode = fields[1] as String
           ..productName = fields[2] as String
           ..categoryid = fields[3] as String
@@ -510,7 +513,7 @@ class ProductAdapter extends TypeAdapter<Product> {
     writer
       ..writeByte(15)
       ..writeByte(0)
-      ..write(obj.id)
+      ..write(obj.productId)
       ..writeByte(1)
       ..write(obj.productCode)
       ..writeByte(2)

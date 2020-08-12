@@ -23,6 +23,8 @@ import 'package:m2mobile/models/responses/favorite_operate_response.dart';
 import 'package:m2mobile/models/responses/bank_info_response.dart';
 import 'package:m2mobile/models/payloads/favorite_item.dart';
 import 'package:m2mobile/models/payloads/favorite_item_payload.dart';
+import 'package:m2mobile/models/order.dart';
+import 'package:m2mobile/models/responses/order_list_response.dart';
 part 'serializers.g.dart';
 
 @SerializersFor([
@@ -47,7 +49,9 @@ part 'serializers.g.dart';
   BankAccount,
   BankInfoResponse,
   FavoriteItemPayload,
-  FavoriteItem
+  FavoriteItem,
+  Order,
+  OrderListResponse
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

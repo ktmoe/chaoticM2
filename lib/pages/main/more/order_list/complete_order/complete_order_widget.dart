@@ -128,8 +128,8 @@ class _CompleteOrderWidgetState extends State<CompleteOrderWidget> {
                   height: 250,
                   spinner: FadeInImage(
                     fit: BoxFit.cover,
-                    image: AssetImage("lib/res/images/earth.jpg"),
-                    placeholder: AssetImage("lib/res/images/earth.jpg"),
+                    image: AssetImage("lib/res/images/placeholder.png"),
+                    placeholder: AssetImage("lib/res/images/placeholder.png"),
                   )),
         ));
   }

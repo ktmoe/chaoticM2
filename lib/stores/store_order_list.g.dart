@@ -24,6 +24,21 @@ mixin _$StoreOrderList on _StoreOrderListBase, Store {
     });
   }
 
+  final _$ordersAtom = Atom(name: '_StoreOrderListBase.orders');
+
+  @override
+  ObservableList<Order> get orders {
+    _$ordersAtom.reportRead();
+    return super.orders;
+  }
+
+  @override
+  set orders(ObservableList<Order> value) {
+    _$ordersAtom.reportWrite(value, super.orders, () {
+      super.orders = value;
+    });
+  }
+
   final _$bankAccountsAtom = Atom(name: '_StoreOrderListBase.bankAccounts');
 
   @override
@@ -77,6 +92,13 @@ mixin _$StoreOrderList on _StoreOrderListBase, Store {
     return _$initAsyncAction.run(() => super.init());
   }
 
+  final _$getOrdersAsyncAction = AsyncAction('_StoreOrderListBase.getOrders');
+
+  @override
+  Future<void> getOrders() {
+    return _$getOrdersAsyncAction.run(() => super.getOrders());
+  }
+
   final _$getBankAccountsAsyncAction =
       AsyncAction('_StoreOrderListBase.getBankAccounts');
 
@@ -103,6 +125,7 @@ mixin _$StoreOrderList on _StoreOrderListBase, Store {
   String toString() {
     return '''
 exception: ${exception},
+orders: ${orders},
 bankAccounts: ${bankAccounts},
 selectedBankAccount: ${selectedBankAccount},
 hasInitialized: ${hasInitialized}

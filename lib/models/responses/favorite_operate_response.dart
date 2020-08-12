@@ -15,6 +15,7 @@ abstract class FavoriteOperateResponse
   factory FavoriteOperateResponse([updates(FavoriteOperateResponseBuilder b)]) =
       _$FavoriteOperateResponse;
 
+  @nullable
   @BuiltValueField(wireName: 'message')
   String get message;
   String toJson() {

@@ -78,9 +78,9 @@ class ProductCardHeader extends StatelessWidget {
                     topRight: Radius.circular(Dimens.marginMedium2)),
                 child: FadeInImage(
                   fit: BoxFit.cover,
-                  placeholder: AssetImage("lib/res/images/earth.jpg"),
+                  placeholder: AssetImage("lib/res/images/placeholder.png"),
                   image: product.images.toList().isEmpty
-                      ? AssetImage("lib/res/images/earth.jpg")
+                      ? AssetImage("lib/res/images/placeholder.png")
                       : NetworkImage(baseUrl + '/' + product.images[0]),
                 ),
               ),

@@ -7,6 +7,8 @@ import 'package:m2mobile/data/api/api_service.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/stores/store_app.dart';
+import 'package:m2mobile/models/payloads/favorite_item_payload.dart';
+import 'package:m2mobile/models/payloads/favorite_item.dart';
 import 'package:mobx/mobx.dart';
 
 part 'store_home.g.dart';
@@ -86,11 +88,23 @@ abstract class _StoreHome with Store {
   @action
   Future operateFavorite(Product product) async {
     try {
-      final favoriteOperateResponse = await _api.addToFav(
-          Modular.get<StoreApp>().userProfile.id, product.id);
-      if (favoriteOperateResponse.body.message.toLowerCase() == "success") {
-        _onFavoriteSyncProducts(product);
-      }
+      final userId = Modular.get<StoreApp>().userProfile.id;
+
+      final favoriteItem = FavoriteItem((b) {
+        b.customerid = userId;
+        b.productid = product.productId;
+      });
+      final payload = FavoriteItemPayload((builder) {
+        builder.favoriteItem = favoriteItem.toBuilder();
+      });
+
+      final favoriteOperateResponse = await _api.addToFav(payload.toJson());
+      Modular.get<Logger>().d(
+          "body ${favoriteOperateResponse.body}\n error ${favoriteOperateResponse.error}");
+
+      // if (favoriteOperateResponse.body.message.toLowerCase() == "success") {
+      //   _onFavoriteSyncProducts(product);
+      // }
     } catch (e) {
       exception = AppException(message: e.toString());
     }

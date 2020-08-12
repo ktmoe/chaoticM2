@@ -106,7 +106,7 @@ class _HomeWidgetState extends State<HomeWidget>
                 itemCount: discountItems.length,
                 itemBuilder: (_, index) {
                   return ProductCard(
-                      discountItem: discountItems[index].discountPrice != null,
+                      discountItem: discountItems[index].discountPrice != 0,
                       product: discountItems[index]);
                 });
           },
@@ -126,7 +126,7 @@ class _HomeWidgetState extends State<HomeWidget>
           children: List.generate(_storeHome.products.length, (index) {
             return ProductCard(
                 product: latestProducts[index],
-                discountItem: latestProducts[index].discountPrice != null);
+                discountItem: latestProducts[index].discountPrice != 0);
           }),
         );
       },
@@ -152,7 +152,7 @@ class _HomeWidgetState extends State<HomeWidget>
                 },
                 child: FadeInImage(
                   fit: BoxFit.cover,
-                  placeholder: AssetImage("lib/res/images/earth.jpg"),
+                  placeholder: AssetImage("lib/res/images/placeholder.png"),
                   image: NetworkImage(_images[index]),
                 ),
               );

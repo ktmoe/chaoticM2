@@ -39,7 +39,7 @@ class BoxProduct implements Disposable {
   }
 
   void save(Product product) {
-    _box.put(product.id, product);
+    _box.put(product.productId, product);
   }
 
   void deleteAll() => _box.deleteAll(_box.keys);
