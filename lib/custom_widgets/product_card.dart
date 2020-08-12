@@ -234,8 +234,9 @@ class _ProductCardBottomState extends State<ProductCardBottom> {
                  // widget._storeCart.addToCart(widget.product);
                 }
               },
+              // widget._storeCart.cartProducts.containsKey(widget.product)
               child: Icon(
-                widget._storeCart.cartProducts.containsKey(widget.product)
+                widget._cartStore.cartItems.contains(widget.product)
                     ? M2Icon.cart_cross
                     : M2Icon.cart_plus,
                 color: Colors.white,

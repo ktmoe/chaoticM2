@@ -75,6 +75,10 @@ abstract class Product implements Built<Product, ProductBuilder> {
   @HiveField(15)
   @BuiltValueField(wireName: 'quantity')
   int get quantity;
+  @nullable
+  @HiveField(16)
+  @BuiltValueField(wireName: 'id')
+  int get id;
 
   String toJson() {
     return json.encode(serializers.serializeWith(Product.serializer, this));

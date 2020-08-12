@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:m2mobile/models/cart_item.dart';
+import 'package:m2mobile/models/requests/update_cart_request.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/stores/cart_store.dart';
 import 'package:m2mobile/utils/extensions.dart';
@@ -23,6 +24,15 @@ class OrderItemCard extends StatefulWidget {
 class _OrderItemCardState extends State<OrderItemCard> {
   final StoreCart _storeCart = Modular.get<StoreCart>();
   final CartStore _cartStore = Modular.get<CartStore>();
+
+  int qty = 0;
+
+  @override
+  void initState() {
+    qty = widget.count;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,8 +65,14 @@ class _OrderItemCardState extends State<OrderItemCard> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           InkWell(
-            onTap: () {
-              //_cartStore.addToCart(widget.product);
+            onTap: (){
+              setState(() {
+                  qty+=1;
+              });
+              Future.delayed(const Duration(milliseconds: 3000),() async{
+                final updateItem = UpdateCartRequest((b)=>b..updateItem.quantity = qty);
+               // _cartStore.updateCartItemQty(widget.product.id,updateItem);
+              });
             },
             child: Card(
               elevation: Dimens.cardElevation,
@@ -77,6 +93,12 @@ class _OrderItemCardState extends State<OrderItemCard> {
           const SizedBox(width: Dimens.marginMedium),
           InkWell(
             onTap: () {
+              setState(() {
+                qty -= 1;
+              });
+              Future.delayed(const Duration(milliseconds: 3000),() async{
+                // _cartStore.updateCartItemQty(widget.product.id,updateItem);
+              });
              // _storeCart.removeFromCart(widget.product);
             },
             child: Card(

@@ -118,7 +118,6 @@ abstract class ApiService extends ChopperService {
       @Query('productid') String productId);
 
 /// cart  ///
-  ///
   @Post(path: '/cartview/getCartItemList')
   Future<Response<ProductResponse>> getCartList(
       @Query('customerId') String customerId,
@@ -129,14 +128,17 @@ abstract class ApiService extends ChopperService {
         @Body() String item
       );
 
-  @Post(path: '/cartview/updateCartItem')
+  @Put(path: '/cartview/updateCartItem')
   Future<Response<CartListResponse>> updateCart(
       @Query('cartId') String cartId,
+      @Body() String updateCount
       );
 
   /// order ///
   @Get(path: '/orderview/getOrderList')
   Future<Response<OrderListResponse>> getOrderList(
       @Query('customerId') String customerId);
+
+  //@Delete(path : '/cartview/deleteCartItems')
 
 }

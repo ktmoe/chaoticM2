@@ -103,6 +103,12 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
         ..add(serializers.serialize(object.quantity,
             specifiedType: const FullType(int)));
     }
+    if (object.id != null) {
+      result
+        ..add('id')
+        ..add(serializers.serialize(object.id,
+            specifiedType: const FullType(int)));
+    }
     return result;
   }
 
@@ -183,6 +189,10 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
           result.quantity = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
+        case 'id':
+          result.id = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
       }
     }
 
@@ -223,6 +233,8 @@ class _$Product extends Product {
   final int soldCount;
   @override
   final int quantity;
+  @override
+  final int id;
 
   factory _$Product([void Function(ProductBuilder) updates]) =>
       (new ProductBuilder()..update(updates)).build();
@@ -243,7 +255,8 @@ class _$Product extends Product {
       this.discountPrice,
       this.discountType,
       this.soldCount,
-      this.quantity})
+      this.quantity,
+      this.id})
       : super._() {
     if (productCode == null) {
       throw new BuiltValueNullFieldError('Product', 'productCode');
@@ -285,7 +298,8 @@ class _$Product extends Product {
         discountPrice == other.discountPrice &&
         discountType == other.discountType &&
         soldCount == other.soldCount &&
-        quantity == other.quantity;
+        quantity == other.quantity &&
+        id == other.id;
   }
 
   @override
@@ -306,26 +320,29 @@ class _$Product extends Product {
                                                         $jc(
                                                             $jc(
                                                                 $jc(
-                                                                    0,
-                                                                    productId
+                                                                    $jc(
+                                                                        0,
+                                                                        productId
+                                                                            .hashCode),
+                                                                    productCode
                                                                         .hashCode),
-                                                                productCode
+                                                                productName
                                                                     .hashCode),
-                                                            productName
+                                                            categoryid
                                                                 .hashCode),
-                                                        categoryid.hashCode),
-                                                    subcategoryid.hashCode),
-                                                description.hashCode),
-                                            specification.hashCode),
-                                        price.hashCode),
-                                    status.hashCode),
-                                favorite.hashCode),
-                            images.hashCode),
-                        percentAmount.hashCode),
-                    discountPrice.hashCode),
-                discountType.hashCode),
-            soldCount.hashCode),
-        quantity.hashCode));
+                                                        subcategoryid.hashCode),
+                                                    description.hashCode),
+                                                specification.hashCode),
+                                            price.hashCode),
+                                        status.hashCode),
+                                    favorite.hashCode),
+                                images.hashCode),
+                            percentAmount.hashCode),
+                        discountPrice.hashCode),
+                    discountType.hashCode),
+                soldCount.hashCode),
+            quantity.hashCode),
+        id.hashCode));
   }
 
   @override
@@ -346,7 +363,8 @@ class _$Product extends Product {
           ..add('discountPrice', discountPrice)
           ..add('discountType', discountType)
           ..add('soldCount', soldCount)
-          ..add('quantity', quantity))
+          ..add('quantity', quantity)
+          ..add('id', id))
         .toString();
   }
 }
@@ -421,6 +439,10 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
   int get quantity => _$this._quantity;
   set quantity(int quantity) => _$this._quantity = quantity;
 
+  int _id;
+  int get id => _$this._id;
+  set id(int id) => _$this._id = id;
+
   ProductBuilder();
 
   ProductBuilder get _$this {
@@ -441,6 +463,7 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
       _discountType = _$v.discountType;
       _soldCount = _$v.soldCount;
       _quantity = _$v.quantity;
+      _id = _$v.id;
       _$v = null;
     }
     return this;
@@ -480,7 +503,8 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
               discountPrice: discountPrice,
               discountType: discountType,
               soldCount: soldCount,
-              quantity: quantity);
+              quantity: quantity,
+              id: id);
     } catch (_) {
       String _$failedField;
       try {
@@ -529,14 +553,15 @@ class ProductAdapter extends TypeAdapter<Product> {
           ..discountPrice = fields[12] as int
           ..discountType = fields[13] as String
           ..soldCount = fields[14] as int
-          ..quantity = fields[15] as int)
+          ..quantity = fields[15] as int
+          ..id = fields[16] as int)
         .build();
   }
 
   @override
   void write(BinaryWriter writer, Product obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(17)
       ..writeByte(0)
       ..write(obj.productId)
       ..writeByte(1)
@@ -568,6 +593,8 @@ class ProductAdapter extends TypeAdapter<Product> {
       ..writeByte(14)
       ..write(obj.soldCount)
       ..writeByte(15)
-      ..write(obj.quantity);
+      ..write(obj.quantity)
+      ..writeByte(16)
+      ..write(obj.id);
   }
 }

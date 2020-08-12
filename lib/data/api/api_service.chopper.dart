@@ -219,10 +219,13 @@ class _$ApiService extends ApiService {
   }
 
   @override
-  Future<Response<CartListResponse>> updateCart(String cartId) {
+  Future<Response<CartListResponse>> updateCart(
+      String cartId, String updateCount) {
     final $url = '/api/cartview/updateCartItem';
     final $params = <String, dynamic>{'cartId': cartId};
-    final $request = Request('POST', $url, client.baseUrl, parameters: $params);
+    final $body = updateCount;
+    final $request =
+        Request('PUT', $url, client.baseUrl, body: $body, parameters: $params);
     return client.send<CartListResponse, CartListResponse>($request);
   }
 

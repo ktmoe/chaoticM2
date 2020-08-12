@@ -70,4 +70,14 @@ abstract class _CartStore with Store {
     }
   }
 
+  Future updateCartItemQty(String cartId,String updateItem) async{
+    try{
+      String userId = appBox.getUserProfile().id;
+      await api.updateCart(cartId,updateItem);
+    }catch(e){
+
+    }
+  }
+
+
 }
