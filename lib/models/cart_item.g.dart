@@ -215,3 +215,43 @@ class CartItemBuilder implements Builder<CartItem, CartItemBuilder> {
 }
 
 // ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class CartItemAdapter extends TypeAdapter<CartItem> {
+  @override
+  final int typeId = 9;
+
+  @override
+  CartItem read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return (CartItemBuilder()
+          ..id = fields[0] as String
+          ..customerid = fields[1] as String
+          ..productid = fields[2] as String
+          ..quantity = fields[3] as int
+          ..price = fields[4] as int)
+        .build();
+  }
+
+  @override
+  void write(BinaryWriter writer, CartItem obj) {
+    writer
+      ..writeByte(5)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.customerid)
+      ..writeByte(2)
+      ..write(obj.productid)
+      ..writeByte(3)
+      ..write(obj.quantity)
+      ..writeByte(4)
+      ..write(obj.price);
+  }
+}

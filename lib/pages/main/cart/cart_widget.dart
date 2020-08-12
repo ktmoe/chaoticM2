@@ -92,7 +92,7 @@ class _CartWidgetState extends State<CartWidget> {
                   itemCount: cartProductsMap.length,
                   itemBuilder: (context, index) {
                     return _buildOrderRow(
-                        cartProducts[index], cartCounts[index]);
+                        cartProducts[index],cartCounts[index]);
                   }))
         ],
       ),

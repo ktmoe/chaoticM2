@@ -24,6 +24,34 @@ mixin _$CartStore on _CartStore, Store {
     });
   }
 
+  final _$initAsyncAction = AsyncAction('_CartStore.init');
+
+  @override
+  Future<dynamic> init() {
+    return _$initAsyncAction.run(() => super.init());
+  }
+
+  final _$fetchCartItemsAsyncAction = AsyncAction('_CartStore.fetchCartItems');
+
+  @override
+  Future<dynamic> fetchCartItems({bool refresh = false}) {
+    return _$fetchCartItemsAsyncAction
+        .run(() => super.fetchCartItems(refresh: refresh));
+  }
+
+  final _$_CartStoreActionController = ActionController(name: '_CartStore');
+
+  @override
+  void updateCart() {
+    final _$actionInfo =
+        _$_CartStoreActionController.startAction(name: '_CartStore.updateCart');
+    try {
+      return super.updateCart();
+    } finally {
+      _$_CartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

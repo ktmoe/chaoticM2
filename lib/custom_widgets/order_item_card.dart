@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:m2mobile/models/cart_item.dart';
 import 'package:m2mobile/res/dimens.dart';
+import 'package:m2mobile/stores/cart_store.dart';
 import 'package:m2mobile/utils/extensions.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/models/product.dart';
@@ -20,6 +22,7 @@ class OrderItemCard extends StatefulWidget {
 
 class _OrderItemCardState extends State<OrderItemCard> {
   final StoreCart _storeCart = Modular.get<StoreCart>();
+  final CartStore _cartStore = Modular.get<CartStore>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,7 +56,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
         children: <Widget>[
           InkWell(
             onTap: () {
-              _storeCart.addToCart(widget.product);
+              //_cartStore.addToCart(widget.product);
             },
             child: Card(
               elevation: Dimens.cardElevation,
@@ -74,7 +77,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
           const SizedBox(width: Dimens.marginMedium),
           InkWell(
             onTap: () {
-              _storeCart.removeFromCart(widget.product);
+             // _storeCart.removeFromCart(widget.product);
             },
             child: Card(
               elevation: Dimens.cardElevation,

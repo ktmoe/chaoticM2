@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:m2mobile/models/cart_item.dart';
+import 'package:m2mobile/models/product.dart';
 
 class BoxCart implements Disposable{
   @override
@@ -10,7 +11,7 @@ class BoxCart implements Disposable{
     _box.close();
   }
 
-  Box<CartItem> _box;
+  Box<Product> _box;
 
   static var key = "BoxCartBox";
 
@@ -22,13 +23,13 @@ class BoxCart implements Disposable{
     return _instance ??= BoxCart._(await Hive.openBox(key));
   }
 
-  ValueListenable<Box<CartItem>> get listenable => _box.listenable();
+  ValueListenable<Box<Product>> get listenable => _box.listenable();
 
-  void save(CartItem data){
+  void save(Product data){
     _box.put(data.id,data);
   }
 
-  void addAll(List<CartItem> items){
+  void addAll(List<Product> items){
     items.forEach((element) {
       save(element);
     });

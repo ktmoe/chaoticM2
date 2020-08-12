@@ -110,7 +110,7 @@ abstract class ApiService extends ChopperService {
 /// cart  ///
   ///
   @Post(path: '/cartview/getCartItemList')
-  Future<Response<CartListResponse>> getCartList(
+  Future<Response<ProductResponse>> getCartList(
       @Query('customerid') String customerId,
     );
 
