@@ -1,8 +1,20 @@
+import 'dart:io';
+import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:m2mobile/utils/constants.dart';
+import 'dart:convert';
 import 'package:intl/intl.dart';
 
 extension StringX on String {
+  bool isJsonFormat() {
+    try {
+      var _ = json.decode(this) as Map;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   void makeSnack(GlobalKey<ScaffoldState> state) {
     state.currentState.showSnackBar(this.snackBar());
   }
@@ -17,7 +29,7 @@ extension StringX on String {
   String createImageUrl() => "$baseUrl/$this";
 }
 
-extension DoubleX on num {
+extension NumX on num {
   String thousandSeparator() {
     final format = NumberFormat("#,###");
     return format.format(this);
@@ -26,4 +38,11 @@ extension DoubleX on num {
   String money() {
     return this.thousandSeparator() + " MMK";
   }
+}
+
+extension RequestX on Request {
+  bool get shouldBeJSONContentType =>
+      !headers.containsKey(HttpHeaders.contentTypeHeader) &&
+      body != null &&
+      (body as String).isJsonFormat();
 }

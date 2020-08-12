@@ -20,15 +20,17 @@ class _$ProductResponseSerializer
   Iterable<Object> serialize(Serializers serializers, ProductResponse object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'message',
-      serializers.serialize(object.message,
-          specifiedType: const FullType(String)),
       'data',
       serializers.serialize(object.product,
           specifiedType:
               const FullType(BuiltList, const [const FullType(Product)])),
     ];
-
+    if (object.message != null) {
+      result
+        ..add('message')
+        ..add(serializers.serialize(object.message,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
@@ -71,9 +73,6 @@ class _$ProductResponse extends ProductResponse {
       (new ProductResponseBuilder()..update(updates)).build();
 
   _$ProductResponse._({this.message, this.product}) : super._() {
-    if (message == null) {
-      throw new BuiltValueNullFieldError('ProductResponse', 'message');
-    }
     if (product == null) {
       throw new BuiltValueNullFieldError('ProductResponse', 'product');
     }

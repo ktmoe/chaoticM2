@@ -17,57 +17,64 @@ abstract class Product implements Built<Product, ProductBuilder> {
 
   @HiveField(0)
   @nullable
-  @BuiltValueField(wireName: 'id')
-  String get id;
+  @BuiltValueField(wireName: 'productid')
+  String get productId;
   @HiveField(1)
+  @BuiltValueField(wireName: 'productcode')
+  String get productCode;
+  @HiveField(2)
   @BuiltValueField(wireName: 'productname')
   String get productName;
-  @HiveField(2)
+  @HiveField(3)
   @nullable
   @BuiltValueField(wireName: 'categoryid')
   String get categoryid;
-  @HiveField(3)
+  @HiveField(4)
   @nullable
   @BuiltValueField(wireName: 'subcategoryid')
   String get subcategoryid;
-  @HiveField(4)
+  @HiveField(5)
   @nullable
   @BuiltValueField(wireName: 'description')
   String get description;
-  @HiveField(5)
+  @HiveField(6)
   @BuiltValueField(wireName: 'specification')
   String get specification;
-  @HiveField(6)
+  @HiveField(7)
   @nullable
   @BuiltValueField(wireName: 'price')
   int get price;
-  @HiveField(7)
+  @HiveField(8)
   @BuiltValueField(wireName: 'status')
   int get status;
-  @HiveField(8)
-  @nullable
-  @BuiltValueField(wireName: 'favorite')
-  String get favorite;
-  @nullable
   @HiveField(9)
+  @nullable
+  @BuiltValueField(wireName: 'isFavorite')
+  bool get favorite;
+  @nullable
+  @HiveField(10)
   @BuiltValueField(wireName: 'images')
   BuiltList<String> get images;
   @nullable
-  @HiveField(10)
+  @HiveField(11)
   @BuiltValueField(wireName: 'percent_amount')
   int get percentAmount;
   @nullable
-  @HiveField(11)
+  @HiveField(12)
   @BuiltValueField(wireName: 'discount_price')
   int get discountPrice;
   @nullable
-  @HiveField(12)
+  @HiveField(13)
   @BuiltValueField(wireName: 'discount_type')
   String get discountType;
   @nullable
-  @HiveField(13)
+  @HiveField(14)
   @BuiltValueField(wireName: 'soldcount')
   int get soldCount;
+  @nullable
+  @HiveField(15)
+  @BuiltValueField(wireName: 'quantity')
+  int get quantity;
 
   String toJson() {
     return json.encode(serializers.serializeWith(Product.serializer, this));

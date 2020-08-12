@@ -26,7 +26,7 @@ class BoxCart implements Disposable{
   ValueListenable<Box<Product>> get listenable => _box.listenable();
 
   void save(Product data){
-    _box.put(data.id,data);
+    _box.put(data.productId,data);
   }
 
   void addAll(List<Product> items){

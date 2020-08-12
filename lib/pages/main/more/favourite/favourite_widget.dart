@@ -60,7 +60,7 @@ class _FavouriteWidgetState extends State<FavouriteWidget> {
           RefreshIndicator(
               key: _refreshIndicatorState,
               onRefresh: () async {
-                _storeFav.fetchFavList();
+                await _storeFav.fetchFavList();
               },
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -76,7 +76,7 @@ class _FavouriteWidgetState extends State<FavouriteWidget> {
                             var product = _storeFav.favs[index];
                             return ProductCard(
                                 product: product,
-                                discountItem: product.discountPrice != null);
+                                discountItem: product.discountPrice != 0);
                           }),
                         )
                       : ListEmptyWidget(

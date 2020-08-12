@@ -18,6 +18,9 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
   Iterable<Object> serialize(Serializers serializers, Product object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
+      'productcode',
+      serializers.serialize(object.productCode,
+          specifiedType: const FullType(String)),
       'productname',
       serializers.serialize(object.productName,
           specifiedType: const FullType(String)),
@@ -27,10 +30,10 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
       'status',
       serializers.serialize(object.status, specifiedType: const FullType(int)),
     ];
-    if (object.id != null) {
+    if (object.productId != null) {
       result
-        ..add('id')
-        ..add(serializers.serialize(object.id,
+        ..add('productid')
+        ..add(serializers.serialize(object.productId,
             specifiedType: const FullType(String)));
     }
     if (object.categoryid != null) {
@@ -59,9 +62,9 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
     }
     if (object.favorite != null) {
       result
-        ..add('favorite')
+        ..add('isFavorite')
         ..add(serializers.serialize(object.favorite,
-            specifiedType: const FullType(String)));
+            specifiedType: const FullType(bool)));
     }
     if (object.images != null) {
       result
@@ -94,6 +97,12 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
         ..add(serializers.serialize(object.soldCount,
             specifiedType: const FullType(int)));
     }
+    if (object.quantity != null) {
+      result
+        ..add('quantity')
+        ..add(serializers.serialize(object.quantity,
+            specifiedType: const FullType(int)));
+    }
     return result;
   }
 
@@ -108,8 +117,12 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'id':
-          result.id = serializers.deserialize(value,
+        case 'productid':
+          result.productId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'productcode':
+          result.productCode = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'productname':
@@ -140,9 +153,9 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
           result.status = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
-        case 'favorite':
+        case 'isFavorite':
           result.favorite = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(bool)) as bool;
           break;
         case 'images':
           result.images.replace(serializers.deserialize(value,
@@ -166,6 +179,10 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
           result.soldCount = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
+        case 'quantity':
+          result.quantity = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
       }
     }
 
@@ -175,7 +192,9 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
 
 class _$Product extends Product {
   @override
-  final String id;
+  final String productId;
+  @override
+  final String productCode;
   @override
   final String productName;
   @override
@@ -191,7 +210,7 @@ class _$Product extends Product {
   @override
   final int status;
   @override
-  final String favorite;
+  final bool favorite;
   @override
   final BuiltList<String> images;
   @override
@@ -202,12 +221,15 @@ class _$Product extends Product {
   final String discountType;
   @override
   final int soldCount;
+  @override
+  final int quantity;
 
   factory _$Product([void Function(ProductBuilder) updates]) =>
       (new ProductBuilder()..update(updates)).build();
 
   _$Product._(
-      {this.id,
+      {this.productId,
+      this.productCode,
       this.productName,
       this.categoryid,
       this.subcategoryid,
@@ -220,8 +242,12 @@ class _$Product extends Product {
       this.percentAmount,
       this.discountPrice,
       this.discountType,
-      this.soldCount})
+      this.soldCount,
+      this.quantity})
       : super._() {
+    if (productCode == null) {
+      throw new BuiltValueNullFieldError('Product', 'productCode');
+    }
     if (productName == null) {
       throw new BuiltValueNullFieldError('Product', 'productName');
     }
@@ -244,7 +270,8 @@ class _$Product extends Product {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Product &&
-        id == other.id &&
+        productId == other.productId &&
+        productCode == other.productCode &&
         productName == other.productName &&
         categoryid == other.categoryid &&
         subcategoryid == other.subcategoryid &&
@@ -257,7 +284,8 @@ class _$Product extends Product {
         percentAmount == other.percentAmount &&
         discountPrice == other.discountPrice &&
         discountType == other.discountType &&
-        soldCount == other.soldCount;
+        soldCount == other.soldCount &&
+        quantity == other.quantity;
   }
 
   @override
@@ -274,26 +302,37 @@ class _$Product extends Product {
                                         $jc(
                                             $jc(
                                                 $jc(
-                                                    $jc($jc(0, id.hashCode),
-                                                        productName.hashCode),
-                                                    categoryid.hashCode),
-                                                subcategoryid.hashCode),
-                                            description.hashCode),
-                                        specification.hashCode),
-                                    price.hashCode),
-                                status.hashCode),
-                            favorite.hashCode),
-                        images.hashCode),
-                    percentAmount.hashCode),
-                discountPrice.hashCode),
-            discountType.hashCode),
-        soldCount.hashCode));
+                                                    $jc(
+                                                        $jc(
+                                                            $jc(
+                                                                $jc(
+                                                                    0,
+                                                                    productId
+                                                                        .hashCode),
+                                                                productCode
+                                                                    .hashCode),
+                                                            productName
+                                                                .hashCode),
+                                                        categoryid.hashCode),
+                                                    subcategoryid.hashCode),
+                                                description.hashCode),
+                                            specification.hashCode),
+                                        price.hashCode),
+                                    status.hashCode),
+                                favorite.hashCode),
+                            images.hashCode),
+                        percentAmount.hashCode),
+                    discountPrice.hashCode),
+                discountType.hashCode),
+            soldCount.hashCode),
+        quantity.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Product')
-          ..add('id', id)
+          ..add('productId', productId)
+          ..add('productCode', productCode)
           ..add('productName', productName)
           ..add('categoryid', categoryid)
           ..add('subcategoryid', subcategoryid)
@@ -306,7 +345,8 @@ class _$Product extends Product {
           ..add('percentAmount', percentAmount)
           ..add('discountPrice', discountPrice)
           ..add('discountType', discountType)
-          ..add('soldCount', soldCount))
+          ..add('soldCount', soldCount)
+          ..add('quantity', quantity))
         .toString();
   }
 }
@@ -314,9 +354,13 @@ class _$Product extends Product {
 class ProductBuilder implements Builder<Product, ProductBuilder> {
   _$Product _$v;
 
-  String _id;
-  String get id => _$this._id;
-  set id(String id) => _$this._id = id;
+  String _productId;
+  String get productId => _$this._productId;
+  set productId(String productId) => _$this._productId = productId;
+
+  String _productCode;
+  String get productCode => _$this._productCode;
+  set productCode(String productCode) => _$this._productCode = productCode;
 
   String _productName;
   String get productName => _$this._productName;
@@ -348,9 +392,9 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
   int get status => _$this._status;
   set status(int status) => _$this._status = status;
 
-  String _favorite;
-  String get favorite => _$this._favorite;
-  set favorite(String favorite) => _$this._favorite = favorite;
+  bool _favorite;
+  bool get favorite => _$this._favorite;
+  set favorite(bool favorite) => _$this._favorite = favorite;
 
   ListBuilder<String> _images;
   ListBuilder<String> get images =>
@@ -373,11 +417,16 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
   int get soldCount => _$this._soldCount;
   set soldCount(int soldCount) => _$this._soldCount = soldCount;
 
+  int _quantity;
+  int get quantity => _$this._quantity;
+  set quantity(int quantity) => _$this._quantity = quantity;
+
   ProductBuilder();
 
   ProductBuilder get _$this {
     if (_$v != null) {
-      _id = _$v.id;
+      _productId = _$v.productId;
+      _productCode = _$v.productCode;
       _productName = _$v.productName;
       _categoryid = _$v.categoryid;
       _subcategoryid = _$v.subcategoryid;
@@ -391,6 +440,7 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
       _discountPrice = _$v.discountPrice;
       _discountType = _$v.discountType;
       _soldCount = _$v.soldCount;
+      _quantity = _$v.quantity;
       _$v = null;
     }
     return this;
@@ -415,7 +465,8 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
     try {
       _$result = _$v ??
           new _$Product._(
-              id: id,
+              productId: productId,
+              productCode: productCode,
               productName: productName,
               categoryid: categoryid,
               subcategoryid: subcategoryid,
@@ -428,7 +479,8 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
               percentAmount: percentAmount,
               discountPrice: discountPrice,
               discountType: discountType,
-              soldCount: soldCount);
+              soldCount: soldCount,
+              quantity: quantity);
     } catch (_) {
       String _$failedField;
       try {
@@ -462,54 +514,60 @@ class ProductAdapter extends TypeAdapter<Product> {
       for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return (ProductBuilder()
-          ..id = fields[0] as String
-          ..productName = fields[1] as String
-          ..categoryid = fields[2] as String
-          ..subcategoryid = fields[3] as String
-          ..description = fields[4] as String
-          ..specification = fields[5] as String
-          ..price = fields[6] as int
-          ..status = fields[7] as int
-          ..favorite = fields[8] as String
-          ..images = ListBuilder<String>(fields[9] as List)
-          ..percentAmount = fields[10] as int
-          ..discountPrice = fields[11] as int
-          ..discountType = fields[12] as String
-          ..soldCount = fields[13] as int)
+          ..productId = fields[0] as String
+          ..productCode = fields[1] as String
+          ..productName = fields[2] as String
+          ..categoryid = fields[3] as String
+          ..subcategoryid = fields[4] as String
+          ..description = fields[5] as String
+          ..specification = fields[6] as String
+          ..price = fields[7] as int
+          ..status = fields[8] as int
+          ..favorite = fields[9] as bool
+          ..images = ListBuilder<String>(fields[10] as List)
+          ..percentAmount = fields[11] as int
+          ..discountPrice = fields[12] as int
+          ..discountType = fields[13] as String
+          ..soldCount = fields[14] as int
+          ..quantity = fields[15] as int)
         .build();
   }
 
   @override
   void write(BinaryWriter writer, Product obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(16)
       ..writeByte(0)
-      ..write(obj.id)
+      ..write(obj.productId)
       ..writeByte(1)
-      ..write(obj.productName)
+      ..write(obj.productCode)
       ..writeByte(2)
-      ..write(obj.categoryid)
+      ..write(obj.productName)
       ..writeByte(3)
-      ..write(obj.subcategoryid)
+      ..write(obj.categoryid)
       ..writeByte(4)
-      ..write(obj.description)
+      ..write(obj.subcategoryid)
       ..writeByte(5)
-      ..write(obj.specification)
+      ..write(obj.description)
       ..writeByte(6)
-      ..write(obj.price)
+      ..write(obj.specification)
       ..writeByte(7)
-      ..write(obj.status)
+      ..write(obj.price)
       ..writeByte(8)
-      ..write(obj.favorite)
+      ..write(obj.status)
       ..writeByte(9)
-      ..write(obj.images?.toList())
+      ..write(obj.favorite)
       ..writeByte(10)
-      ..write(obj.percentAmount)
+      ..write(obj.images?.toList())
       ..writeByte(11)
-      ..write(obj.discountPrice)
+      ..write(obj.percentAmount)
       ..writeByte(12)
-      ..write(obj.discountType)
+      ..write(obj.discountPrice)
       ..writeByte(13)
-      ..write(obj.soldCount);
+      ..write(obj.discountType)
+      ..writeByte(14)
+      ..write(obj.soldCount)
+      ..writeByte(15)
+      ..write(obj.quantity);
   }
 }

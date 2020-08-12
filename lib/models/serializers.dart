@@ -1,10 +1,14 @@
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
+import 'package:m2mobile/models/cart_item.dart';
 import 'package:m2mobile/models/force_update.dart';
+import 'package:m2mobile/models/requests/add_to_cart_request.dart';
+import 'package:m2mobile/models/responses/cart_list_response.dart';
 import 'package:m2mobile/models/responses/force_update_response.dart';
 import 'package:m2mobile/models/responses/help_response.dart';
 import 'package:m2mobile/models/help.dart';
 import 'package:m2mobile/models/product.dart';
+import 'package:m2mobile/models/bank_account.dart';
 import 'package:m2mobile/models/responses/login_response.dart';
 import 'package:m2mobile/models/responses/refresh_token_response.dart';
 import 'package:m2mobile/models/responses/product_response.dart';
@@ -19,6 +23,11 @@ import 'package:m2mobile/models/user_profile.dart';
 import 'package:m2mobile/models/responses/file_upload_response.dart';
 import 'package:m2mobile/models/responses/post_profile_response.dart';
 import 'package:m2mobile/models/responses/favorite_operate_response.dart';
+import 'package:m2mobile/models/responses/bank_info_response.dart';
+import 'package:m2mobile/models/payloads/favorite_item.dart';
+import 'package:m2mobile/models/payloads/favorite_item_payload.dart';
+import 'package:m2mobile/models/order.dart';
+import 'package:m2mobile/models/responses/order_list_response.dart';
 part 'serializers.g.dart';
 
 @SerializersFor([
@@ -39,7 +48,16 @@ part 'serializers.g.dart';
   PostProfileResponse,
   LoginResponse,
   FavoriteOperateResponse,
-  RefreshTokenResponse
+  RefreshTokenResponse,
+  BankAccount,
+  BankInfoResponse,
+  FavoriteItemPayload,
+  FavoriteItem,
+  Order,
+  OrderListResponse,
+  AddToCartRequest,
+  CartItem,
+  CartListResponse
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

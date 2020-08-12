@@ -23,12 +23,13 @@ class _$FavoriteOperateResponseSerializer
   Iterable<Object> serialize(
       Serializers serializers, FavoriteOperateResponse object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'message',
-      serializers.serialize(object.message,
-          specifiedType: const FullType(String)),
-    ];
-
+    final result = <Object>[];
+    if (object.message != null) {
+      result
+        ..add('message')
+        ..add(serializers.serialize(object.message,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
@@ -63,11 +64,7 @@ class _$FavoriteOperateResponse extends FavoriteOperateResponse {
           [void Function(FavoriteOperateResponseBuilder) updates]) =>
       (new FavoriteOperateResponseBuilder()..update(updates)).build();
 
-  _$FavoriteOperateResponse._({this.message}) : super._() {
-    if (message == null) {
-      throw new BuiltValueNullFieldError('FavoriteOperateResponse', 'message');
-    }
-  }
+  _$FavoriteOperateResponse._({this.message}) : super._();
 
   @override
   FavoriteOperateResponse rebuild(

@@ -6,6 +6,7 @@ import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/custom_widgets/order_item_card.dart';
 import 'package:m2mobile/pages/main/cart/order/order_widget.dart';
 import 'package:m2mobile/pages/main/more/order_list/complete_order/complete_order_widget.dart';
+import 'package:m2mobile/stores/cart_store.dart';
 import 'package:m2mobile/stores/store_cart.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:m2mobile/models/product.dart';
@@ -25,25 +26,37 @@ class CartWidget extends StatefulWidget {
 class _CartWidgetState extends State<CartWidget> {
   final StoreCart _storeCart = Modular.get<StoreCart>();
 
+  final CartStore _cartStore = Modular.get<CartStore>();
+
+  @override
+  void initState() {
+    _cartStore.init();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
       return WillPopScope(
           onWillPop: _cartBackPressed,
-          child: Scaffold(
-              appBar: M2AppBar(
-                showSearch: false,
-                title: "My Cart",
-                deleteOnly: !widget.isSummary,
-                onBackPressed: () async {
-                  final pop = await _cartBackPressed();
-                  if (pop) Modular.to.pop();
-                },
-                onDeletePressed: widget.isSummary ? null : _cartDeletePressed,
-              ),
-              body: _storeCart.cartCount == 0
-                  ? _buildEmptyBody()
-                  : _buildNonEmptyBody()));
+          child: Observer(
+            builder: (_) {
+              return Scaffold(
+                appBar: M2AppBar(
+                  showSearch: false,
+                  title: "My Cart",
+                  deleteOnly: !widget.isSummary,
+                  onBackPressed: () async {
+                    final pop = await _cartBackPressed();
+                    if (pop) Modular.to.pop();
+                  },
+                  onDeletePressed: widget.isSummary ? null : _cartDeletePressed,
+                ),
+                body: _cartStore.cartItems.isEmpty
+                    ? _buildEmptyBody()
+                    : _buildNonEmptyBody());
+            },
+          ));
     });
   }
 
@@ -87,13 +100,18 @@ class _CartWidgetState extends State<CartWidget> {
                   ],
                 )
               : Container(height: Dimens.marginLarge),
-          Expanded(
-              child: ListView.builder(
-                  itemCount: cartProductsMap.length,
-                  itemBuilder: (context, index) {
-                    return _buildOrderRow(
-                        cartProducts[index],cartCounts[index]);
-                  }))
+          Observer(
+            builder: (_) {
+              final items = _cartStore.cartItems.toList();
+              return Expanded(
+                child: ListView.builder(
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      return _buildOrderRow(
+                          items[index],items[index].quantity);
+                    }));
+            },
+          )
         ],
       ),
     );

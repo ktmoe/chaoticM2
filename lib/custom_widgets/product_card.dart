@@ -4,6 +4,7 @@ import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/pages/main/product_detail/product_detail_widget.dart';
+import 'package:m2mobile/stores/cart_store.dart';
 import 'package:m2mobile/stores/store_cart.dart';
 import 'package:m2mobile/stores/store_home.dart';
 import 'package:m2mobile/utils/constants.dart';
@@ -78,9 +79,9 @@ class ProductCardHeader extends StatelessWidget {
                     topRight: Radius.circular(Dimens.marginMedium2)),
                 child: FadeInImage(
                   fit: BoxFit.cover,
-                  placeholder: AssetImage("lib/res/images/earth.jpg"),
+                  placeholder: AssetImage("lib/res/images/placeholder.png"),
                   image: product.images.toList().isEmpty
-                      ? AssetImage("lib/res/images/earth.jpg")
+                      ? AssetImage("lib/res/images/placeholder.png")
                       : NetworkImage(baseUrl + '/' + product.images[0]),
                 ),
               ),
@@ -184,6 +185,8 @@ class ProductCardBottom extends StatefulWidget {
   final StoreCart _storeCart = Modular.get<StoreCart>();
   final Product product;
 
+  final CartStore _cartStore = Modular.get<CartStore>();
+
   ProductCardBottom({Key key, this.product}) : super(key: key);
 
   @override
@@ -208,13 +211,11 @@ class _ProductCardBottomState extends State<ProductCardBottom> {
               onTap: () async {
                 await Modular.get<StoreHome>().operateFavorite(widget.product);
               },
-              child: Icon(
-                M2Icon.favourite,
-                size: 16,
-                color: widget.product.favorite != 'true'
-                    ? Colors.white
-                    : Theme.of(context).iconTheme.color,
-              ),
+              child: Icon(M2Icon.favourite,
+                  size: 16,
+                  color: widget.product.favorite
+                      ? Theme.of(context).iconTheme.color
+                      : Colors.white),
             ),
             VerticalDivider(
               color: Colors.white,
@@ -222,14 +223,15 @@ class _ProductCardBottomState extends State<ProductCardBottom> {
               endIndent: Dimens.marginMedium,
             ),
             InkWell(
-              onTap: () {
+              onTap: () async{
+                widget._cartStore.addToCart(widget.product);
                 if (widget._storeCart.cartProducts
                     .containsKey(widget.product)) {
                   "Item removed from cart.".showSnack(context);
-                  widget._storeCart.removeFromCart(widget.product);
+                 // widget._storeCart.removeFromCart(widget.product);
                 } else {
                   "Item added to cart.".showSnack(context);
-                  widget._storeCart.addToCart(widget.product);
+                 // widget._storeCart.addToCart(widget.product);
                 }
               },
               child: Icon(

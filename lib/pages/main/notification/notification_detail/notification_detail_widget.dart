@@ -76,7 +76,7 @@ class _NotificationDetailWidgetState extends State<NotificationDetailWidget> {
           height: MediaQuery.of(context).size.height * 0.4,
           child: FadeInImage(
               fit: BoxFit.cover,
-              placeholder: AssetImage("lib/res/images/earth.jpg"),
+              placeholder: AssetImage("lib/res/images/placeholder.png"),
               image: NetworkImage("")),
         ),
       );

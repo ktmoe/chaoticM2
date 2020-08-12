@@ -5,6 +5,9 @@ import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:m2mobile/stores/store_order_list.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:m2mobile/models/bank_account.dart';
 
 class CompleteOrderWidget extends StatefulWidget {
   static const route = "/main/more/order_list/complete_order";
@@ -14,13 +17,16 @@ class CompleteOrderWidget extends StatefulWidget {
 }
 
 class _CompleteOrderWidgetState extends State<CompleteOrderWidget> {
+  StoreOrderList _storeOrderList = Modular.get<StoreOrderList>();
+
   List<Asset> _selectedImages = <Asset>[];
-  List<String> _bankList = [
-    'KBZ Bank (0002-302-19284735)',
-    'AYA Bank (0002-302-19284735)',
-    'UAB Bank (0002-302-19284735)'
-  ];
-  String _selectedBank;
+
+  @override
+  void initState() {
+    super.initState();
+    _storeOrderList.init();
+    _storeOrderList.getBankAccounts();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,22 +87,25 @@ class _CompleteOrderWidgetState extends State<CompleteOrderWidget> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Padding(
         padding: const EdgeInsets.only(left: 8.0),
-        child: DropdownButton<String>(
-            isExpanded: true,
-            underline: Container(),
-            hint: Text(_bankList[0]),
-            value: _selectedBank,
-            onChanged: (bank) {
-              setState(() {
-                _selectedBank = bank;
-              });
-            },
-            items: _bankList.map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList()),
+        child: Observer(builder: (_) {
+          return DropdownButton<BankAccount>(
+              isExpanded: true,
+              underline: Container(),
+              hint: _storeOrderList.bankAccounts.isNotEmpty
+                  ? Text(
+                      '${_storeOrderList.bankAccounts.first.bank} (${_storeOrderList.bankAccounts.first.account})')
+                  : Text(''),
+              value: _storeOrderList.selectedBankAccount,
+              onChanged: (bank) {
+                _storeOrderList.selectedBankAccount = bank;
+              },
+              items: _storeOrderList.bankAccounts.map((BankAccount value) {
+                return DropdownMenuItem<BankAccount>(
+                  value: value,
+                  child: Text('${value.bank} (${value.account})'),
+                );
+              }).toList());
+        }),
       ),
     );
   }
@@ -119,8 +128,8 @@ class _CompleteOrderWidgetState extends State<CompleteOrderWidget> {
                   height: 250,
                   spinner: FadeInImage(
                     fit: BoxFit.cover,
-                    image: AssetImage("lib/res/images/earth.jpg"),
-                    placeholder: AssetImage("lib/res/images/earth.jpg"),
+                    image: AssetImage("lib/res/images/placeholder.png"),
+                    placeholder: AssetImage("lib/res/images/placeholder.png"),
                   )),
         ));
   }

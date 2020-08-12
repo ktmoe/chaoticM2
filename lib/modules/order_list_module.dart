@@ -2,10 +2,11 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/pages/main/more/order_list/order_list_widget.dart';
 import 'package:m2mobile/pages/main/more/order_list/complete_order/complete_order_widget.dart';
 import 'package:m2mobile/pages/main/more/order_list/order_detail/order_detail_widget.dart';
+import 'package:m2mobile/stores/store_order_list.dart';
 
 class OrderListModule extends ChildModule {
   @override
-  List<Bind> get binds => [];
+  List<Bind> get binds => [Bind((i) => StoreOrderList())];
 
   @override
   List<Router> get routers => [

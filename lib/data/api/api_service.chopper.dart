@@ -33,8 +33,8 @@ class _$ApiService extends ApiService {
 
   @override
   Future<Response<ProductResponse>> getLatestProducts(String customerId) {
-    final $url = '/api/productview/getLatestProducts';
-    final $params = <String, dynamic>{'customerid': customerId};
+    final $url = '/api/productview/getLatestProductList';
+    final $params = <String, dynamic>{'customerId': customerId};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<ProductResponse, ProductResponse>($request);
   }
@@ -63,14 +63,12 @@ class _$ApiService extends ApiService {
   }
 
   @override
-  Future<Response<dynamic>> addToFav(String customerId, String productId) {
-    final $url = '/api/customerview/favorite';
-    final $params = <String, dynamic>{
-      'customerid': customerId,
-      'productid': productId
-    };
-    final $request = Request('POST', $url, client.baseUrl, parameters: $params);
-    return client.send<dynamic, dynamic>($request);
+  Future<Response<FavoriteOperateResponse>> addToFav(String favoriteItem) {
+    final $url = '/api/favoriteview/addToFavorite';
+    final $body = favoriteItem;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client
+        .send<FavoriteOperateResponse, FavoriteOperateResponse>($request);
   }
 
   @override
@@ -105,6 +103,13 @@ class _$ApiService extends ApiService {
     final $url = '/api/companyview';
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<CompanyInfoResponse, CompanyInfoResponse>($request);
+  }
+
+  @override
+  Future<Response<BankInfoResponse>> getBankInfo() {
+    final $url = '/api/bankview/getBankInfoList';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<BankInfoResponse, BankInfoResponse>($request);
   }
 
   @override
@@ -200,7 +205,7 @@ class _$ApiService extends ApiService {
   @override
   Future<Response<ProductResponse>> getCartList(String customerId) {
     final $url = '/api/cartview/getCartItemList';
-    final $params = <String, dynamic>{'customerid': customerId};
+    final $params = <String, dynamic>{'customerId': customerId};
     final $request = Request('POST', $url, client.baseUrl, parameters: $params);
     return client.send<ProductResponse, ProductResponse>($request);
   }
@@ -219,5 +224,13 @@ class _$ApiService extends ApiService {
     final $params = <String, dynamic>{'cartId': cartId};
     final $request = Request('POST', $url, client.baseUrl, parameters: $params);
     return client.send<CartListResponse, CartListResponse>($request);
+  }
+
+  @override
+  Future<Response<OrderListResponse>> getOrderList(String customerId) {
+    final $url = '/api/orderview/getOrderList';
+    final $params = <String, dynamic>{'customerId': customerId};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<OrderListResponse, OrderListResponse>($request);
   }
 }

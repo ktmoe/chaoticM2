@@ -174,18 +174,18 @@ mixin _$StoreApp on _StoreApp, Store {
     });
   }
 
-  final _$perloadDoneAtom = Atom(name: '_StoreApp.perloadDone');
+  final _$proceedAtom = Atom(name: '_StoreApp.proceed');
 
   @override
-  bool get perloadDone {
-    _$perloadDoneAtom.reportRead();
-    return super.perloadDone;
+  bool get proceed {
+    _$proceedAtom.reportRead();
+    return super.proceed;
   }
 
   @override
-  set perloadDone(bool value) {
-    _$perloadDoneAtom.reportWrite(value, super.perloadDone, () {
-      super.perloadDone = value;
+  set proceed(bool value) {
+    _$proceedAtom.reportWrite(value, super.proceed, () {
+      super.proceed = value;
     });
   }
 
@@ -398,7 +398,7 @@ chosenLanguage: ${chosenLanguage},
 userProfile: ${userProfile},
 categoryList: ${categoryList},
 subCategoryList: ${subCategoryList},
-perloadDone: ${perloadDone},
+proceed: ${proceed},
 isNetworkOn: ${isNetworkOn},
 connectivityMessage: ${connectivityMessage},
 isLoggedIn: ${isLoggedIn},

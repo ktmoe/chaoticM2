@@ -33,7 +33,7 @@ class AppModule extends MainModule {
                 JWTInterceptor(),
                 LoggingRequestInterceptor(i.get<Logger>()),
                 LoggingResponseInterceptor(i.get<Logger>())
-                // HttpLoggingInterceptor(),
+                // // HttpLoggingInterceptor(),
                 // CurlInterceptor(),
                 // HeadersInterceptor({HttpHeaders.authorizationHeader: bearerToken})
               ],

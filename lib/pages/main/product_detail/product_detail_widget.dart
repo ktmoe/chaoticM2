@@ -32,7 +32,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
   @override
   void initState() {
     _product = widget.product;
-    _discountItem = widget.product.discountPrice != null;
+    _discountItem = widget.product.discountPrice != 0;
     _images = _product.images.toList();
     super.initState();
   }
@@ -153,9 +153,9 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                 itemBuilder: (context, index) {
                   return FadeInImage(
                     fit: BoxFit.cover,
-                    placeholder: AssetImage("lib/res/images/earth.jpg"),
+                    placeholder: AssetImage("lib/res/images/placeholder.png"),
                     image: _images.isEmpty
-                        ? AssetImage("lib/res/images/earth.jpg")
+                        ? AssetImage("lib/res/images/placeholder.png")
                         : NetworkImage(baseUrl + '/' + _images[index]),
                   );
                 },
@@ -236,7 +236,7 @@ class BottomSheet extends StatefulWidget {
 
 class _BottomSheetState extends State<BottomSheet> {
   final StoreCart _storeCart = Modular.get<StoreCart>();
-  String _favorite = "false";
+  bool _favorite = false;
   @override
   void initState() {
     _favorite = widget.product.favorite;
@@ -272,18 +272,14 @@ class _BottomSheetState extends State<BottomSheet> {
   Widget _buildFavoriteBtn() => IconButton(
       icon: Icon(
         M2Icon.favourite,
-        color: _favorite == 'true'
+        color: _favorite
             ? Theme.of(context).iconTheme.color
             : const Color(0x8AE9E9E9),
       ),
       onPressed: () async {
         await Modular.get<StoreHome>().operateFavorite(widget.product);
         setState(() {
-          if (_favorite == "true") {
-            _favorite = "false";
-          } else {
-            _favorite = "true";
-          }
+          _favorite = !_favorite;
         });
       });
 

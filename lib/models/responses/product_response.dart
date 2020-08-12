@@ -16,6 +16,7 @@ abstract class ProductResponse
   factory ProductResponse([updates(ProductResponseBuilder b)]) =
       _$ProductResponse;
 
+  @nullable
   @BuiltValueField(wireName: 'message')
   String get message;
 

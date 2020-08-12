@@ -7,8 +7,15 @@ part of 'serializers.dart';
 // **************************************************************************
 
 Serializers _$serializers = (new Serializers().toBuilder()
+      ..add(AddToCartRequest.serializer)
+      ..add(BankAccount.serializer)
+      ..add(BankInfoResponse.serializer)
+      ..add(CartItem.serializer)
+      ..add(CartListResponse.serializer)
       ..add(CompanyInfo.serializer)
       ..add(CompanyInfoResponse.serializer)
+      ..add(FavoriteItem.serializer)
+      ..add(FavoriteItemPayload.serializer)
       ..add(FavoriteOperateResponse.serializer)
       ..add(FileUploadResponse.serializer)
       ..add(ForceUpdate.serializer)
@@ -18,6 +25,8 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(LoginResponse.serializer)
       ..add(M2Category.serializer)
       ..add(M2CategoryResponse.serializer)
+      ..add(Order.serializer)
+      ..add(OrderListResponse.serializer)
       ..add(PostProfileResponse.serializer)
       ..add(Product.serializer)
       ..add(ProductResponse.serializer)
@@ -26,8 +35,17 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(SubCategoryResponse.serializer)
       ..add(UserProfile.serializer)
       ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(BankAccount)]),
+          () => new ListBuilder<BankAccount>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(CartItem)]),
+          () => new ListBuilder<CartItem>())
+      ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(M2Category)]),
           () => new ListBuilder<M2Category>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(Order)]),
+          () => new ListBuilder<Order>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Product)]),
           () => new ListBuilder<Product>())
