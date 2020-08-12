@@ -72,7 +72,7 @@ class _CategoriesWidgetState extends State<CategoriesWidget>
         .map((item) => ListTile(
             onTap: () {
               Modular.to.pushNamed(ProductListWidget.route,
-                  arguments: ProductNameArgs(item.subCategory));
+                  arguments: ProductNameArgs(item.subCategory, item.id));
             },
             leading: Icon(Icons.arrow_right, color: Colors.grey),
             title: Text(

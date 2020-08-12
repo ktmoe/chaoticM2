@@ -6,13 +6,13 @@ import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:m2mobile/custom_widgets/one_call_away_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
+import 'package:m2mobile/custom_widgets/creation_aware_widget.dart';
 import 'package:m2mobile/custom_widgets/product_card.dart';
 import 'package:m2mobile/stores/store_home.dart';
 import 'package:m2mobile/utils/constants.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:m2mobile/utils/extensions.dart';
-import 'package:m2mobile/stores/store_app.dart';
 import 'package:logger/logger.dart';
 
 class HomeWidget extends StatefulWidget {
@@ -27,15 +27,17 @@ class _HomeWidgetState extends State<HomeWidget>
     "$baseUrl/upload/product/akrales_181019_3014_0770-(1).jpg"
   ];
 
-  final StoreApp _storeApp = Modular.get<StoreApp>();
   final StoreHome _storeHome = Modular.get<StoreHome>();
   final List<ReactionDisposer> _disposer = [];
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorState = GlobalKey();
 
-  ReactionDisposer _onConnectivityChanged() =>
-      when((_) => _storeApp.isNetworkOn, () async {
-        await _storeHome.getLatestProducts(refresh: true);
-      });
+  ReactionDisposer _onLoadMoreChanged() {
+    return reaction<bool>((_) => _storeHome.loadMore, (load) async {
+      if (load) {
+        await _storeHome.getLatestProducts(false);
+      }
+    });
+  }
 
   ReactionDisposer _onException() {
     return reaction<AppException>((_) => _storeHome.exception, (exception) {
@@ -47,7 +49,8 @@ class _HomeWidgetState extends State<HomeWidget>
   @override
   void initState() {
     super.initState();
-    _disposer.addAll([_onConnectivityChanged(), _onException()]);
+    _disposer.addAll([_onException(), _onLoadMoreChanged()]);
+    _storeHome.init();
   }
 
   @override
@@ -64,10 +67,8 @@ class _HomeWidgetState extends State<HomeWidget>
     return RefreshIndicator(
         key: _refreshIndicatorState,
         onRefresh: () async {
-          Future.wait([
-            _storeHome.getDiscountProducts(refresh: true),
-            _storeHome.getLatestProducts(refresh: true)
-          ]);
+          await _storeHome.getDiscountProducts(refresh: true);
+          await _storeHome.getLatestProducts(true);
         },
         child: SingleChildScrollView(
           child: Column(
@@ -116,7 +117,6 @@ class _HomeWidgetState extends State<HomeWidget>
   Widget _buildLatestItemGrid() {
     return Observer(
       builder: (_) {
-        final latestProducts = _storeHome.products;
         return GridView.count(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
@@ -124,9 +124,17 @@ class _HomeWidgetState extends State<HomeWidget>
           padding: const EdgeInsets.all(Dimens.marginMedium),
           childAspectRatio: (120 / 170),
           children: List.generate(_storeHome.products.length, (index) {
-            return ProductCard(
-                product: latestProducts[index],
-                discountItem: latestProducts[index].discountPrice != 0);
+            return CreationAwareWidget(
+              child: ProductCard(
+                  product: _storeHome.products[index],
+                  discountItem: _storeHome.products[index].discountPrice != 0),
+              onCreate: () {
+                if ((index + 1) % 10 == 0) {
+                  Modular.get<Logger>().d("Creation Awared ${index + 1}");
+                  _storeHome.loadMore = true;
+                }
+              },
+            );
           }),
         );
       },

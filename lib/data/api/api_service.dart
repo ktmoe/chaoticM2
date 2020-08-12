@@ -21,19 +21,23 @@ abstract class ApiService extends ChopperService {
 
   /// product ///
 
-  @Get(path: '/productview/getProductList')
-  Future<Response<ProductResponse>> getProducts();
-
   @Get(path: '/productview/getProductByID')
   Future<Response<Product>> getProductById(@Query('productid') String id);
 
   @Get(path: '/productview/getLatestProductList')
   Future<Response<ProductResponse>> getLatestProducts(
-      @Query('customerId') String customerId);
+      {@Query('customerId') String customerId,
+      @Query('currentPage') int currentPage,
+      @Query('perPage') int perPage = 10});
 
   @Get(path: '/productview/getDiscountProducts')
   Future<Response<ProductResponse>> getDiscountProducts(
       @Query('customerid') String customerId);
+
+  @Get(path: '/productview/getProductListByCategory')
+  Future<Response<ProductResponse>> getProductsByCategory(
+    @Query('subCategoryId') String subCategoryId
+  );
 
   /// help ///
   @Get(path: '/helpview')
@@ -47,8 +51,9 @@ abstract class ApiService extends ChopperService {
   Future<Response<FavoriteOperateResponse>> addToFav(
       @Body() String favoriteItem);
 
-  // @Delete(path: '/favoriteview/deleteFavorite')
-  // Future<Response> deleteFavorite()
+  @Delete(path: '/favoriteview/deleteFavorite')
+  Future<Response<FavoriteOperateResponse>> deleteFavorite(
+      @Body() String favoriteItem);
 
   @Post(path: '/customerview/Removefavorite')
   Future<Response> removeFromFav(@Query('customerid') String customerId,

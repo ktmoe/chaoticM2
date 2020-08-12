@@ -8,6 +8,7 @@ import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/stores/store_app.dart';
 import 'package:m2mobile/models/payloads/favorite_item_payload.dart';
+import 'package:m2mobile/models/payloads/delete_favorite_item_payload.dart';
 import 'package:m2mobile/models/payloads/favorite_item.dart';
 import 'package:mobx/mobx.dart';
 
@@ -22,12 +23,17 @@ abstract class _StoreHome with Store {
   DiscountProductBox _discountProductBox;
   BoxFav _boxFav;
 
-  _StoreHome() {
-    init();
-  }
-
   @observable
   AppException exception;
+
+  @observable
+  int latestCurrentPage = 0;
+
+  @observable
+  int latestTotalPage = 1;
+
+  @observable
+  bool loadMore = false;
 
   @observable
   ObservableList<Product> products = ObservableList.of([]);
@@ -44,7 +50,8 @@ abstract class _StoreHome with Store {
     updateDiscountProducts();
     _boxProduct.listenable.addListener(updateProducts);
     _discountProductBox.listenable.addListener(updateDiscountProducts);
-    Future.wait([getLatestProducts(), getDiscountProducts()]);
+    await getDiscountProducts();
+    await getLatestProducts(true);
   }
 
   @action
@@ -59,13 +66,22 @@ abstract class _StoreHome with Store {
   }
 
   @action
-  Future getLatestProducts({bool refresh = true}) async {
+  Future getLatestProducts(bool refresh) async {
+    loadMore = false;
+    if (refresh) {
+      latestCurrentPage = 0;
+    }
     try {
-      final productResponse =
-          await _api.getLatestProducts(Modular.get<StoreApp>().userProfile.id);
-      final products = productResponse.body.product.toList();
-      if (refresh && _boxProduct != null) _boxProduct.deleteAll();
-      _boxProduct.saveAll(products);
+      latestCurrentPage += 1;
+      if (latestCurrentPage <= latestTotalPage) {
+        final productResponse = await _api.getLatestProducts(
+            customerId: Modular.get<StoreApp>().userProfile.id,
+            currentPage: latestCurrentPage);
+        latestTotalPage = productResponse.body.lastPage;
+        final products = productResponse.body.product.toList();
+        if (refresh && _boxProduct != null) _boxProduct.deleteAll();
+        _boxProduct.saveAll(products);
+      }
     } catch (e) {
       exception = AppException(message: e.toString());
     }
@@ -88,34 +104,44 @@ abstract class _StoreHome with Store {
   @action
   Future operateFavorite(Product product) async {
     try {
-      final userId = Modular.get<StoreApp>().userProfile.id;
-
-      final favoriteItem = FavoriteItem((b) {
-        b.customerid = userId;
-        b.productid = product.productId;
-      });
-      final payload = FavoriteItemPayload((builder) {
-        builder.favoriteItem = favoriteItem.toBuilder();
-      });
-
-      final favoriteOperateResponse = await _api.addToFav(payload.toJson());
-      Modular.get<Logger>().d(
-          "body ${favoriteOperateResponse.body}\n error ${favoriteOperateResponse.error}");
-
-      // if (favoriteOperateResponse.body.message.toLowerCase() == "success") {
-      //   _onFavoriteSyncProducts(product);
-      // }
+      final favoriteOperateResponse = (!product.favorite)
+          ? await _api.addToFav(_getFavoriteItemPayload(product).toJson())
+          : await _api
+              .deleteFavorite(_getDeleteFavoriteItemPayload(product).toJson());
+      if (favoriteOperateResponse.body.message.toLowerCase() == "success") {
+        _onFavoriteSyncProducts(product);
+      }
     } catch (e) {
       exception = AppException(message: e.toString());
     }
   }
 
   @action
+  FavoriteItemPayload _getFavoriteItemPayload(Product product) {
+    final favoriteItem = FavoriteItem((b) {
+      b.customerid = Modular.get<StoreApp>().userProfile.id;
+      b.productid = product.productId;
+    });
+    final payload = FavoriteItemPayload((builder) {
+      builder.favoriteItem = favoriteItem.toBuilder();
+    });
+    return payload;
+  }
+
+  @action
+  DeleteFavoriteItemPayload _getDeleteFavoriteItemPayload(Product product) {
+    final payload = DeleteFavoriteItemPayload((b) {
+      b.favoriteId = product.favoriteId;
+    });
+    return payload;
+  }
+
+  @action
   Future<void> _onFavoriteSyncProducts(Product product) async {
-    final renewedProduct = product.rebuild((b) => b.favorite = !b.favorite);
+    final renewedProduct = product.rebuild((b) => b..favorite = !b.favorite);
     Modular.get<Logger>().d(renewedProduct.toString());
     await _syncFavoriteBox(renewedProduct);
-    if (product.discountPrice != null) {
+    if (product.discountPrice != 0) {
       _discountProductBox.save(renewedProduct);
     } else {
       _boxProduct.save(renewedProduct);

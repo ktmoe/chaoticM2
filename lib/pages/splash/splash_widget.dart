@@ -49,12 +49,14 @@ class _SplashWidgetState extends State<SplashWidget>
   }
 
   ReactionDisposer _onProceed() {
-    return when((_) => _storeApp.proceed, () {
-      Future.delayed(Duration(seconds: 2)).whenComplete(() {
-        try {
-          Modular.to.pushReplacementNamed(MainWidget.route);
-        } catch (e) {}
-      });
+    return reaction((_) => _storeApp.proceed, (proceed) {
+      if (proceed) {
+        Future.delayed(Duration(seconds: 2)).whenComplete(() {
+          try {
+            Modular.to.pushReplacementNamed(MainWidget.route);
+          } catch (e) {}
+        });
+      }
     });
   }
 

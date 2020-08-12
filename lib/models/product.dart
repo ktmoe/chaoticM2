@@ -15,60 +15,64 @@ abstract class Product implements Built<Product, ProductBuilder> {
 
   factory Product([updates(ProductBuilder b)]) = _$Product;
 
+  @nullable
   @HiveField(0)
+  @BuiltValueField(wireName: 'id')
+  String get favoriteId;
+  @HiveField(1)
   @nullable
   @BuiltValueField(wireName: 'productid')
   String get productId;
-  @HiveField(1)
+  @HiveField(2)
   @BuiltValueField(wireName: 'productcode')
   String get productCode;
-  @HiveField(2)
+  @HiveField(3)
   @BuiltValueField(wireName: 'productname')
   String get productName;
-  @HiveField(3)
+  @HiveField(4)
   @nullable
   @BuiltValueField(wireName: 'categoryid')
   String get categoryid;
-  @HiveField(4)
+  @HiveField(5)
   @nullable
   @BuiltValueField(wireName: 'subcategoryid')
   String get subcategoryid;
-  @HiveField(5)
+  @HiveField(6)
   @nullable
   @BuiltValueField(wireName: 'description')
   String get description;
-  @HiveField(6)
+  @HiveField(7)
   @BuiltValueField(wireName: 'specification')
   String get specification;
-  @HiveField(7)
+  @HiveField(8)
   @nullable
   @BuiltValueField(wireName: 'price')
   int get price;
-  @HiveField(8)
+  @HiveField(9)
   @BuiltValueField(wireName: 'status')
   int get status;
-  @HiveField(9)
+  @HiveField(10)
   @nullable
   @BuiltValueField(wireName: 'isFavorite')
   bool get favorite;
   @nullable
-  @HiveField(10)
+  @HiveField(11)
   @BuiltValueField(wireName: 'images')
   BuiltList<String> get images;
   @nullable
-  @HiveField(11)
+  @HiveField(12)
   @BuiltValueField(wireName: 'percent_amount')
   int get percentAmount;
   @nullable
-  @HiveField(12)
+  @HiveField(13)
   @BuiltValueField(wireName: 'discount_price')
   int get discountPrice;
   @nullable
-  @HiveField(13)
+  @HiveField(14)
   @BuiltValueField(wireName: 'discount_type')
   String get discountType;
   @nullable
-  @HiveField(14)
+  @HiveField(15)
   @BuiltValueField(wireName: 'soldcount')
   int get soldCount;
 

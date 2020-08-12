@@ -21,6 +21,11 @@ abstract class ProductResponse
 
   @BuiltValueField(wireName: 'data')
   BuiltList<Product> get product;
+
+  @nullable
+  @BuiltValueField(wireName: 'lastPage')
+  int get lastPage;
+
   String toJson() {
     return json
         .encode(serializers.serializeWith(ProductResponse.serializer, this));
