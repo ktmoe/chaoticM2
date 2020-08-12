@@ -236,7 +236,7 @@ class BottomSheet extends StatefulWidget {
 
 class _BottomSheetState extends State<BottomSheet> {
   final StoreCart _storeCart = Modular.get<StoreCart>();
-  String _favorite = "false";
+  bool _favorite = false;
   @override
   void initState() {
     _favorite = widget.product.favorite;
@@ -272,18 +272,14 @@ class _BottomSheetState extends State<BottomSheet> {
   Widget _buildFavoriteBtn() => IconButton(
       icon: Icon(
         M2Icon.favourite,
-        color: _favorite == 'true'
+        color: _favorite
             ? Theme.of(context).iconTheme.color
             : const Color(0x8AE9E9E9),
       ),
       onPressed: () async {
         await Modular.get<StoreHome>().operateFavorite(widget.product);
         setState(() {
-          if (_favorite == "true") {
-            _favorite = "false";
-          } else {
-            _favorite = "true";
-          }
+          _favorite = !_favorite;
         });
       });
 

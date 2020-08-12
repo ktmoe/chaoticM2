@@ -65,7 +65,7 @@ abstract class _StoreApp with Store {
   ObservableList<SubCategory> subCategoryList;
 
   @observable
-  bool perloadDone = false;
+  bool proceed = false;
 
   @computed
   Map<M2Category, List<SubCategory>> get subCategoryMap {
@@ -94,8 +94,8 @@ abstract class _StoreApp with Store {
     readUserProfile();
     if (!isFirstTime) {
       await _preloadAppData();
-      perloadDone = true;
     }
+    proceed = true;
   }
 
   @action

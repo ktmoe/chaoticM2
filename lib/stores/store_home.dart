@@ -86,7 +86,7 @@ abstract class _StoreHome with Store {
   @action
   Future operateFavorite(Product product) async {
     try {
-      final favoriteOperateResponse = await _api.operateFavorite(
+      final favoriteOperateResponse = await _api.addToFav(
           Modular.get<StoreApp>().userProfile.id, product.id);
       if (favoriteOperateResponse.body.message.toLowerCase() == "success") {
         _onFavoriteSyncProducts(product);
@@ -98,8 +98,7 @@ abstract class _StoreHome with Store {
 
   @action
   Future<void> _onFavoriteSyncProducts(Product product) async {
-    final renewedProduct = product
-        .rebuild((b) => b.favorite = b.favorite == 'true' ? 'false' : 'true');
+    final renewedProduct = product.rebuild((b) => b.favorite = !b.favorite);
     Modular.get<Logger>().d(renewedProduct.toString());
     await _syncFavoriteBox(renewedProduct);
     if (product.discountPrice != null) {
@@ -111,7 +110,7 @@ abstract class _StoreHome with Store {
 
   @action
   Future _syncFavoriteBox(Product product) async {
-    if (product.favorite == 'true') {
+    if (product.favorite) {
       await _boxFav.add(product);
     } else {
       await _boxFav.remove(product);

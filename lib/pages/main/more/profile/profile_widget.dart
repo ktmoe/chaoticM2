@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
-import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
 import 'package:m2mobile/pages/main/more/profile/edit_profile_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
@@ -29,29 +28,68 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       body: Stack(
         children: <Widget>[
           _buildBackgroundGradient(),
-          Container(
-              margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.15),
-              child: ScreenBgCard()),
           Observer(
-            builder: (context) => _buildProfileInfoArea(),
+            builder: (context) => SingleChildScrollView(
+              child: Stack(
+                children: <Widget>[
+                  _buildCircleProfilePhoto(),
+                  _buildProfileInfoArea()
+                ],
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
+  Widget _buildCircleProfilePhoto() => Stack(
+        children: <Widget>[
+          Container(
+            width: MediaQuery.of(context).size.width,
+            margin:
+                EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20))),
+          ),
+          Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.15 - 50),
+            child: Card(
+              elevation: Dimens.cardElevation,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50)),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: _storeApp.userProfile.imageurl.isNotEmpty
+                    ? FadeInImage(
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                        placeholder: AssetImage("lib/res/images/profile.png"),
+                        image: NetworkImage(_storeApp.userProfile.imageurl))
+                    : AssetImage("lib/res/images/profile.png"),
+              ),
+            ),
+          )
+        ],
+      );
+
   Widget _buildProfileInfoArea() => Align(
         alignment: Alignment.center,
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: Dimens.marginLargeX),
+          margin: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height * 0.15,
+              right: Dimens.marginLargeX,
+              left: Dimens.marginLargeX),
+          padding: const EdgeInsets.only(top: 40),
           child: Column(
             children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.05),
-                child: _buildCircleProfilePhoto(),
-              ),
               Padding(
                 padding: const EdgeInsets.all(Dimens.marginMedium2),
                 child: Text(
@@ -113,22 +151,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               )
             ],
           ),
-        ),
-      );
-
-  Widget _buildCircleProfilePhoto() => Card(
-        elevation: Dimens.cardElevation,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(50),
-          child: _storeApp.userProfile.imageurl.isNotEmpty
-              ? FadeInImage(
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
-                  placeholder: AssetImage("lib/res/images/profile.png"),
-                  image: NetworkImage(_storeApp.userProfile.imageurl))
-              : AssetImage("lib/res/images/profile.png"),
         ),
       );
 

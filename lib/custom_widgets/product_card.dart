@@ -208,13 +208,11 @@ class _ProductCardBottomState extends State<ProductCardBottom> {
               onTap: () async {
                 await Modular.get<StoreHome>().operateFavorite(widget.product);
               },
-              child: Icon(
-                M2Icon.favourite,
-                size: 16,
-                color: widget.product.favorite != 'true'
-                    ? Colors.white
-                    : Theme.of(context).iconTheme.color,
-              ),
+              child: Icon(M2Icon.favourite,
+                  size: 16,
+                  color: widget.product.favorite
+                      ? Theme.of(context).iconTheme.color
+                      : Colors.white),
             ),
             VerticalDivider(
               color: Colors.white,

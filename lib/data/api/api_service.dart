@@ -1,4 +1,5 @@
 import 'package:chopper/chopper.dart';
+import 'package:m2mobile/models/responses/bank_info_response.dart';
 import 'package:m2mobile/models/responses/force_update_response.dart';
 import 'package:m2mobile/models/responses/help_response.dart';
 import 'package:m2mobile/models/product.dart';
@@ -9,7 +10,6 @@ import 'package:m2mobile/models/responses/company_info_response.dart';
 import 'package:m2mobile/models/responses/m2_category_response.dart';
 import 'package:m2mobile/models/responses/sub_category_response.dart';
 import 'package:m2mobile/models/responses/refresh_token_response.dart';
-import 'package:m2mobile/models/responses/favorite_operate_response.dart';
 
 part 'api_service.chopper.dart';
 
@@ -25,9 +25,9 @@ abstract class ApiService extends ChopperService {
   @Get(path: '/productview/getProductByID')
   Future<Response<Product>> getProductById(@Query('productid') String id);
 
-  @Get(path: '/productview/getLatestProducts')
+  @Get(path: '/productview/getLatestProductList')
   Future<Response<ProductResponse>> getLatestProducts(
-      @Query('customerid') String customerId);
+      @Query('customerId') String customerId);
 
   @Get(path: '/productview/getDiscountProducts')
   Future<Response<ProductResponse>> getDiscountProducts(
@@ -41,7 +41,7 @@ abstract class ApiService extends ChopperService {
   @Get(path: '/customerview/getFavoriteList')
   Future<Response<ProductResponse>> getFavList(@Query('customerid') String id);
 
-  @Post(path: '/customerview/favorite')
+  @Post(path: '/favoriteview/addToFavorite')
   Future<Response> addToFav(@Query('customerid') String customerId,
       @Query('productid') String productId);
 
@@ -61,6 +61,10 @@ abstract class ApiService extends ChopperService {
   ///  Company Info ///
   @Get(path: '/companyview')
   Future<Response<CompanyInfoResponse>> getCompanyInfo();
+
+  /// Bank Info ///
+  @Get(path: '/bankview/getBankInfoList')
+  Future<Response<BankInfoResponse>> getBankInfo();
 
   ///  Category and SubCategories ///
   @Get(path: '/categoryview')
@@ -100,9 +104,4 @@ abstract class ApiService extends ChopperService {
   @Get(path: '/customerview/customerProfile')
   Future<Response<PostProfileResponse>> customerProfile(
       @Query('customerid') String customerId);
-
-  @Post(path: '/customerview/operateFavorite')
-  Future<Response<FavoriteOperateResponse>> operateFavorite(
-      @Query('customerid') String customerId,
-      @Query('productid') String productId);
 }

@@ -5,6 +5,7 @@ import 'package:m2mobile/models/responses/force_update_response.dart';
 import 'package:m2mobile/models/responses/help_response.dart';
 import 'package:m2mobile/models/help.dart';
 import 'package:m2mobile/models/product.dart';
+import 'package:m2mobile/models/bank_account.dart';
 import 'package:m2mobile/models/responses/login_response.dart';
 import 'package:m2mobile/models/responses/refresh_token_response.dart';
 import 'package:m2mobile/models/responses/product_response.dart';
@@ -19,6 +20,9 @@ import 'package:m2mobile/models/user_profile.dart';
 import 'package:m2mobile/models/responses/file_upload_response.dart';
 import 'package:m2mobile/models/responses/post_profile_response.dart';
 import 'package:m2mobile/models/responses/favorite_operate_response.dart';
+import 'package:m2mobile/models/responses/bank_info_response.dart';
+import 'package:m2mobile/models/payloads/favorite_item.dart';
+import 'package:m2mobile/models/payloads/favorite_item_payload.dart';
 part 'serializers.g.dart';
 
 @SerializersFor([
@@ -39,7 +43,11 @@ part 'serializers.g.dart';
   PostProfileResponse,
   LoginResponse,
   FavoriteOperateResponse,
-  RefreshTokenResponse
+  RefreshTokenResponse,
+  BankAccount,
+  BankInfoResponse,
+  FavoriteItemPayload,
+  FavoriteItem
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

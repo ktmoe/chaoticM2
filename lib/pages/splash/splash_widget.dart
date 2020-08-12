@@ -42,12 +42,14 @@ class _SplashWidgetState extends State<SplashWidget>
           StoreRedirect.redirect(
               androidAppId: "com.gnwt.m2mobile", iOSAppId: "");
         }
+      } else {
+        await _storeApp.init();
       }
     });
   }
 
-  ReactionDisposer _onPreloadDone() {
-    return when((_) => _storeApp.perloadDone, () {
+  ReactionDisposer _onProceed() {
+    return when((_) => _storeApp.proceed, () {
       Future.delayed(Duration(seconds: 2)).whenComplete(() {
         try {
           Modular.to.pushReplacementNamed(MainWidget.route);
@@ -69,12 +71,11 @@ class _SplashWidgetState extends State<SplashWidget>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _storeApp.init();
     _disposers.addAll([
       _onConnectivityChanged(),
       _onForceUpdateChanged(),
       _onException(),
-      _onPreloadDone()
+      _onProceed()
     ]);
   }
 

@@ -7,8 +7,12 @@ part of 'serializers.dart';
 // **************************************************************************
 
 Serializers _$serializers = (new Serializers().toBuilder()
+      ..add(BankAccount.serializer)
+      ..add(BankInfoResponse.serializer)
       ..add(CompanyInfo.serializer)
       ..add(CompanyInfoResponse.serializer)
+      ..add(FavoriteItem.serializer)
+      ..add(FavoriteItemPayload.serializer)
       ..add(FavoriteOperateResponse.serializer)
       ..add(FileUploadResponse.serializer)
       ..add(ForceUpdate.serializer)
@@ -25,6 +29,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(SubCategory.serializer)
       ..add(SubCategoryResponse.serializer)
       ..add(UserProfile.serializer)
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(BankAccount)]),
+          () => new ListBuilder<BankAccount>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(M2Category)]),
           () => new ListBuilder<M2Category>())

@@ -9,7 +9,7 @@ class LoggingResponseInterceptor extends ResponseInterceptor {
   LoggingResponseInterceptor(this.logger);
   @override
   FutureOr<Response> onResponse(Response response) {
-    logger.i(response.body);
+    logger.i('raw response ${response.body}');
     return response;
   }
 }

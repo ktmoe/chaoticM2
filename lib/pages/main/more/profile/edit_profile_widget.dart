@@ -200,41 +200,45 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
         ],
       );
 
-  Widget _buildProfileInfoArea() => Container(
-        margin: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height * 0.15,
-            right: Dimens.marginLargeX,
-            left: Dimens.marginLargeX),
-        padding: const EdgeInsets.only(top: 40),
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(Dimens.marginMedium2),
-              child: const Text(
-                "Upload Profile Photo",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: Dimens.textRegular2x),
+  Widget _buildProfileInfoArea() => Align(
+        alignment: Alignment.center,
+        child: Container(
+          margin: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height * 0.15,
+              right: Dimens.marginLargeX,
+              left: Dimens.marginLargeX),
+          padding: const EdgeInsets.only(top: 40),
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(Dimens.marginMedium2),
+                child: const Text(
+                  "Upload Profile Photo",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: Dimens.textRegular2x),
+                ),
               ),
-            ),
-            Container(
-                margin: const EdgeInsets.only(bottom: Dimens.marginMedium2),
-                child: _buildNameTextField()),
-            Container(
-                margin: const EdgeInsets.only(bottom: Dimens.marginMedium2),
-                child: _buildPhoneNoTextField()),
-            Container(
-                margin: const EdgeInsets.only(bottom: Dimens.marginMedium2),
-                child: _buildAddressTextField()),
-            widget.register
-                ? Container(
-                    margin: const EdgeInsets.only(bottom: Dimens.marginMedium2),
-                    child: _buildPasswordTextField())
-                : Container(),
-            SizedBox(height: Dimens.marginLargeX),
-            _buildCorrectDoneButton()
-          ],
+              Container(
+                  margin: const EdgeInsets.only(bottom: Dimens.marginMedium2),
+                  child: _buildNameTextField()),
+              Container(
+                  margin: const EdgeInsets.only(bottom: Dimens.marginMedium2),
+                  child: _buildPhoneNoTextField()),
+              Container(
+                  margin: const EdgeInsets.only(bottom: Dimens.marginMedium2),
+                  child: _buildAddressTextField()),
+              widget.register
+                  ? Container(
+                      margin:
+                          const EdgeInsets.only(bottom: Dimens.marginMedium2),
+                      child: _buildPasswordTextField())
+                  : Container(),
+              SizedBox(height: Dimens.marginLargeX),
+              _buildCorrectDoneButton()
+            ],
+          ),
         ),
       );
 
