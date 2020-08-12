@@ -1,4 +1,5 @@
 import 'package:chopper/chopper.dart';
+import 'package:m2mobile/models/responses/cart_list_response.dart';
 import 'package:m2mobile/models/responses/force_update_response.dart';
 import 'package:m2mobile/models/responses/help_response.dart';
 import 'package:m2mobile/models/product.dart';
@@ -105,4 +106,22 @@ abstract class ApiService extends ChopperService {
   Future<Response<FavoriteOperateResponse>> operateFavorite(
       @Query('customerid') String customerId,
       @Query('productid') String productId);
+
+/// cart  ///
+  ///
+  @Post(path: '/cartview/getCartItemList')
+  Future<Response<CartListResponse>> getCartList(
+      @Query('customerid') String customerId,
+    );
+
+  @Post(path: '/cartview/addToCart')
+  Future<Response<CartListResponse>> addToCart(
+        @Body() String item
+      );
+
+  @Post(path: '/cartview/updateCartItem')
+  Future<Response<CartListResponse>> updateCart(
+      @Query('cartId') String cartId,
+      );
+
 }

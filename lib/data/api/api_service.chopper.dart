@@ -196,4 +196,28 @@ class _$ApiService extends ApiService {
     return client
         .send<FavoriteOperateResponse, FavoriteOperateResponse>($request);
   }
+
+  @override
+  Future<Response<CartListResponse>> getCartList(String customerId) {
+    final $url = '/api/cartview/getCartItemList';
+    final $params = <String, dynamic>{'customerid': customerId};
+    final $request = Request('POST', $url, client.baseUrl, parameters: $params);
+    return client.send<CartListResponse, CartListResponse>($request);
+  }
+
+  @override
+  Future<Response<CartListResponse>> addToCart(String item) {
+    final $url = '/api/cartview/addToCart';
+    final $body = item;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<CartListResponse, CartListResponse>($request);
+  }
+
+  @override
+  Future<Response<CartListResponse>> updateCart(String cartId) {
+    final $url = '/api/cartview/updateCartItem';
+    final $params = <String, dynamic>{'cartId': cartId};
+    final $request = Request('POST', $url, client.baseUrl, parameters: $params);
+    return client.send<CartListResponse, CartListResponse>($request);
+  }
 }
