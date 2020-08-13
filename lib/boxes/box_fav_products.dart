@@ -30,12 +30,19 @@ class BoxFav implements Disposable {
     }
   }
 
+  String favoriteId(String productId) {
+    return _box.values
+        .where((element) => element.productId == productId)
+        .first
+        .favoriteId;
+  }
+
   Future<void> add(Product product) async {
-    await _box.put(product.productId, product);
+    await _box.put(product.favoriteId, product);
   }
 
   Future<void> remove(Product product) async {
-    await _box.delete(product.productId);
+    await _box.delete(product.favoriteId);
   }
 
   void delete() => _box.deleteAll(_box.keys);

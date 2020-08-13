@@ -9,7 +9,7 @@ part 'store_help.g.dart';
 
 class StoreHelp = _StoreHelp with _$StoreHelp;
 
-abstract class _StoreHelp with Store, Disposable {
+abstract class _StoreHelp with Store {
   final ApiService api = Modular.get<ApiService>();
 
   BoxHelp _boxHelp;
@@ -22,9 +22,10 @@ abstract class _StoreHelp with Store, Disposable {
 
   @action
   void updateInfo() {
-    final helpInfo = _boxHelp.listenable.value.get(BoxHelp.infoKey);
-    if (helpInfo != null) {
-      phones = ObservableList.of(helpInfo.customerservicePhone.split(','));
+    final helpInfo = _boxHelp.listenable.value.values;
+    if (helpInfo.isNotEmpty) {
+      phones =
+          ObservableList.of(helpInfo.first.customerservicePhone.split(','));
     }
   }
 
@@ -40,14 +41,9 @@ abstract class _StoreHelp with Store, Disposable {
     try {
       final helpResponse = await api.getHelpInfo();
       final Help helpInfo = helpResponse.body.help;
-      await _boxHelp.save(helpInfo);
+      _boxHelp.save(helpInfo);
     } catch (e) {
       exception = AppException(message: e.toString());
     }
-  }
-
-  @override
-  void dispose() {
-    _boxHelp.dispose();
   }
 }

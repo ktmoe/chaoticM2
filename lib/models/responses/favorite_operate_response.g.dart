@@ -30,6 +30,13 @@ class _$FavoriteOperateResponseSerializer
         ..add(serializers.serialize(object.message,
             specifiedType: const FullType(String)));
     }
+    if (object.favoriteId != null) {
+      result
+        ..add('data')
+        ..add(serializers.serialize(object.favoriteId,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(FavoriteId)])));
+    }
     return result;
   }
 
@@ -49,6 +56,12 @@ class _$FavoriteOperateResponseSerializer
           result.message = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'data':
+          result.favoriteId.replace(serializers.deserialize(value,
+                  specifiedType: const FullType(
+                      BuiltList, const [const FullType(FavoriteId)]))
+              as BuiltList<Object>);
+          break;
       }
     }
 
@@ -59,12 +72,14 @@ class _$FavoriteOperateResponseSerializer
 class _$FavoriteOperateResponse extends FavoriteOperateResponse {
   @override
   final String message;
+  @override
+  final BuiltList<FavoriteId> favoriteId;
 
   factory _$FavoriteOperateResponse(
           [void Function(FavoriteOperateResponseBuilder) updates]) =>
       (new FavoriteOperateResponseBuilder()..update(updates)).build();
 
-  _$FavoriteOperateResponse._({this.message}) : super._();
+  _$FavoriteOperateResponse._({this.message, this.favoriteId}) : super._();
 
   @override
   FavoriteOperateResponse rebuild(
@@ -78,18 +93,21 @@ class _$FavoriteOperateResponse extends FavoriteOperateResponse {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is FavoriteOperateResponse && message == other.message;
+    return other is FavoriteOperateResponse &&
+        message == other.message &&
+        favoriteId == other.favoriteId;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, message.hashCode));
+    return $jf($jc($jc(0, message.hashCode), favoriteId.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('FavoriteOperateResponse')
-          ..add('message', message))
+          ..add('message', message)
+          ..add('favoriteId', favoriteId))
         .toString();
   }
 }
@@ -103,11 +121,18 @@ class FavoriteOperateResponseBuilder
   String get message => _$this._message;
   set message(String message) => _$this._message = message;
 
+  ListBuilder<FavoriteId> _favoriteId;
+  ListBuilder<FavoriteId> get favoriteId =>
+      _$this._favoriteId ??= new ListBuilder<FavoriteId>();
+  set favoriteId(ListBuilder<FavoriteId> favoriteId) =>
+      _$this._favoriteId = favoriteId;
+
   FavoriteOperateResponseBuilder();
 
   FavoriteOperateResponseBuilder get _$this {
     if (_$v != null) {
       _message = _$v.message;
+      _favoriteId = _$v.favoriteId?.toBuilder();
       _$v = null;
     }
     return this;
@@ -128,7 +153,22 @@ class FavoriteOperateResponseBuilder
 
   @override
   _$FavoriteOperateResponse build() {
-    final _$result = _$v ?? new _$FavoriteOperateResponse._(message: message);
+    _$FavoriteOperateResponse _$result;
+    try {
+      _$result = _$v ??
+          new _$FavoriteOperateResponse._(
+              message: message, favoriteId: _favoriteId?.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'favoriteId';
+        _favoriteId?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'FavoriteOperateResponse', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

@@ -259,7 +259,8 @@ class _LoginWidgetState extends State<LoginWidget> {
             child: InkWell(
                 onTap: () async {
                   final yes = await context.standardWarningDialog(
-                      dialogType: WarningDialogType.forgotPasswordDialog);
+                      dialogType:
+                          '${WarningDialogType.forgotPasswordDialog}${_storeApp.companyInfo.phone.split(',').first}');
                   if (yes) {
                     await _phoneCallWorks();
                   }
@@ -272,14 +273,14 @@ class _LoginWidgetState extends State<LoginWidget> {
     if (!status.isGranted) {
       await _requestAndMakeCall();
     } else {
-      await launch('tel:09790428136');
+      await launch('tel:${_storeApp.companyInfo.phone.split(',').first}');
     }
   }
 
   Future<void> _requestAndMakeCall() async {
     final newStatus = await Permission.phone.request();
     if (newStatus.isGranted) {
-      await launch('tel:09790428136');
+      await launch('tel:${_storeApp.companyInfo.phone.split(',').first}');
     }
   }
 }

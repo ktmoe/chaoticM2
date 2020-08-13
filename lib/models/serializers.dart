@@ -5,6 +5,7 @@ import 'package:m2mobile/models/force_update.dart';
 import 'package:m2mobile/models/requests/add_to_cart_request.dart';
 import 'package:m2mobile/models/requests/update_cart_request.dart';
 import 'package:m2mobile/models/responses/cart_list_response.dart';
+import 'package:m2mobile/models/responses/favorite_id.dart';
 import 'package:m2mobile/models/responses/force_update_response.dart';
 import 'package:m2mobile/models/responses/help_response.dart';
 import 'package:m2mobile/models/help.dart';
@@ -63,7 +64,8 @@ part 'serializers.g.dart';
   CartItem,
   CartListResponse,
   UpdateCartRequest,
-  UpdateItem
+  UpdateItem,
+  FavoriteId
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

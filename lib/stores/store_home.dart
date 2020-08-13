@@ -3,9 +3,11 @@ import 'package:logger/logger.dart';
 import 'package:m2mobile/boxes/box_products.dart';
 import 'package:m2mobile/boxes/discount_products_box.dart';
 import 'package:m2mobile/boxes/box_fav_products.dart';
+import 'package:m2mobile/boxes/box_products_by_category.dart';
 import 'package:m2mobile/data/api/api_service.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:m2mobile/models/product.dart';
+import 'package:m2mobile/models/responses/favorite_id.dart';
 import 'package:m2mobile/stores/store_app.dart';
 import 'package:m2mobile/models/payloads/favorite_item_payload.dart';
 import 'package:m2mobile/models/payloads/delete_favorite_item_payload.dart';
@@ -22,6 +24,7 @@ abstract class _StoreHome with Store {
   BoxProduct _boxProduct;
   DiscountProductBox _discountProductBox;
   BoxFav _boxFav;
+  BoxProductByCategory _boxProductByCategory;
 
   @observable
   AppException exception;
@@ -46,6 +49,7 @@ abstract class _StoreHome with Store {
     _boxProduct = await BoxProduct.create();
     _discountProductBox = await DiscountProductBox.create();
     _boxFav = await BoxFav.create();
+    _boxProductByCategory = await BoxProductByCategory.create();
     updateProducts();
     updateDiscountProducts();
     _boxProduct.listenable.addListener(updateProducts);
@@ -111,7 +115,8 @@ abstract class _StoreHome with Store {
           : await _api
               .deleteFavorite(_getDeleteFavoriteItemPayload(product).toJson());
       if (favoriteOperateResponse.body.message.toLowerCase() == "success") {
-        _onFavoriteSyncProducts(product);
+        _onFavoriteSyncProducts(
+            product, favoriteOperateResponse.body.favoriteId?.first);
       }
     } catch (e) {
       exception = AppException(message: e.toString());
@@ -139,22 +144,32 @@ abstract class _StoreHome with Store {
   }
 
   @action
-  Future<void> _onFavoriteSyncProducts(Product product) async {
-    final renewedProduct = product.rebuild((b) => b..favorite = !b.favorite);
-    Modular.get<Logger>().d(renewedProduct.toString());
+  Future<void> _onFavoriteSyncProducts(
+      Product product, FavoriteId favoriteId) async {
+    final renewedProduct = product.rebuild((b) => b
+      ..favorite = !b.favorite
+      ..favoriteId = favoriteId == null ? b.favoriteId : favoriteId.id);
+    Modular.get<Logger>().d("renewed${renewedProduct.toString()}");
     await _syncFavoriteBox(renewedProduct);
     if (product.discountPrice != 0) {
       _discountProductBox.save(renewedProduct);
-    } else {
+    }
+    if (_boxProduct.contain(product)) {
       _boxProduct.save(renewedProduct);
+    }
+    if (_boxProductByCategory.contain(product)) {
+      Modular.get<Logger>().d("going to category ${renewedProduct.toString()}");
+      _boxProductByCategory.save(renewedProduct);
     }
   }
 
   @action
   Future _syncFavoriteBox(Product product) async {
     if (product.favorite) {
+      Modular.get<Logger>().d("ToAddBox${product.toString()}");
       await _boxFav.add(product);
     } else {
+      Modular.get<Logger>().d("ToRemoveBox${product.toString()}");
       await _boxFav.remove(product);
     }
   }

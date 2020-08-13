@@ -137,9 +137,9 @@ mixin _$StoreHome on _StoreHome, Store {
       AsyncAction('_StoreHome._onFavoriteSyncProducts');
 
   @override
-  Future<void> _onFavoriteSyncProducts(Product product) {
+  Future<void> _onFavoriteSyncProducts(Product product, FavoriteId favoriteId) {
     return _$_onFavoriteSyncProductsAsyncAction
-        .run(() => super._onFavoriteSyncProducts(product));
+        .run(() => super._onFavoriteSyncProducts(product, favoriteId));
   }
 
   final _$_syncFavoriteBoxAsyncAction =

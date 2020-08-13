@@ -38,8 +38,8 @@ abstract class ApiService extends ChopperService {
 
   @Get(path: '/productview/getProductListByCategory')
   Future<Response<ProductResponse>> getProductsByCategory(
-    @Query('subCategoryId') String subCategoryId
-  );
+      @Query('customerId') String customerId,
+      @Query('subCategoryId') String subCategoryId);
 
   /// help ///
   @Get(path: '/helpview')

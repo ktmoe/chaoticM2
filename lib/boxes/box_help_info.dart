@@ -28,9 +28,15 @@ class BoxHelp implements Disposable {
 
   ValueListenable<Box<Help>> get listenable => _box.listenable();
 
-  Future save(Help help) async {
-    await _box.put(infoKey, help);
+  void saveAll(List<Help> help) {
+    help.forEach((element) {
+      save(element);
+    });
   }
 
-  void delete() => _box.delete(infoKey);
+  void save(Help help) {
+    _box.put(help.id, help);
+  }
+
+  void delete() => _box.deleteAll(_box.keys);
 }
