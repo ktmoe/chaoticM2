@@ -32,6 +32,7 @@ abstract class _CartStore with Store {
 
   @action
   void updateCart(){
+    print("cart items in box updated");
     cartItems = ObservableList.of(_box.listenable.value.values.toList());
   }
 
@@ -47,7 +48,7 @@ abstract class _CartStore with Store {
 
   Future addToCart(Product product) async{
     try{
-      final item = CartItem((b)=>b..quantity = 1..productid = product.productId..customerid = appBox.getUserProfile().id);
+      //final item = CartItem((b)=>b..quantity = 1..productid = product.productId..customerid = appBox.getUserProfile().id);
       final addToCartRequest = AddToCartRequest((b)=>b..cartItem.productid = product.productId..cartItem.customerid = appBox.getUserProfile().id
         ..cartItem.quantity = 1);
       api.addToCart(addToCartRequest.toJson());
@@ -79,7 +80,9 @@ abstract class _CartStore with Store {
   }
 
   int getProductCountById(String id){
-    return cartItems.toList().singleWhere((product) => product.productId == id).quantity;
+    final count = cartItems.toList().singleWhere((product) => product.productId == id).quantity;
+    print("count by item id => $count");
+    return count;
   }
 
 
