@@ -78,7 +78,7 @@ abstract class Product implements Built<Product, ProductBuilder> {
   @nullable
   @HiveField(16)
   @BuiltValueField(wireName: 'id')
-  int get id;
+  String get cartId;
 
   String toJson() {
     return json.encode(serializers.serializeWith(Product.serializer, this));

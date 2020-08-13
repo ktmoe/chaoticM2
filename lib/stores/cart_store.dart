@@ -72,11 +72,14 @@ abstract class _CartStore with Store {
 
   Future updateCartItemQty(String cartId,String updateItem) async{
     try{
-      String userId = appBox.getUserProfile().id;
       await api.updateCart(cartId,updateItem);
     }catch(e){
-
+       print("update cart error => ${e.toString()}");
     }
+  }
+
+  int getProductCountById(String id){
+    return cartItems.toList().singleWhere((product) => product.productId == id).quantity;
   }
 
 

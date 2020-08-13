@@ -103,11 +103,11 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
         ..add(serializers.serialize(object.quantity,
             specifiedType: const FullType(int)));
     }
-    if (object.id != null) {
+    if (object.cartId != null) {
       result
         ..add('id')
-        ..add(serializers.serialize(object.id,
-            specifiedType: const FullType(int)));
+        ..add(serializers.serialize(object.cartId,
+            specifiedType: const FullType(String)));
     }
     return result;
   }
@@ -190,8 +190,8 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
               specifiedType: const FullType(int)) as int;
           break;
         case 'id':
-          result.id = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+          result.cartId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
           break;
       }
     }
@@ -234,7 +234,7 @@ class _$Product extends Product {
   @override
   final int quantity;
   @override
-  final int id;
+  final String cartId;
 
   factory _$Product([void Function(ProductBuilder) updates]) =>
       (new ProductBuilder()..update(updates)).build();
@@ -256,7 +256,7 @@ class _$Product extends Product {
       this.discountType,
       this.soldCount,
       this.quantity,
-      this.id})
+      this.cartId})
       : super._() {
     if (productCode == null) {
       throw new BuiltValueNullFieldError('Product', 'productCode');
@@ -299,7 +299,7 @@ class _$Product extends Product {
         discountType == other.discountType &&
         soldCount == other.soldCount &&
         quantity == other.quantity &&
-        id == other.id;
+        cartId == other.cartId;
   }
 
   @override
@@ -342,7 +342,7 @@ class _$Product extends Product {
                     discountType.hashCode),
                 soldCount.hashCode),
             quantity.hashCode),
-        id.hashCode));
+        cartId.hashCode));
   }
 
   @override
@@ -364,7 +364,7 @@ class _$Product extends Product {
           ..add('discountType', discountType)
           ..add('soldCount', soldCount)
           ..add('quantity', quantity)
-          ..add('id', id))
+          ..add('cartId', cartId))
         .toString();
   }
 }
@@ -439,9 +439,9 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
   int get quantity => _$this._quantity;
   set quantity(int quantity) => _$this._quantity = quantity;
 
-  int _id;
-  int get id => _$this._id;
-  set id(int id) => _$this._id = id;
+  String _cartId;
+  String get cartId => _$this._cartId;
+  set cartId(String cartId) => _$this._cartId = cartId;
 
   ProductBuilder();
 
@@ -463,7 +463,7 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
       _discountType = _$v.discountType;
       _soldCount = _$v.soldCount;
       _quantity = _$v.quantity;
-      _id = _$v.id;
+      _cartId = _$v.cartId;
       _$v = null;
     }
     return this;
@@ -504,7 +504,7 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
               discountType: discountType,
               soldCount: soldCount,
               quantity: quantity,
-              id: id);
+              cartId: cartId);
     } catch (_) {
       String _$failedField;
       try {
@@ -554,7 +554,7 @@ class ProductAdapter extends TypeAdapter<Product> {
           ..discountType = fields[13] as String
           ..soldCount = fields[14] as int
           ..quantity = fields[15] as int
-          ..id = fields[16] as int)
+          ..cartId = fields[16] as String)
         .build();
   }
 
@@ -595,6 +595,6 @@ class ProductAdapter extends TypeAdapter<Product> {
       ..writeByte(15)
       ..write(obj.quantity)
       ..writeByte(16)
-      ..write(obj.id);
+      ..write(obj.cartId);
   }
 }

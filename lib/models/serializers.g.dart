@@ -33,6 +33,8 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(RefreshTokenResponse.serializer)
       ..add(SubCategory.serializer)
       ..add(SubCategoryResponse.serializer)
+      ..add(UpdateCartRequest.serializer)
+      ..add(UpdateItem.serializer)
       ..add(UserProfile.serializer)
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(BankAccount)]),

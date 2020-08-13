@@ -29,12 +29,12 @@ class _OrderItemCardState extends State<OrderItemCard> {
 
   @override
   void initState() {
-    qty = widget.count;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    qty = _cartStore.getProductCountById(widget.product.productId);
     return Container(
       width: _storeCart.showSelect
           ? MediaQuery.of(context).size.width -
@@ -69,9 +69,9 @@ class _OrderItemCardState extends State<OrderItemCard> {
               setState(() {
                   qty+=1;
               });
-              Future.delayed(const Duration(milliseconds: 3000),() async{
+              Future.delayed(const Duration(milliseconds: 2000),() async{
                 final updateItem = UpdateCartRequest((b)=>b..updateItem.quantity = qty);
-               // _cartStore.updateCartItemQty(widget.product.id,updateItem);
+                _cartStore.updateCartItemQty(widget.product.cartId,updateItem.toJson());
               });
             },
             child: Card(
@@ -89,15 +89,16 @@ class _OrderItemCardState extends State<OrderItemCard> {
             ),
           ),
           const SizedBox(width: Dimens.marginMedium),
-          Text('${widget.count}'),
+          Text("$qty"),
           const SizedBox(width: Dimens.marginMedium),
           InkWell(
             onTap: () {
               setState(() {
                 qty -= 1;
               });
-              Future.delayed(const Duration(milliseconds: 3000),() async{
-                // _cartStore.updateCartItemQty(widget.product.id,updateItem);
+              Future.delayed(const Duration(milliseconds: 2000),() async{
+                final updateItem = UpdateCartRequest((b)=>b..updateItem.quantity = qty);
+                 _cartStore.updateCartItemQty(widget.product.cartId,updateItem.toJson());
               });
              // _storeCart.removeFromCart(widget.product);
             },

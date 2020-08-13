@@ -16,7 +16,7 @@ abstract class UpdateCartRequest
   factory UpdateCartRequest([updates(UpdateCartRequestBuilder b)]) =
   _$UpdateCartRequest;
 
-  @BuiltValueField(wireName: 'update_item')
+  @BuiltValueField(wireName: 'cartItem')
   UpdateItem get updateItem;
   String toJson() {
     return json

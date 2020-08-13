@@ -20,7 +20,7 @@ class _$UpdateCartRequestSerializer
   Iterable<Object> serialize(Serializers serializers, UpdateCartRequest object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'update_item',
+      'cartItem',
       serializers.serialize(object.updateItem,
           specifiedType: const FullType(UpdateItem)),
     ];
@@ -40,7 +40,7 @@ class _$UpdateCartRequestSerializer
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'update_item':
+        case 'cartItem':
           result.updateItem.replace(serializers.deserialize(value,
               specifiedType: const FullType(UpdateItem)) as UpdateItem);
           break;
