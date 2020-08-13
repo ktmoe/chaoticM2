@@ -1,6 +1,7 @@
 import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:m2mobile/models/force_update.dart';
+import 'package:m2mobile/models/responses/favorite_id.dart';
 import 'package:m2mobile/models/responses/force_update_response.dart';
 import 'package:m2mobile/models/responses/help_response.dart';
 import 'package:m2mobile/models/help.dart';
@@ -53,7 +54,8 @@ part 'serializers.g.dart';
   FavoriteItem,
   DeleteFavoriteItemPayload,
   Order,
-  OrderListResponse
+  OrderListResponse,
+  FavoriteId
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

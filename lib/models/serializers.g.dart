@@ -12,6 +12,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(CompanyInfo.serializer)
       ..add(CompanyInfoResponse.serializer)
       ..add(DeleteFavoriteItemPayload.serializer)
+      ..add(FavoriteId.serializer)
       ..add(FavoriteItem.serializer)
       ..add(FavoriteItemPayload.serializer)
       ..add(FavoriteOperateResponse.serializer)
@@ -35,6 +36,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(BankAccount)]),
           () => new ListBuilder<BankAccount>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(FavoriteId)]),
+          () => new ListBuilder<FavoriteId>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(M2Category)]),
           () => new ListBuilder<M2Category>())

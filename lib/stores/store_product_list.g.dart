@@ -24,6 +24,43 @@ mixin _$StoreProductList on _StoreProductListBase, Store {
     });
   }
 
+  final _$subCategoryAtom = Atom(name: '_StoreProductListBase.subCategory');
+
+  @override
+  String get subCategory {
+    _$subCategoryAtom.reportRead();
+    return super.subCategory;
+  }
+
+  @override
+  set subCategory(String value) {
+    _$subCategoryAtom.reportWrite(value, super.subCategory, () {
+      super.subCategory = value;
+    });
+  }
+
+  final _$initDoneAtom = Atom(name: '_StoreProductListBase.initDone');
+
+  @override
+  bool get initDone {
+    _$initDoneAtom.reportRead();
+    return super.initDone;
+  }
+
+  @override
+  set initDone(bool value) {
+    _$initDoneAtom.reportWrite(value, super.initDone, () {
+      super.initDone = value;
+    });
+  }
+
+  final _$initAsyncAction = AsyncAction('_StoreProductListBase.init');
+
+  @override
+  Future<void> init() {
+    return _$initAsyncAction.run(() => super.init());
+  }
+
   final _$getProductsByCategoryAsyncAction =
       AsyncAction('_StoreProductListBase.getProductsByCategory');
 
@@ -33,10 +70,26 @@ mixin _$StoreProductList on _StoreProductListBase, Store {
         .run(() => super.getProductsByCategory(subcategoryId, refresh));
   }
 
+  final _$_StoreProductListBaseActionController =
+      ActionController(name: '_StoreProductListBase');
+
+  @override
+  void updateProducts() {
+    final _$actionInfo = _$_StoreProductListBaseActionController.startAction(
+        name: '_StoreProductListBase.updateProducts');
+    try {
+      return super.updateProducts();
+    } finally {
+      _$_StoreProductListBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
-products: ${products}
+products: ${products},
+subCategory: ${subCategory},
+initDone: ${initDone}
     ''';
   }
 }

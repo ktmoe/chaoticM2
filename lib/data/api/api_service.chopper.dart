@@ -47,9 +47,12 @@ class _$ApiService extends ApiService {
 
   @override
   Future<Response<ProductResponse>> getProductsByCategory(
-      String subCategoryId) {
+      String customerId, String subCategoryId) {
     final $url = '/api/productview/getProductListByCategory';
-    final $params = <String, dynamic>{'subCategoryId': subCategoryId};
+    final $params = <String, dynamic>{
+      'customerId': customerId,
+      'subCategoryId': subCategoryId
+    };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<ProductResponse, ProductResponse>($request);
   }
