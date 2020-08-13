@@ -30,6 +30,12 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
       'status',
       serializers.serialize(object.status, specifiedType: const FullType(int)),
     ];
+    if (object.favoriteId != null) {
+      result
+        ..add('id')
+        ..add(serializers.serialize(object.favoriteId,
+            specifiedType: const FullType(String)));
+    }
     if (object.productId != null) {
       result
         ..add('productid')
@@ -123,6 +129,10 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
+        case 'id':
+          result.favoriteId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'productid':
           result.productId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -202,6 +212,8 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
 
 class _$Product extends Product {
   @override
+  final String favoriteId;
+  @override
   final String productId;
   @override
   final String productCode;
@@ -240,7 +252,8 @@ class _$Product extends Product {
       (new ProductBuilder()..update(updates)).build();
 
   _$Product._(
-      {this.productId,
+      {this.favoriteId,
+      this.productId,
       this.productCode,
       this.productName,
       this.categoryid,
@@ -283,6 +296,7 @@ class _$Product extends Product {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Product &&
+        favoriteId == other.favoriteId &&
         productId == other.productId &&
         productCode == other.productCode &&
         productName == other.productName &&
@@ -321,7 +335,10 @@ class _$Product extends Product {
                                                             $jc(
                                                                 $jc(
                                                                     $jc(
-                                                                        0,
+                                                                        $jc(
+                                                                            0,
+                                                                            favoriteId
+                                                                                .hashCode),
                                                                         productId
                                                                             .hashCode),
                                                                     productCode
@@ -348,6 +365,7 @@ class _$Product extends Product {
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Product')
+          ..add('favoriteId', favoriteId)
           ..add('productId', productId)
           ..add('productCode', productCode)
           ..add('productName', productName)
@@ -371,6 +389,10 @@ class _$Product extends Product {
 
 class ProductBuilder implements Builder<Product, ProductBuilder> {
   _$Product _$v;
+
+  String _favoriteId;
+  String get favoriteId => _$this._favoriteId;
+  set favoriteId(String favoriteId) => _$this._favoriteId = favoriteId;
 
   String _productId;
   String get productId => _$this._productId;
@@ -447,6 +469,7 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
 
   ProductBuilder get _$this {
     if (_$v != null) {
+      _favoriteId = _$v.favoriteId;
       _productId = _$v.productId;
       _productCode = _$v.productCode;
       _productName = _$v.productName;
@@ -488,6 +511,7 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
     try {
       _$result = _$v ??
           new _$Product._(
+              favoriteId: favoriteId,
               productId: productId,
               productCode: productCode,
               productName: productName,
@@ -538,22 +562,23 @@ class ProductAdapter extends TypeAdapter<Product> {
       for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return (ProductBuilder()
-          ..productId = fields[0] as String
-          ..productCode = fields[1] as String
-          ..productName = fields[2] as String
-          ..categoryid = fields[3] as String
-          ..subcategoryid = fields[4] as String
-          ..description = fields[5] as String
-          ..specification = fields[6] as String
-          ..price = fields[7] as int
-          ..status = fields[8] as int
-          ..favorite = fields[9] as bool
-          ..images = ListBuilder<String>(fields[10] as List)
-          ..percentAmount = fields[11] as int
-          ..discountPrice = fields[12] as int
-          ..discountType = fields[13] as String
-          ..soldCount = fields[14] as int
-          ..quantity = fields[15] as int
+          ..favoriteId = fields[0] as String
+          ..productId = fields[1] as String
+          ..productCode = fields[2] as String
+          ..productName = fields[3] as String
+          ..categoryid = fields[4] as String
+          ..subcategoryid = fields[5] as String
+          ..description = fields[6] as String
+          ..specification = fields[7] as String
+          ..price = fields[8] as int
+          ..status = fields[9] as int
+          ..favorite = fields[10] as bool
+          ..images = ListBuilder<String>(fields[11] as List)
+          ..percentAmount = fields[12] as int
+          ..discountPrice = fields[13] as int
+          ..discountType = fields[14] as String
+          ..soldCount = fields[15] as int
+          ..quantity = fields[17] as int
           ..cartId = fields[16] as String)
         .build();
   }
@@ -561,38 +586,40 @@ class ProductAdapter extends TypeAdapter<Product> {
   @override
   void write(BinaryWriter writer, Product obj) {
     writer
-      ..writeByte(17)
+      ..writeByte(18)
       ..writeByte(0)
-      ..write(obj.productId)
+      ..write(obj.favoriteId)
       ..writeByte(1)
-      ..write(obj.productCode)
+      ..write(obj.productId)
       ..writeByte(2)
-      ..write(obj.productName)
+      ..write(obj.productCode)
       ..writeByte(3)
-      ..write(obj.categoryid)
+      ..write(obj.productName)
       ..writeByte(4)
-      ..write(obj.subcategoryid)
+      ..write(obj.categoryid)
       ..writeByte(5)
-      ..write(obj.description)
+      ..write(obj.subcategoryid)
       ..writeByte(6)
-      ..write(obj.specification)
+      ..write(obj.description)
       ..writeByte(7)
-      ..write(obj.price)
+      ..write(obj.specification)
       ..writeByte(8)
-      ..write(obj.status)
+      ..write(obj.price)
       ..writeByte(9)
-      ..write(obj.favorite)
+      ..write(obj.status)
       ..writeByte(10)
-      ..write(obj.images?.toList())
+      ..write(obj.favorite)
       ..writeByte(11)
-      ..write(obj.percentAmount)
+      ..write(obj.images?.toList())
       ..writeByte(12)
-      ..write(obj.discountPrice)
+      ..write(obj.percentAmount)
       ..writeByte(13)
-      ..write(obj.discountType)
+      ..write(obj.discountPrice)
       ..writeByte(14)
-      ..write(obj.soldCount)
+      ..write(obj.discountType)
       ..writeByte(15)
+      ..write(obj.soldCount)
+      ..writeByte(17)
       ..write(obj.quantity)
       ..writeByte(16)
       ..write(obj.cartId);

@@ -13,6 +13,7 @@ import 'package:package_info/package_info.dart';
 import 'package:m2mobile/models/company_info.dart';
 import 'package:m2mobile/boxes/box_category.dart';
 import 'package:m2mobile/boxes/box_sub_category.dart';
+import 'package:logger/logger.dart';
 
 part 'store_app.g.dart';
 
@@ -87,6 +88,8 @@ abstract class _StoreApp with Store {
 
   @action
   Future init() async {
+    Modular.get<Logger>().d("AppStore init");
+    proceed = false;
     await _createBoxes();
     _setupBoxListeners();
     readIsFirstTime();
@@ -164,6 +167,7 @@ abstract class _StoreApp with Store {
 
   @action
   Future checkForceUpdate() async {
+    forceUpdate = Observable(null);
     final packageInfo = await PackageInfo.fromPlatform();
     final versionCode = packageInfo.buildNumber;
 
@@ -243,6 +247,8 @@ abstract class _StoreApp with Store {
     if (isFirstTime) {
       await _appBox.changeFirstTime(false);
     }
+    var a = _appBox.getIsFirstTime();
+    Modular.get<Logger>().d('FirstTime Changed $a');
   }
 
   @action

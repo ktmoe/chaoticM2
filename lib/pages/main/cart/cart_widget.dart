@@ -70,9 +70,9 @@ class _CartWidgetState extends State<CartWidget> {
       );
 
   Widget _buildOrderList() {
-    final cartProductsMap = _storeCart.cartProducts;
-    final cartProducts = cartProductsMap.keys.toList();
-    final cartCounts = cartProductsMap.values.toList();
+    //final cartProductsMap = _storeCart.cartProducts;
+    //final cartProducts = cartProductsMap.keys.toList();
+    //final cartCounts = cartProductsMap.values.toList();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: Dimens.marginMedium),
       margin: const EdgeInsets.only(bottom: Dimens.marginLargeX),

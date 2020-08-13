@@ -24,6 +24,51 @@ mixin _$StoreHome on _StoreHome, Store {
     });
   }
 
+  final _$latestCurrentPageAtom = Atom(name: '_StoreHome.latestCurrentPage');
+
+  @override
+  int get latestCurrentPage {
+    _$latestCurrentPageAtom.reportRead();
+    return super.latestCurrentPage;
+  }
+
+  @override
+  set latestCurrentPage(int value) {
+    _$latestCurrentPageAtom.reportWrite(value, super.latestCurrentPage, () {
+      super.latestCurrentPage = value;
+    });
+  }
+
+  final _$latestTotalPageAtom = Atom(name: '_StoreHome.latestTotalPage');
+
+  @override
+  int get latestTotalPage {
+    _$latestTotalPageAtom.reportRead();
+    return super.latestTotalPage;
+  }
+
+  @override
+  set latestTotalPage(int value) {
+    _$latestTotalPageAtom.reportWrite(value, super.latestTotalPage, () {
+      super.latestTotalPage = value;
+    });
+  }
+
+  final _$loadMoreAtom = Atom(name: '_StoreHome.loadMore');
+
+  @override
+  bool get loadMore {
+    _$loadMoreAtom.reportRead();
+    return super.loadMore;
+  }
+
+  @override
+  set loadMore(bool value) {
+    _$loadMoreAtom.reportWrite(value, super.loadMore, () {
+      super.loadMore = value;
+    });
+  }
+
   final _$productsAtom = Atom(name: '_StoreHome.products');
 
   @override
@@ -65,9 +110,9 @@ mixin _$StoreHome on _StoreHome, Store {
       AsyncAction('_StoreHome.getLatestProducts');
 
   @override
-  Future<dynamic> getLatestProducts({bool refresh = true}) {
+  Future<dynamic> getLatestProducts(bool refresh) {
     return _$getLatestProductsAsyncAction
-        .run(() => super.getLatestProducts(refresh: refresh));
+        .run(() => super.getLatestProducts(refresh));
   }
 
   final _$getDiscountProductsAsyncAction =
@@ -131,9 +176,34 @@ mixin _$StoreHome on _StoreHome, Store {
   }
 
   @override
+  FavoriteItemPayload _getFavoriteItemPayload(Product product) {
+    final _$actionInfo = _$_StoreHomeActionController.startAction(
+        name: '_StoreHome._getFavoriteItemPayload');
+    try {
+      return super._getFavoriteItemPayload(product);
+    } finally {
+      _$_StoreHomeActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  DeleteFavoriteItemPayload _getDeleteFavoriteItemPayload(Product product) {
+    final _$actionInfo = _$_StoreHomeActionController.startAction(
+        name: '_StoreHome._getDeleteFavoriteItemPayload');
+    try {
+      return super._getDeleteFavoriteItemPayload(product);
+    } finally {
+      _$_StoreHomeActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 exception: ${exception},
+latestCurrentPage: ${latestCurrentPage},
+latestTotalPage: ${latestTotalPage},
+loadMore: ${loadMore},
 products: ${products},
 discountProducts: ${discountProducts}
     ''';

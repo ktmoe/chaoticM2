@@ -14,6 +14,7 @@ abstract class CartListResponse
   factory CartListResponse([updates(CartListResponseBuilder b)]) =
   _$CartListResponse;
 
+  @nullable
   @BuiltValueField(wireName: 'message')
   String get message;
   @BuiltValueField(wireName: 'data')

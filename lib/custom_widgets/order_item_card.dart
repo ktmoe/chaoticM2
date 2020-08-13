@@ -95,10 +95,12 @@ class _OrderItemCardState extends State<OrderItemCard> {
           InkWell(
             onTap: () {
               setState(() {
-                qty -= 1;
+                qty--;
+                qty = (qty<0)? 0 : qty;
               });
               Future.delayed(const Duration(milliseconds: 1500),() async{
                 final updateItem = UpdateCartRequest((b)=>b..updateItem.quantity = qty);
+                print("cart id => ${widget.product.cartId}");
                  _cartStore.updateCartItemQty(widget.product.cartId,updateItem.toJson());
                  _cartStore.fetchCartItems(refresh: true);
               });

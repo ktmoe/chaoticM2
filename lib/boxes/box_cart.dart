@@ -35,6 +35,9 @@ class BoxCart implements Disposable{
     });
   }
 
-  void delete() => _box.deleteAll(_box.keys);
+  void delete() {
+    print("delete all get called");
+     _box.deleteAll(_box.keys);
+  }
 
 }

@@ -31,6 +31,12 @@ class _$ProductResponseSerializer
         ..add(serializers.serialize(object.message,
             specifiedType: const FullType(String)));
     }
+    if (object.lastPage != null) {
+      result
+        ..add('lastPage')
+        ..add(serializers.serialize(object.lastPage,
+            specifiedType: const FullType(int)));
+    }
     return result;
   }
 
@@ -56,6 +62,10 @@ class _$ProductResponseSerializer
                       BuiltList, const [const FullType(Product)]))
               as BuiltList<Object>);
           break;
+        case 'lastPage':
+          result.lastPage = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
       }
     }
 
@@ -68,11 +78,13 @@ class _$ProductResponse extends ProductResponse {
   final String message;
   @override
   final BuiltList<Product> product;
+  @override
+  final int lastPage;
 
   factory _$ProductResponse([void Function(ProductResponseBuilder) updates]) =>
       (new ProductResponseBuilder()..update(updates)).build();
 
-  _$ProductResponse._({this.message, this.product}) : super._() {
+  _$ProductResponse._({this.message, this.product, this.lastPage}) : super._() {
     if (product == null) {
       throw new BuiltValueNullFieldError('ProductResponse', 'product');
     }
@@ -91,19 +103,22 @@ class _$ProductResponse extends ProductResponse {
     if (identical(other, this)) return true;
     return other is ProductResponse &&
         message == other.message &&
-        product == other.product;
+        product == other.product &&
+        lastPage == other.lastPage;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, message.hashCode), product.hashCode));
+    return $jf($jc(
+        $jc($jc(0, message.hashCode), product.hashCode), lastPage.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('ProductResponse')
           ..add('message', message)
-          ..add('product', product))
+          ..add('product', product)
+          ..add('lastPage', lastPage))
         .toString();
   }
 }
@@ -121,12 +136,17 @@ class ProductResponseBuilder
       _$this._product ??= new ListBuilder<Product>();
   set product(ListBuilder<Product> product) => _$this._product = product;
 
+  int _lastPage;
+  int get lastPage => _$this._lastPage;
+  set lastPage(int lastPage) => _$this._lastPage = lastPage;
+
   ProductResponseBuilder();
 
   ProductResponseBuilder get _$this {
     if (_$v != null) {
       _message = _$v.message;
       _product = _$v.product?.toBuilder();
+      _lastPage = _$v.lastPage;
       _$v = null;
     }
     return this;
@@ -150,7 +170,8 @@ class ProductResponseBuilder
     _$ProductResponse _$result;
     try {
       _$result = _$v ??
-          new _$ProductResponse._(message: message, product: product.build());
+          new _$ProductResponse._(
+              message: message, product: product.build(), lastPage: lastPage);
     } catch (_) {
       String _$failedField;
       try {

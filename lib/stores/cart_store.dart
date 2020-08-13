@@ -60,6 +60,7 @@ abstract class _CartStore with Store {
 
   @action
   Future fetchCartItems({bool refresh = false}) async{
+    print("fetch all cart items get called");
     try {
       String userId = appBox.getUserProfile().id;
       final response = await api.getCartList(userId);

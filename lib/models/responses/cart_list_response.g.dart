@@ -20,15 +20,17 @@ class _$CartListResponseSerializer
   Iterable<Object> serialize(Serializers serializers, CartListResponse object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'message',
-      serializers.serialize(object.message,
-          specifiedType: const FullType(String)),
       'data',
       serializers.serialize(object.cartItem,
           specifiedType:
               const FullType(BuiltList, const [const FullType(CartItem)])),
     ];
-
+    if (object.message != null) {
+      result
+        ..add('message')
+        ..add(serializers.serialize(object.message,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
@@ -72,9 +74,6 @@ class _$CartListResponse extends CartListResponse {
       (new CartListResponseBuilder()..update(updates)).build();
 
   _$CartListResponse._({this.message, this.cartItem}) : super._() {
-    if (message == null) {
-      throw new BuiltValueNullFieldError('CartListResponse', 'message');
-    }
     if (cartItem == null) {
       throw new BuiltValueNullFieldError('CartListResponse', 'cartItem');
     }

@@ -17,7 +17,8 @@ void main() {
   });
 
   test('LatestProducts', () async {
-    await _apiService.getLatestProducts("6bc0cd5e-f193-42f6-bbcd-618e985670f0");
+    await _apiService.getLatestProducts(
+        customerId: "6bc0cd5e-f193-42f6-bbcd-618e985670f0");
   });
 
   test('DiscountProducts', () async {
