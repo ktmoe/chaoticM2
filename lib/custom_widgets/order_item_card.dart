@@ -30,6 +30,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
   @override
   void initState() {
     qty = widget.count;
+    print("item card jsonstring => ${widget.product.toJson()}");
     super.initState();
   }
 
@@ -70,6 +71,9 @@ class _OrderItemCardState extends State<OrderItemCard> {
                   qty+=1;
               });
               Future.delayed(const Duration(milliseconds: 1500),() async{
+                print("qty before api request => ${qty}");
+                print("json string of product => ${widget.product.toJson()}");
+                print("cart id before api request => ${widget.product.cartId}");
                 final updateItem = UpdateCartRequest((b)=>b..updateItem.quantity = qty);
                 _cartStore.updateCartItemQty(widget.product.cartId,updateItem.toJson());
                 _cartStore.fetchCartItems(refresh: true);
@@ -101,6 +105,8 @@ class _OrderItemCardState extends State<OrderItemCard> {
               Future.delayed(const Duration(milliseconds: 1500),() async{
                 final updateItem = UpdateCartRequest((b)=>b..updateItem.quantity = qty);
                 print("cart id => ${widget.product.cartId}");
+                print("qty before api request => ${qty}");
+                print("cart id before api request => ${widget.product.cartId}");
                  _cartStore.updateCartItemQty(widget.product.cartId,updateItem.toJson());
                  _cartStore.fetchCartItems(refresh: true);
               });

@@ -67,6 +67,7 @@ abstract class _StoreHome with Store {
 
   @action
   Future getLatestProducts(bool refresh) async {
+    print("get latest get called");
     loadMore = false;
     if (refresh) {
       latestCurrentPage = 0;
