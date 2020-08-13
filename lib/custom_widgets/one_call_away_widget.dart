@@ -220,7 +220,7 @@ abstract class WarningDialogType {
       'All filled informations will be lost. Are you sure?';
 
   static const forgotPasswordDialog =
-      'Forgot Password အတွက် M2 Mobile သို့အောက်ဖော်ပြပါ ဖုန်းနံပါတ်ဖြင့်ဆက်သွယ်အကြောင်းကြားနိုင်သည်။\nဖုန်း - 09 790428136';
+      'Forgot Password အတွက် M2 Mobile သို့အောက်ဖော်ပြပါ ဖုန်းနံပါတ်ဖြင့်ဆက်သွယ်အကြောင်းကြားနိုင်သည်။\nဖုန်း - ';
 
   static const loginFailedDialog = 'UserName or Password Wrong';
   static const forceUpdateDialog = 'The new version is available';

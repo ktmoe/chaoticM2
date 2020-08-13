@@ -32,7 +32,7 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
     ];
     if (object.favoriteId != null) {
       result
-        ..add('id')
+        ..add('favoriteid')
         ..add(serializers.serialize(object.favoriteId,
             specifiedType: const FullType(String)));
     }
@@ -117,7 +117,7 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'id':
+        case 'favoriteid':
           result.favoriteId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;

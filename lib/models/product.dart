@@ -17,7 +17,7 @@ abstract class Product implements Built<Product, ProductBuilder> {
 
   @nullable
   @HiveField(0)
-  @BuiltValueField(wireName: 'id')
+  @BuiltValueField(wireName: 'favoriteid')
   String get favoriteId;
   @HiveField(1)
   @nullable
