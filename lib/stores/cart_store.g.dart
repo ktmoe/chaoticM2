@@ -9,6 +9,31 @@ part of 'cart_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$CartStore on _CartStore, Store {
+  Computed<int> _$cartCountComputed;
+
+  @override
+  int get cartCount => (_$cartCountComputed ??=
+          Computed<int>(() => super.cartCount, name: '_CartStore.cartCount'))
+      .value;
+  Computed<int> _$amountComputed;
+
+  @override
+  int get amount => (_$amountComputed ??=
+          Computed<int>(() => super.amount, name: '_CartStore.amount'))
+      .value;
+  Computed<double> _$taxComputed;
+
+  @override
+  double get tax => (_$taxComputed ??=
+          Computed<double>(() => super.tax, name: '_CartStore.tax'))
+      .value;
+  Computed<double> _$totalComputed;
+
+  @override
+  double get total => (_$totalComputed ??=
+          Computed<double>(() => super.total, name: '_CartStore.total'))
+      .value;
+
   final _$errorAtom = Atom(name: '_CartStore.error');
 
   @override
@@ -55,7 +80,11 @@ mixin _$CartStore on _CartStore, Store {
   @override
   String toString() {
     return '''
-error: ${error}
+error: ${error},
+cartCount: ${cartCount},
+amount: ${amount},
+tax: ${tax},
+total: ${total}
     ''';
   }
 }

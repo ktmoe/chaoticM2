@@ -256,4 +256,12 @@ class _$ApiService extends ApiService {
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<OrderListResponse, OrderListResponse>($request);
   }
+
+  @override
+  Future<Response<dynamic>> deleteCartItems(String cartIds) {
+    final $url = '/api/cartview/deleteCartItems';
+    final $body = cartIds;
+    final $request = Request('DELETE', $url, client.baseUrl, body: $body);
+    return client.send<dynamic, dynamic>($request);
+  }
 }

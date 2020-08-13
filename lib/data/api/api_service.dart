@@ -145,6 +145,9 @@ abstract class ApiService extends ChopperService {
   Future<Response<OrderListResponse>> getOrderList(
       @Query('customerId') String customerId);
 
-  //@Delete(path : '/cartview/deleteCartItems')
+  @Delete(path : '/cartview/deleteCartItems')
+  Future<Response> deleteCartItems(
+      @Body() String cartIds
+      );
 
 }

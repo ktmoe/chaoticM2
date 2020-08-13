@@ -224,19 +224,22 @@ class _ProductCardBottomState extends State<ProductCardBottom> {
             ),
             InkWell(
               onTap: () async{
-                widget._cartStore.addToCart(widget.product);
-                if (widget._storeCart.cartProducts
-                    .containsKey(widget.product)) {
+                print("items in cart before adding => ${widget._cartStore.cartItems.length}");
+                if (widget._cartStore.cartItems
+                    .contains(widget.product)) {
                   "Item removed from cart.".showSnack(context);
-                 // widget._storeCart.removeFromCart(widget.product);
+                  widget._cartStore.removeItemFromCart(widget.product.productId);
+                  // widget._storeCart.removeFromCart(widget.product);
                 } else {
                   "Item added to cart.".showSnack(context);
-                 // widget._storeCart.addToCart(widget.product);
+                  await widget._cartStore.addToCart(widget.product);
+                  print("items in cart => ${widget._cartStore.cartItems.toString()}");
+                  // widget._storeCart.addToCart(widget.product);
                 }
               },
               // widget._storeCart.cartProducts.containsKey(widget.product)
               child: Icon(
-                widget._cartStore.cartItems.contains(widget.product)
+                widget._cartStore.containsInList(widget.product)
                     ? M2Icon.cart_cross
                     : M2Icon.cart_plus,
                 color: Colors.white,

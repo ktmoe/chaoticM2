@@ -215,9 +215,10 @@ class BottomSheet extends StatefulWidget {
 
 class _BottomSheetState extends State<BottomSheet> {
   final StoreCart _storeCart = Modular.get<StoreCart>();
+  final CartStore _cartStore = Modular.get<CartStore>();
   @override
   Widget build(BuildContext context) {
-    return _storeCart.cartCount == 0
+    return _cartStore.cartItems.isEmpty
         ? _buildEmptyCartBottomSheet()
         : _buildNonEmptyCartBottomSheet();
   }
@@ -262,7 +263,7 @@ class _BottomSheetState extends State<BottomSheet> {
                 style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: Dimens.textRegular2_5x)),
-            Text(_storeCart.amount.toDouble().money(),
+            Text(_cartStore.amount.toDouble().money(),
                 textAlign: TextAlign.end,
                 style: TextStyle(
                     color: Theme.of(context).accentColor,
@@ -281,7 +282,7 @@ class _BottomSheetState extends State<BottomSheet> {
                 style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: Dimens.textRegular2_5x)),
-            Text(_storeCart.tax.toDouble().money(),
+            Text(_cartStore.tax.toDouble().money(),
                 textAlign: TextAlign.end,
                 style: TextStyle(
                     color: Theme.of(context).accentColor,
@@ -300,7 +301,7 @@ class _BottomSheetState extends State<BottomSheet> {
                 style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: Dimens.textRegular2_5x)),
-            Text(_storeCart.total.toDouble().money(),
+            Text(_cartStore.total.toDouble().money(),
                 textAlign: TextAlign.end,
                 style: TextStyle(
                     color: Theme.of(context).accentColor,

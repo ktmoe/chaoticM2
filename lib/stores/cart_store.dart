@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/boxes/app_box.dart';
@@ -6,6 +7,7 @@ import 'package:m2mobile/data/api/api_service.dart';
 import 'package:m2mobile/models/cart_item.dart';
 import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/models/requests/add_to_cart_request.dart';
+import 'package:m2mobile/models/requests/delete_cart_items_request.dart';
 import 'package:mobx/mobx.dart';
 
 part 'cart_store.g.dart';
@@ -36,6 +38,18 @@ abstract class _CartStore with Store {
     cartItems = ObservableList.of(_box.listenable.value.values.toList());
   }
 
+  @computed
+  int get cartCount => cartItems.isEmpty ? 0 : cartItems.length;
+
+  @computed
+  int get amount => cartItems.fold(0, (val,cartItem) => val+(cartItem.price*cartItem.quantity));
+
+  @computed
+  double get tax => (amount / 100) * 10;
+
+  @computed
+  double get total => amount + tax;
+
   @action
   Future init() async {
     print("cart store init get called");
@@ -46,12 +60,25 @@ abstract class _CartStore with Store {
     fetchCartItems(refresh: true);
   }
 
+  bool containsInList(Product product){
+    bool found = false;
+    print("added item id => ${product.productId}");
+    cartItems.toList().forEach((item){
+      print("cart items id => ${item.productId}");
+      if(item.productId == product.productId) {
+        found = true;
+      }
+    });
+    return found;
+  }
+
   Future addToCart(Product product) async{
     try{
       //final item = CartItem((b)=>b..quantity = 1..productid = product.productId..customerid = appBox.getUserProfile().id);
       final addToCartRequest = AddToCartRequest((b)=>b..cartItem.productid = product.productId..cartItem.customerid = appBox.getUserProfile().id
         ..cartItem.quantity = 1);
       api.addToCart(addToCartRequest.toJson());
+      fetchCartItems(refresh: true);
     }catch(e){
       print("add to cart error => ${e.toString()}");
     }
@@ -84,6 +111,16 @@ abstract class _CartStore with Store {
     final count = cartItems.toList().singleWhere((product) => product.productId == id).quantity;
     print("count by item id => $count");
     return count;
+  }
+
+  Future removeItemFromCart(String id) async{
+    try{
+      DeleteCartListRequest request = DeleteCartListRequest((b)=> b..cartIdList.add(id));
+      print("nums of item to delete => ${request.cartIdList.length}");
+      await api.deleteCartItems(request.toJson());
+    }catch(e){
+      print("remove from cart err => ${e.toString()}");
+    }
   }
 
 
