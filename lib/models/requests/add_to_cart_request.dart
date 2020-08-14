@@ -1,11 +1,10 @@
 import 'dart:convert';
 
-import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-import '../cart_item.dart';
-import '../serializers.dart';
+import 'package:m2mobile/models/cart_item.dart';
+import 'package:m2mobile/models/serializers.dart';
 
 part 'add_to_cart_request.g.dart';
 
@@ -14,7 +13,7 @@ abstract class AddToCartRequest
   AddToCartRequest._();
 
   factory AddToCartRequest([updates(AddToCartRequestBuilder b)]) =
-  _$AddToCartRequest;
+      _$AddToCartRequest;
 
   @BuiltValueField(wireName: 'cartItem')
   CartItem get cartItem;

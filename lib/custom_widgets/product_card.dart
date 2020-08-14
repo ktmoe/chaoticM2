@@ -182,10 +182,7 @@ class ProductCardHeader extends StatelessWidget {
 }
 
 class ProductCardBottom extends StatefulWidget {
-  final StoreCart _storeCart = Modular.get<StoreCart>();
   final Product product;
-
-  final CartStore _cartStore = Modular.get<CartStore>();
 
   ProductCardBottom({Key key, this.product}) : super(key: key);
 
@@ -194,17 +191,18 @@ class ProductCardBottom extends StatefulWidget {
 }
 
 class _ProductCardBottomState extends State<ProductCardBottom> {
+  final CartStore _cartStore = Modular.get<CartStore>();
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: Dimens.marginSmall),
-      decoration: BoxDecoration(
-          color: Theme.of(context).accentColor,
-          borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(Dimens.marginMedium2),
-              bottomRight: Radius.circular(Dimens.marginMedium2))),
-      child: Observer(builder: (context) {
-        return Row(
+        margin: const EdgeInsets.only(top: Dimens.marginSmall),
+        decoration: BoxDecoration(
+            color: Theme.of(context).accentColor,
+            borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(Dimens.marginMedium2),
+                bottomRight: Radius.circular(Dimens.marginMedium2))),
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             InkWell(
@@ -223,23 +221,23 @@ class _ProductCardBottomState extends State<ProductCardBottom> {
               endIndent: Dimens.marginMedium,
             ),
             InkWell(
-              onTap: () async{
-                print("items in cart before adding => ${widget._cartStore.cartItems.length}");
-                if (widget._cartStore.cartItems
-                    .contains(widget.product)) {
+              onTap: () async {
+                print(
+                    "items in cart before adding => ${_cartStore.cartItems.length}");
+                if (_cartStore.cartItems.contains(widget.product)) {
                   "Item removed from cart.".showSnack(context);
-                  widget._cartStore.removeItemFromCart(widget.product.productId);
+                  _cartStore.removeItemFromCart(widget.product.productId);
                   // widget._storeCart.removeFromCart(widget.product);
                 } else {
                   "Item added to cart.".showSnack(context);
-                  await widget._cartStore.addToCart(widget.product);
-                  print("items in cart => ${widget._cartStore.cartItems.toString()}");
+                  await _cartStore.addToCart(widget.product);
+                  print("items in cart => ${_cartStore.cartItems.toString()}");
                   // widget._storeCart.addToCart(widget.product);
                 }
               },
               // widget._storeCart.cartProducts.containsKey(widget.product)
               child: Icon(
-                widget._cartStore.containsInList(widget.product)
+                _cartStore.containsInList(widget.product)
                     ? M2Icon.cart_cross
                     : M2Icon.cart_plus,
                 color: Colors.white,
@@ -247,8 +245,6 @@ class _ProductCardBottomState extends State<ProductCardBottom> {
               ),
             )
           ],
-        );
-      }),
-    );
+        ));
   }
 }

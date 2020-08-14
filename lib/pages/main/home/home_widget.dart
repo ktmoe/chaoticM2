@@ -71,6 +71,7 @@ class _HomeWidgetState extends State<HomeWidget>
           await _storeHome.getLatestProducts(true);
         },
         child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

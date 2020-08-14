@@ -50,7 +50,7 @@ class _CartWidgetState extends State<CartWidget> {
                 },
                 onDeletePressed: widget.isSummary ? null : _cartDeletePressed,
               ),
-              body: _storeCart.cartCount == 0
+              body: _cartStore.cartCount == 0
                   ? _buildEmptyBody()
                   : _buildNonEmptyBody()));
     });
@@ -155,7 +155,9 @@ class _CartWidgetState extends State<CartWidget> {
   Widget _buildEmptyBody() => Stack(
         children: <Widget>[
           _buildEmptyCartView(),
-          Align(alignment: Alignment.bottomCenter, child: BottomSheet())
+          Align(
+              alignment: Alignment.bottomCenter,
+              child: BottomSheet(isSummary: widget.isSummary))
         ],
       );
 
@@ -213,7 +215,6 @@ class BottomSheet extends StatefulWidget {
 }
 
 class _BottomSheetState extends State<BottomSheet> {
-  final StoreCart _storeCart = Modular.get<StoreCart>();
   final CartStore _cartStore = Modular.get<CartStore>();
   @override
   Widget build(BuildContext context) {

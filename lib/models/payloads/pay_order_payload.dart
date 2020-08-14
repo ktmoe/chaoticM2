@@ -6,8 +6,6 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:m2mobile/models/serializers.dart';
 
-import 'package:http/http.dart';
-
 part 'pay_order_payload.g.dart';
 
 abstract class PayOrderPayload

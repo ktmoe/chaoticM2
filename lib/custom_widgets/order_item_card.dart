@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:m2mobile/models/cart_item.dart';
 import 'package:m2mobile/models/requests/update_cart_request.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/stores/cart_store.dart';

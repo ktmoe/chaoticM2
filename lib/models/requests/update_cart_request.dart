@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
@@ -14,7 +13,7 @@ abstract class UpdateCartRequest
   UpdateCartRequest._();
 
   factory UpdateCartRequest([updates(UpdateCartRequestBuilder b)]) =
-  _$UpdateCartRequest;
+      _$UpdateCartRequest;
 
   @BuiltValueField(wireName: 'cartItem')
   UpdateItem get updateItem;

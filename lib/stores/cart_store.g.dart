@@ -56,12 +56,37 @@ mixin _$CartStore on _CartStore, Store {
     return _$initAsyncAction.run(() => super.init());
   }
 
+  final _$addToCartAsyncAction = AsyncAction('_CartStore.addToCart');
+
+  @override
+  Future<dynamic> addToCart(Product product) {
+    return _$addToCartAsyncAction.run(() => super.addToCart(product));
+  }
+
   final _$fetchCartItemsAsyncAction = AsyncAction('_CartStore.fetchCartItems');
 
   @override
   Future<dynamic> fetchCartItems({bool refresh = false}) {
     return _$fetchCartItemsAsyncAction
         .run(() => super.fetchCartItems(refresh: refresh));
+  }
+
+  final _$updateCartItemQtyAsyncAction =
+      AsyncAction('_CartStore.updateCartItemQty');
+
+  @override
+  Future<dynamic> updateCartItemQty(String cartId, String updateItem) {
+    return _$updateCartItemQtyAsyncAction
+        .run(() => super.updateCartItemQty(cartId, updateItem));
+  }
+
+  final _$removeItemFromCartAsyncAction =
+      AsyncAction('_CartStore.removeItemFromCart');
+
+  @override
+  Future<dynamic> removeItemFromCart(String id) {
+    return _$removeItemFromCartAsyncAction
+        .run(() => super.removeItemFromCart(id));
   }
 
   final _$_CartStoreActionController = ActionController(name: '_CartStore');
@@ -72,6 +97,28 @@ mixin _$CartStore on _CartStore, Store {
         _$_CartStoreActionController.startAction(name: '_CartStore.updateCart');
     try {
       return super.updateCart();
+    } finally {
+      _$_CartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool containsInList(Product product) {
+    final _$actionInfo = _$_CartStoreActionController.startAction(
+        name: '_CartStore.containsInList');
+    try {
+      return super.containsInList(product);
+    } finally {
+      _$_CartStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  int getProductCountById(String id) {
+    final _$actionInfo = _$_CartStoreActionController.startAction(
+        name: '_CartStore.getProductCountById');
+    try {
+      return super.getProductCountById(id);
     } finally {
       _$_CartStoreActionController.endAction(_$actionInfo);
     }
