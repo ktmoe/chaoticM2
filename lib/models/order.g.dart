@@ -44,14 +44,19 @@ class _$OrderSerializer implements StructuredSerializer<Order> {
       'updateddate',
       serializers.serialize(object.updateddate,
           specifiedType: const FullType(String)),
-      'total_item',
-      serializers.serialize(object.totalItem,
-          specifiedType: const FullType(int)),
-      'total_price',
-      serializers.serialize(object.totalPrice,
-          specifiedType: const FullType(int)),
     ];
-
+    if (object.totalItem != null) {
+      result
+        ..add('total_item')
+        ..add(serializers.serialize(object.totalItem,
+            specifiedType: const FullType(int)));
+    }
+    if (object.totalPrice != null) {
+      result
+        ..add('total_price')
+        ..add(serializers.serialize(object.totalPrice,
+            specifiedType: const FullType(int)));
+    }
     return result;
   }
 
@@ -183,12 +188,6 @@ class _$Order extends Order {
     }
     if (updateddate == null) {
       throw new BuiltValueNullFieldError('Order', 'updateddate');
-    }
-    if (totalItem == null) {
-      throw new BuiltValueNullFieldError('Order', 'totalItem');
-    }
-    if (totalPrice == null) {
-      throw new BuiltValueNullFieldError('Order', 'totalPrice');
     }
   }
 
@@ -359,3 +358,61 @@ class OrderBuilder implements Builder<Order, OrderBuilder> {
 }
 
 // ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class OrderAdapter extends TypeAdapter<Order> {
+  @override
+  final int typeId = 7;
+
+  @override
+  Order read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return (OrderBuilder()
+          ..id = fields[0] as String
+          ..customerid = fields[1] as String
+          ..ordercode = fields[2] as String
+          ..orderdate = fields[3] as String
+          ..phone = fields[4] as String
+          ..address = fields[5] as String
+          ..status = fields[6] as String
+          ..createddate = fields[7] as String
+          ..updateddate = fields[8] as String
+          ..totalItem = fields[9] as int
+          ..totalPrice = fields[10] as int)
+        .build();
+  }
+
+  @override
+  void write(BinaryWriter writer, Order obj) {
+    writer
+      ..writeByte(11)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.customerid)
+      ..writeByte(2)
+      ..write(obj.ordercode)
+      ..writeByte(3)
+      ..write(obj.orderdate)
+      ..writeByte(4)
+      ..write(obj.phone)
+      ..writeByte(5)
+      ..write(obj.address)
+      ..writeByte(6)
+      ..write(obj.status)
+      ..writeByte(7)
+      ..write(obj.createddate)
+      ..writeByte(8)
+      ..write(obj.updateddate)
+      ..writeByte(9)
+      ..write(obj.totalItem)
+      ..writeByte(10)
+      ..write(obj.totalPrice);
+  }
+}

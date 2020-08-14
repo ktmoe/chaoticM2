@@ -1,5 +1,4 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:logger/logger.dart';
 import 'package:m2mobile/boxes/box_products.dart';
 import 'package:m2mobile/boxes/discount_products_box.dart';
 import 'package:m2mobile/boxes/box_fav_products.dart';
@@ -43,6 +42,9 @@ abstract class _StoreHome with Store {
 
   @observable
   ObservableList<Product> discountProducts = ObservableList.of([]);
+
+  @observable
+  String selectedOrderId;
 
   @action
   Future init() async {
@@ -108,7 +110,7 @@ abstract class _StoreHome with Store {
   @action
   Future operateFavorite(Product product) async {
     try {
-      final favoriteOperateResponse = (!product.favorite)
+      final favoriteOperateResponse = ((product.favoriteId ?? "").isEmpty)
           ? await _api.addToFav(_getFavoriteItemPayload(product).toJson())
           : await _api
               .deleteFavorite(_getDeleteFavoriteItemPayload(product).toJson());
@@ -145,9 +147,8 @@ abstract class _StoreHome with Store {
   Future<void> _onFavoriteSyncProducts(
       Product product, FavoriteId favoriteId) async {
     final renewedProduct = product.rebuild((b) => b
-      ..favorite = !b.favorite
-      ..favoriteId = favoriteId == null ? b.favoriteId : favoriteId.id);
-    Modular.get<Logger>().d("renewed${renewedProduct.toString()}");
+      ..favorite = favoriteId == null ? false : true
+      ..favoriteId = favoriteId == null ? "" : favoriteId.id);
     await _syncFavoriteBox(renewedProduct);
     if (product.discountPrice != 0) {
       _discountProductBox.save(renewedProduct);
@@ -156,18 +157,15 @@ abstract class _StoreHome with Store {
       _boxProduct.save(renewedProduct);
     }
     if (_boxProductByCategory.contain(product)) {
-      Modular.get<Logger>().d("going to category ${renewedProduct.toString()}");
       _boxProductByCategory.save(renewedProduct);
     }
   }
 
   @action
   Future _syncFavoriteBox(Product product) async {
-    if (product.favorite) {
-      Modular.get<Logger>().d("ToAddBox${product.toString()}");
+    if (product.favoriteId.isNotEmpty) {
       await _boxFav.add(product);
     } else {
-      Modular.get<Logger>().d("ToRemoveBox${product.toString()}");
       await _boxFav.remove(product);
     }
   }

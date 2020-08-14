@@ -33,7 +33,7 @@ class _CartWidgetState extends State<CartWidget> {
           child: Scaffold(
               appBar: M2AppBar(
                 showSearch: false,
-                title: "My Cart",
+                title: widget.isSummary ? "Your Order" : "My Cart",
                 deleteOnly: !widget.isSummary,
                 onBackPressed: () async {
                   final pop = await _cartBackPressed();
@@ -130,7 +130,10 @@ class _CartWidgetState extends State<CartWidget> {
                     }
                   }
                 },
-                child: OrderItemCard(product: product, count: count))
+                child: OrderItemCard(
+                    product: product,
+                    count: count,
+                    isSummary: widget.isSummary))
           ],
         ),
       );

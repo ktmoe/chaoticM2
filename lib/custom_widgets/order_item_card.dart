@@ -10,8 +10,10 @@ import 'package:m2mobile/utils/constants.dart';
 class OrderItemCard extends StatefulWidget {
   final Product product;
   final int count;
+  final bool isSummary;
 
-  const OrderItemCard({Key key, @required this.product, @required this.count})
+  const OrderItemCard(
+      {Key key, @required this.product, @required this.count, this.isSummary})
       : super(key: key);
 
   @override
@@ -23,88 +25,28 @@ class _OrderItemCardState extends State<OrderItemCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: _storeCart.showSelect
-          ? MediaQuery.of(context).size.width -
-              (Dimens.marginLargeX * 2) +
-              Dimens.marginMedium2
-          : MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.2,
-      child: Card(
-        elevation: Dimens.cardElevation * 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Flex(
-          direction: Axis.horizontal,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Expanded(flex: 3, child: _buildOrderProductImage()),
-            const SizedBox(width: Dimens.marginMedium),
-            Expanded(flex: 3, child: _buildOrderProductInfo()),
-            const SizedBox(width: Dimens.marginMedium),
-            Expanded(flex: 1, child: _buildOrderProductQuantity()),
-            const SizedBox(width: Dimens.marginSmall)
-          ],
-        ),
-      ),
-    );
+        width: _storeCart.showSelect
+            ? MediaQuery.of(context).size.width -
+                (Dimens.marginLargeX * 2) +
+                Dimens.marginMedium2
+            : MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height * 0.2,
+        child: Card(
+            elevation: Dimens.cardElevation * 2,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            child: Flex(
+                direction: Axis.horizontal,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Expanded(flex: 3, child: _buildOrderProductImage()),
+                  const SizedBox(width: Dimens.marginMedium),
+                  Expanded(flex: 3, child: _buildOrderProductInfo()),
+                  const SizedBox(width: Dimens.marginMedium),
+                  Expanded(flex: 1, child: _buildOrderProductQuantity()),
+                  const SizedBox(width: Dimens.marginSmall)
+                ])));
   }
-
-  Widget _buildOrderProductQuantity() => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          InkWell(
-            onTap: () {
-              _storeCart.addToCart(widget.product);
-            },
-            child: Card(
-              elevation: Dimens.cardElevation,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: Dimens.marginSmall),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                alignment: Alignment.center,
-                child: Icon(M2Icon.plus, color: Colors.green),
-              ),
-            ),
-          ),
-          const SizedBox(width: Dimens.marginMedium),
-          Text('${widget.count}'),
-          const SizedBox(width: Dimens.marginMedium),
-          InkWell(
-            onTap: () {
-              _storeCart.removeFromCart(widget.product);
-            },
-            child: Card(
-              elevation: Dimens.cardElevation,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: Dimens.marginSmall),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                alignment: Alignment.center,
-                child: Icon(M2Icon.minus, color: Colors.red),
-              ),
-            ),
-          ),
-        ],
-      );
-
-  Widget _buildOrderProductInfo() => Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(widget.product.productName,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  fontSize: Dimens.textRegular2x, fontWeight: FontWeight.w600)),
-          const SizedBox(height: Dimens.marginMedium2),
-          Text("Price: ${widget.product.price.toDouble().money()}")
-        ],
-      );
 
   Widget _buildOrderProductImage() => ClipRRect(
         borderRadius: BorderRadius.only(
@@ -120,4 +62,69 @@ class _OrderItemCardState extends State<OrderItemCard> {
           ),
         ),
       );
+
+  Widget _buildOrderProductInfo() => Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(widget.product.productName,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    fontSize: Dimens.textRegular2x,
+                    fontWeight: FontWeight.w600)),
+            const SizedBox(height: Dimens.marginMedium2),
+            Text("Price: ${widget.product.price.toDouble().money()}")
+          ]);
+
+  Widget _buildOrderProductQuantity() => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          _buildIncreamentBtn(),
+          const SizedBox(height: Dimens.marginMedium),
+          Text('${widget.count}',
+              style: TextStyle(fontWeight: FontWeight.w800)),
+          const SizedBox(height: Dimens.marginMedium),
+          _buildDecrementBtn()
+        ],
+      );
+
+  Widget _buildIncreamentBtn() {
+    return widget.isSummary
+        ? Container()
+        : InkWell(
+            onTap: () {
+              _storeCart.addToCart(widget.product);
+            },
+            child: Card(
+                elevation: Dimens.cardElevation,
+                child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: Dimens.marginSmall),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    alignment: Alignment.center,
+                    child: Icon(M2Icon.plus, color: Colors.green))));
+  }
+
+  Widget _buildDecrementBtn() {
+    return widget.isSummary
+        ? Container()
+        : InkWell(
+            onTap: () {
+              _storeCart.removeFromCart(widget.product);
+            },
+            child: Card(
+                elevation: Dimens.cardElevation,
+                child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: Dimens.marginSmall),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    alignment: Alignment.center,
+                    child: Icon(M2Icon.minus, color: Colors.red))));
+  }
 }

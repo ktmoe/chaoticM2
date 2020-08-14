@@ -12,6 +12,8 @@ import 'package:m2mobile/stores/store_home.dart';
 import 'package:m2mobile/utils/constants.dart';
 import 'package:m2mobile/utils/extensions.dart';
 import 'package:m2mobile/stores/store_cart.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:m2mobile/stores/store_app.dart';
 
 class ProductDetailWidget extends StatefulWidget {
   static const route = "/main/product_detail";
@@ -239,7 +241,7 @@ class _BottomSheetState extends State<BottomSheet> {
   bool _favorite = false;
   @override
   void initState() {
-    _favorite = widget.product.favorite;
+    _favorite = (widget.product.favoriteId ?? "").isNotEmpty;
     super.initState();
   }
 
@@ -261,7 +263,14 @@ class _BottomSheetState extends State<BottomSheet> {
                     M2Icon.messenger,
                     color: Colors.blueAccent,
                   ),
-                  onPressed: () {})
+                  onPressed: () async {
+                    try {
+                      await launch(
+                          Modular.get<StoreApp>().companyInfo.messagerurl);
+                    } catch (e) {
+                      e.toString().showSnack(context);
+                    }
+                  })
             ],
           );
         }),

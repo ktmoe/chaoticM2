@@ -19,8 +19,8 @@ class _OrderListWidgetState extends State<OrderListWidget> {
 
   @override
   void initState() {
-    _storeOrderList.getOrders();
     super.initState();
+    Future.wait([_storeOrderList.init(), _storeOrderList.getOrders()]);
   }
 
   @override

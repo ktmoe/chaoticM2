@@ -210,7 +210,7 @@ class _ProductCardBottomState extends State<ProductCardBottom> {
               },
               child: Icon(M2Icon.favourite,
                   size: 16,
-                  color: widget.product.favorite ?? false
+                  color: (widget.product.favoriteId ?? "").isNotEmpty
                       ? Theme.of(context).iconTheme.color
                       : Colors.white),
             ),

@@ -71,6 +71,58 @@ mixin _$StoreOrder on _StoreOrderBase, Store {
     });
   }
 
+  final _$showLoadingAtom = Atom(name: '_StoreOrderBase.showLoading');
+
+  @override
+  bool get showLoading {
+    _$showLoadingAtom.reportRead();
+    return super.showLoading;
+  }
+
+  @override
+  set showLoading(bool value) {
+    _$showLoadingAtom.reportWrite(value, super.showLoading, () {
+      super.showLoading = value;
+    });
+  }
+
+  final _$orderPostSuccessAtom = Atom(name: '_StoreOrderBase.orderPostSuccess');
+
+  @override
+  bool get orderPostSuccess {
+    _$orderPostSuccessAtom.reportRead();
+    return super.orderPostSuccess;
+  }
+
+  @override
+  set orderPostSuccess(bool value) {
+    _$orderPostSuccessAtom.reportWrite(value, super.orderPostSuccess, () {
+      super.orderPostSuccess = value;
+    });
+  }
+
+  final _$exceptionAtom = Atom(name: '_StoreOrderBase.exception');
+
+  @override
+  AppException<dynamic> get exception {
+    _$exceptionAtom.reportRead();
+    return super.exception;
+  }
+
+  @override
+  set exception(AppException<dynamic> value) {
+    _$exceptionAtom.reportWrite(value, super.exception, () {
+      super.exception = value;
+    });
+  }
+
+  final _$postOrderAsyncAction = AsyncAction('_StoreOrderBase.postOrder');
+
+  @override
+  Future<void> postOrder() {
+    return _$postOrderAsyncAction.run(() => super.postOrder());
+  }
+
   final _$_StoreOrderBaseActionController =
       ActionController(name: '_StoreOrderBase');
 
@@ -86,12 +138,26 @@ mixin _$StoreOrder on _StoreOrderBase, Store {
   }
 
   @override
+  OrderCustomerInfoPayload _getOrderCustomerInfoPayload() {
+    final _$actionInfo = _$_StoreOrderBaseActionController.startAction(
+        name: '_StoreOrderBase._getOrderCustomerInfoPayload');
+    try {
+      return super._getOrderCustomerInfoPayload();
+    } finally {
+      _$_StoreOrderBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 phoneNumber: ${phoneNumber},
 otpCode: ${otpCode},
 address: ${address},
-selectedPaymentMethod: ${selectedPaymentMethod}
+selectedPaymentMethod: ${selectedPaymentMethod},
+showLoading: ${showLoading},
+orderPostSuccess: ${orderPostSuccess},
+exception: ${exception}
     ''';
   }
 }

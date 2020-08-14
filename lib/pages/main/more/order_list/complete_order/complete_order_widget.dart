@@ -2,35 +2,79 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
+import 'package:m2mobile/custom_widgets/one_call_away_widget.dart';
+import 'package:m2mobile/utils/extensions.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:m2mobile/stores/store_order_list.dart';
+import 'package:m2mobile/stores/store_home.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:m2mobile/models/bank_account.dart';
+import 'package:mobx/mobx.dart';
+import 'package:m2mobile/utils/image_picker_utils.dart';
+import 'package:m2mobile/exceptions/app_exception.dart';
 
 class CompleteOrderWidget extends StatefulWidget {
   static const route = "/main/more/order_list/complete_order";
+
+  const CompleteOrderWidget({Key key}) : super(key: key);
 
   @override
   _CompleteOrderWidgetState createState() => _CompleteOrderWidgetState();
 }
 
 class _CompleteOrderWidgetState extends State<CompleteOrderWidget> {
-  StoreOrderList _storeOrderList = Modular.get<StoreOrderList>();
+  final StoreOrderList _storeOrderList = Modular.get<StoreOrderList>();
+  final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey();
+  final List<ReactionDisposer> _disposers = [];
 
-  List<Asset> _selectedImages = <Asset>[];
+  ReactionDisposer _onException() {
+    return reaction<AppException>((_) => _storeOrderList.exception, (e) {
+      e.message.makeSnack(_scaffoldState);
+    });
+  }
+
+  ReactionDisposer _onShowLoading() =>
+      reaction<bool>((_) => _storeOrderList.showLoading, (show) {
+        if (show) {
+          context.loadingDialog();
+        } else
+          Modular.to.pop();
+      });
+
+  ReactionDisposer _onPayOrderSuccess() =>
+      reaction<bool>((_) => _storeOrderList.payOrderSuccess, (paid) async {
+        if (paid) {
+          final a = await context.successFailDialog(
+              dialogType: "You sent slip voucher.", success: true);
+          if (a) {
+            Modular.to.pop();
+          }
+        }
+      });
 
   @override
   void initState() {
     super.initState();
-    _storeOrderList.init();
-    _storeOrderList.getBankAccounts();
+    _disposers.addAll([_onException(), _onShowLoading(), _onPayOrderSuccess()]);
+    Future.wait([
+      _storeOrderList.init(),
+      _storeOrderList.getBankAccounts(),
+    ]);
+  }
+
+  @override
+  void dispose() {
+    _disposers.forEach((element) {
+      element();
+    });
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldState,
       appBar: M2AppBar(
           showSearch: false,
           title: '‌ငွေလွှဲစလစ်ပို့ရန်',
@@ -72,8 +116,9 @@ class _CompleteOrderWidgetState extends State<CompleteOrderWidget> {
               color: Theme.of(context).buttonColor,
               textColor: Colors.white,
               disabledTextColor: Colors.white,
-              onPressed: () {
-                Modular.to.pop();
+              onPressed: () async {
+                await _storeOrderList
+                    .payOrder(Modular.get<StoreHome>().selectedOrderId);
               },
               child: const Text("Send"),
             ))
@@ -118,40 +163,15 @@ class _CompleteOrderWidgetState extends State<CompleteOrderWidget> {
         color: Colors.grey[300],
         child: InkWell(
           onTap: () async {
-            _selectImages();
+            final source = await context.imagePickerDialog();
+            _storeOrderList.slipImage = source == 0
+                ? await ImagePickerUtils.getImagePicker(gallery: true)
+                : await ImagePickerUtils.getImagePicker(gallery: false);
           },
-          child: _selectedImages.isEmpty
-              ? Icon(M2Icon.camera_1, color: Colors.black)
-              : AssetThumb(
-                  asset: _selectedImages[0],
-                  width: 250,
-                  height: 250,
-                  spinner: FadeInImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage("lib/res/images/placeholder.png"),
-                    placeholder: AssetImage("lib/res/images/placeholder.png"),
-                  )),
+          child: Observer(
+              builder: (_) => _storeOrderList.slipImage == null
+                  ? Icon(M2Icon.camera_1, color: Colors.black)
+                  : Image.file(_storeOrderList.slipImage)),
         ));
-  }
-
-  Future<void> _selectImages() async {
-    List<Asset> resultList = <Asset>[];
-
-    try {
-      resultList = await MultiImagePicker.pickImages(
-        maxImages: 1,
-        materialOptions: MaterialOptions(startInAllView: true),
-        enableCamera: true,
-        selectedAssets: [],
-      );
-    } on Exception catch (e) {
-      debugPrint(e.toString());
-    }
-
-    if (!mounted) return;
-
-    setState(() {
-      _selectedImages = resultList;
-    });
   }
 }

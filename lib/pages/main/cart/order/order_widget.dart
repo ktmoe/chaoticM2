@@ -12,6 +12,8 @@ import 'package:m2mobile/stores/store_order.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/utils/extensions.dart';
+import 'package:mobx/mobx.dart';
+import 'package:m2mobile/exceptions/app_exception.dart';
 
 class OrderWidget extends StatefulWidget {
   static const route = "/main/cart/order";
@@ -29,15 +31,51 @@ class _OrderWidgetState extends State<OrderWidget> {
 
   final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey();
 
+  final List<ReactionDisposer> _disposers = [];
+
   int currentStep;
   bool complete = false;
+
+  ReactionDisposer _onException() =>
+      reaction<AppException>((_) => _storeOrder.exception, (e) {
+        e.message.showSnack(context);
+      });
+
+  ReactionDisposer _onShowLoading() =>
+      reaction<bool>((_) => _storeOrder.showLoading, (show) {
+        if (show) {
+          context.loadingDialog();
+        } else
+          Modular.to.pop();
+      });
+
+  ReactionDisposer _onOrderPostSuccess() =>
+      reaction<bool>((_) => _storeOrder.orderPostSuccess, (success) async {
+        if (success) {
+          final a = await context.successFailDialog(
+              dialogType: 'Your Order is posted!', success: true);
+          if (a) {
+            Modular.to.pushReplacementNamed(CartWidget.route, arguments: true);
+          }
+        }
+      });
 
   @override
   void initState() {
     super.initState();
     currentStep = 0;
+    _disposers
+        .addAll([_onException(), _onOrderPostSuccess(), _onShowLoading()]);
     _storeOrder.init();
     _autoFillOldData();
+  }
+
+  @override
+  void dispose() {
+    _disposers.forEach((element) {
+      element();
+    });
+    super.dispose();
   }
 
   void _autoFillOldData() {
@@ -139,7 +177,9 @@ class _OrderWidgetState extends State<OrderWidget> {
                       isLast: true),
                 ],
                 currentStep: currentStep,
-                onStepContinue: next,
+                onStepContinue: () async {
+                  await next();
+                },
                 onStepTapped: (step) {
                   if (step < currentStep) {
                     goTo(step);
@@ -239,12 +279,12 @@ class _OrderWidgetState extends State<OrderWidget> {
             )
           ]);
 
-  next() {
-    currentStep + 1 != 5 ? goTo(currentStep + 1) : _nextPage();
+  next() async {
+    currentStep + 1 != 5 ? goTo(currentStep + 1) : await _nextPage();
   }
 
-  _nextPage() {
-    Modular.to.pushNamed(CartWidget.route, arguments: true);
+  _nextPage() async {
+    await _storeOrder.postOrder();
   }
 
   cancel() async {

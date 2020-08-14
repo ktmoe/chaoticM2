@@ -23,7 +23,7 @@ class _$OrderListResponseSerializer
       'message',
       serializers.serialize(object.message,
           specifiedType: const FullType(String)),
-      'order',
+      'data',
       serializers.serialize(object.order,
           specifiedType:
               const FullType(BuiltList, const [const FullType(Order)])),
@@ -48,7 +48,7 @@ class _$OrderListResponseSerializer
           result.message = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'order':
+        case 'data':
           result.order.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(Order)]))

@@ -99,6 +99,21 @@ mixin _$StoreHome on _StoreHome, Store {
     });
   }
 
+  final _$selectedOrderIdAtom = Atom(name: '_StoreHome.selectedOrderId');
+
+  @override
+  String get selectedOrderId {
+    _$selectedOrderIdAtom.reportRead();
+    return super.selectedOrderId;
+  }
+
+  @override
+  set selectedOrderId(String value) {
+    _$selectedOrderIdAtom.reportWrite(value, super.selectedOrderId, () {
+      super.selectedOrderId = value;
+    });
+  }
+
   final _$initAsyncAction = AsyncAction('_StoreHome.init');
 
   @override
@@ -205,7 +220,8 @@ latestCurrentPage: ${latestCurrentPage},
 latestTotalPage: ${latestTotalPage},
 loadMore: ${loadMore},
 products: ${products},
-discountProducts: ${discountProducts}
+discountProducts: ${discountProducts},
+selectedOrderId: ${selectedOrderId}
     ''';
   }
 }

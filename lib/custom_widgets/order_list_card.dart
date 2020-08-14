@@ -6,6 +6,7 @@ import 'package:m2mobile/res/styles.dart';
 import 'package:m2mobile/utils/extensions.dart';
 import 'package:m2mobile/pages/main/more/order_list/order_detail/order_detail_widget.dart';
 import 'package:m2mobile/pages/main/more/order_list/complete_order/complete_order_widget.dart';
+import 'package:m2mobile/stores/store_home.dart';
 
 class OrderListCard extends StatefulWidget {
   final Order order;
@@ -26,6 +27,7 @@ class _OrderListCardState extends State<OrderListCard> {
             borderRadius: BorderRadius.circular(Dimens.marginMedium2)),
         child: InkWell(
           onTap: () {
+            Modular.get<StoreHome>().selectedOrderId = widget.order.id;
             widget.order.status == "Complete"
                 ? Modular.to.pushNamed(OrderDetailWidget.route)
                 : Modular.to.pushNamed(CompleteOrderWidget.route);
@@ -43,10 +45,13 @@ class _OrderListCardState extends State<OrderListCard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text(widget.order.orderdate,
+                        Text(
+                            widget.order.orderdate
+                                .dateTimeFromString()
+                                .dateAndTime(),
                             style: Styles.m2TextTheme.copyWith(
                                 fontSize: Dimens.textRegular2x,
-                                fontWeight: FontWeight.w400)),
+                                fontWeight: FontWeight.w500)),
                         Text('${widget.order.totalItem} Items',
                             style: Styles.m2TextTheme.copyWith(
                                 fontSize: Dimens.textRegular2x,

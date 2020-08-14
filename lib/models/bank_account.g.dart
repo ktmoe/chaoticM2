@@ -263,3 +263,49 @@ class BankAccountBuilder implements Builder<BankAccount, BankAccountBuilder> {
 }
 
 // ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class BankAccountAdapter extends TypeAdapter<BankAccount> {
+  @override
+  final int typeId = 8;
+
+  @override
+  BankAccount read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return (BankAccountBuilder()
+          ..id = fields[0] as String
+          ..bank = fields[1] as String
+          ..account = fields[2] as String
+          ..ownername = fields[3] as String
+          ..logo = fields[4] as String
+          ..createddate = fields[5] as String
+          ..updateddate = fields[6] as String)
+        .build();
+  }
+
+  @override
+  void write(BinaryWriter writer, BankAccount obj) {
+    writer
+      ..writeByte(7)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.bank)
+      ..writeByte(2)
+      ..write(obj.account)
+      ..writeByte(3)
+      ..write(obj.ownername)
+      ..writeByte(4)
+      ..write(obj.logo)
+      ..writeByte(5)
+      ..write(obj.createddate)
+      ..writeByte(6)
+      ..write(obj.updateddate);
+  }
+}

@@ -33,7 +33,6 @@ dependencies:
   shared_preferences:
   image_cropper:
   image_picker:
-  multi_image_picker: ^4.6.7
   http_parser:
   local_auth:
   flutter_datetime_picker:

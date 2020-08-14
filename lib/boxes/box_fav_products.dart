@@ -38,11 +38,11 @@ class BoxFav implements Disposable {
   }
 
   Future<void> add(Product product) async {
-    await _box.put(product.favoriteId, product);
+    await _box.put(product.productId, product);
   }
 
   Future<void> remove(Product product) async {
-    await _box.delete(product.favoriteId);
+    await _box.delete(product.productId);
   }
 
   void delete() => _box.deleteAll(_box.keys);

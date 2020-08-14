@@ -19,7 +19,7 @@ abstract class OrderListResponse
 
   @BuiltValueField(wireName: 'message')
   String get message;
-  @BuiltValueField(wireName: 'order')
+  @BuiltValueField(wireName: 'data')
   BuiltList<Order> get order;
   String toJson() {
     return json

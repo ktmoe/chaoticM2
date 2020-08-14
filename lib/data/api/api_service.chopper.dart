@@ -66,8 +66,8 @@ class _$ApiService extends ApiService {
 
   @override
   Future<Response<ProductResponse>> getFavList(String id) {
-    final $url = '/api/customerview/getFavoriteList';
-    final $params = <String, dynamic>{'customerid': id};
+    final $url = '/api/favoriteview/getFavoriteList';
+    final $params = <String, dynamic>{'customerId': id};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<ProductResponse, ProductResponse>($request);
   }
@@ -89,17 +89,6 @@ class _$ApiService extends ApiService {
     final $request = Request('DELETE', $url, client.baseUrl, body: $body);
     return client
         .send<FavoriteOperateResponse, FavoriteOperateResponse>($request);
-  }
-
-  @override
-  Future<Response<dynamic>> removeFromFav(String customerId, String productId) {
-    final $url = '/api/customerview/Removefavorite';
-    final $params = <String, dynamic>{
-      'customerid': customerId,
-      'productid': productId
-    };
-    final $request = Request('POST', $url, client.baseUrl, parameters: $params);
-    return client.send<dynamic, dynamic>($request);
   }
 
   @override
@@ -210,10 +199,26 @@ class _$ApiService extends ApiService {
   }
 
   @override
+  Future<Response<PostOrderResponse>> postOrder(String orderCustomerInfo) {
+    final $url = '/api/orderview/orderItems';
+    final $body = orderCustomerInfo;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<PostOrderResponse, PostOrderResponse>($request);
+  }
+
+  @override
   Future<Response<OrderListResponse>> getOrderList(String customerId) {
     final $url = '/api/orderview/getOrderList';
     final $params = <String, dynamic>{'customerId': customerId};
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<OrderListResponse, OrderListResponse>($request);
+  }
+
+  @override
+  Future<Response<OrderDetailResponse>> getOrderDetail(String orderId) {
+    final $url = '/api/orderview/getOrderDetailList';
+    final $params = <String, dynamic>{'orderId': orderId};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<OrderDetailResponse, OrderDetailResponse>($request);
   }
 }

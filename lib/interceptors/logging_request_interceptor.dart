@@ -11,8 +11,6 @@ class LoggingRequestInterceptor extends RequestInterceptor {
   @override
   FutureOr<Request> onRequest(Request request) async {
     logger.i(await CURLGenerator.getCURLFromRequest(request));
-    // logger.i(
-    //     "${request.baseUrl}, ${request.url}\n parameters: ${request.parameters}\n parts: ${request.parts}\n body: ${request.body}");
     return request;
   }
 }

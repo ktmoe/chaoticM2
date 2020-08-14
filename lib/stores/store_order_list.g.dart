@@ -85,6 +85,52 @@ mixin _$StoreOrderList on _StoreOrderListBase, Store {
     });
   }
 
+  final _$showLoadingAtom = Atom(name: '_StoreOrderListBase.showLoading');
+
+  @override
+  bool get showLoading {
+    _$showLoadingAtom.reportRead();
+    return super.showLoading;
+  }
+
+  @override
+  set showLoading(bool value) {
+    _$showLoadingAtom.reportWrite(value, super.showLoading, () {
+      super.showLoading = value;
+    });
+  }
+
+  final _$payOrderSuccessAtom =
+      Atom(name: '_StoreOrderListBase.payOrderSuccess');
+
+  @override
+  bool get payOrderSuccess {
+    _$payOrderSuccessAtom.reportRead();
+    return super.payOrderSuccess;
+  }
+
+  @override
+  set payOrderSuccess(bool value) {
+    _$payOrderSuccessAtom.reportWrite(value, super.payOrderSuccess, () {
+      super.payOrderSuccess = value;
+    });
+  }
+
+  final _$slipImageAtom = Atom(name: '_StoreOrderListBase.slipImage');
+
+  @override
+  File get slipImage {
+    _$slipImageAtom.reportRead();
+    return super.slipImage;
+  }
+
+  @override
+  set slipImage(File value) {
+    _$slipImageAtom.reportWrite(value, super.slipImage, () {
+      super.slipImage = value;
+    });
+  }
+
   final _$initAsyncAction = AsyncAction('_StoreOrderListBase.init');
 
   @override
@@ -107,6 +153,13 @@ mixin _$StoreOrderList on _StoreOrderListBase, Store {
     return _$getBankAccountsAsyncAction.run(() => super.getBankAccounts());
   }
 
+  final _$payOrderAsyncAction = AsyncAction('_StoreOrderListBase.payOrder');
+
+  @override
+  Future<void> payOrder(String orderId) {
+    return _$payOrderAsyncAction.run(() => super.payOrder(orderId));
+  }
+
   final _$_StoreOrderListBaseActionController =
       ActionController(name: '_StoreOrderListBase');
 
@@ -122,13 +175,27 @@ mixin _$StoreOrderList on _StoreOrderListBase, Store {
   }
 
   @override
+  void _onBoxOrderListChanged() {
+    final _$actionInfo = _$_StoreOrderListBaseActionController.startAction(
+        name: '_StoreOrderListBase._onBoxOrderListChanged');
+    try {
+      return super._onBoxOrderListChanged();
+    } finally {
+      _$_StoreOrderListBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 exception: ${exception},
 orders: ${orders},
 bankAccounts: ${bankAccounts},
 selectedBankAccount: ${selectedBankAccount},
-hasInitialized: ${hasInitialized}
+hasInitialized: ${hasInitialized},
+showLoading: ${showLoading},
+payOrderSuccess: ${payOrderSuccess},
+slipImage: ${slipImage}
     ''';
   }
 }

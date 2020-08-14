@@ -1,11 +1,19 @@
+import 'dart:io';
+
 import 'package:m2mobile/stores/store_app.dart';
 import 'package:mobx/mobx.dart';
+import 'package:http/http.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:m2mobile/models/bank_account.dart';
 import 'package:m2mobile/data/api/api_service.dart';
+import 'package:m2mobile/data/api/pay_order_service.dart';
 import 'package:m2mobile/boxes/box_bank_account.dart';
+import 'package:m2mobile/boxes/box_order_list.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:m2mobile/models/order.dart';
+import 'package:logger/logger.dart';
+import 'package:m2mobile/models/payloads/pay_order_payload.dart';
 
 part 'store_order_list.g.dart';
 
@@ -13,7 +21,9 @@ class StoreOrderList = _StoreOrderListBase with _$StoreOrderList;
 
 abstract class _StoreOrderListBase with Store {
   ApiService _apiService = Modular.get<ApiService>();
+  PayOrderService _payOrderService = Modular.get<PayOrderService>();
   BoxBankAccount _boxBankAccount;
+  BoxOrderList _boxOrderList;
 
   @observable
   AppException exception;
@@ -30,16 +40,28 @@ abstract class _StoreOrderListBase with Store {
   @observable
   bool hasInitialized = false;
 
+  @observable
+  bool showLoading = false;
+
+  @observable
+  bool payOrderSuccess = false;
+
+  @observable
+  File slipImage;
+
   @action
   Future<void> init() async {
     if (!hasInitialized) {
       _boxBankAccount = await BoxBankAccount.create();
+      _boxOrderList = await BoxOrderList.create();
+      _boxBankAccount.listenable.addListener(_onBoxBankAccountsChanged);
+
+      _boxOrderList.listenable.addListener(_onBoxOrderListChanged);
+      _onBoxBankAccountsChanged();
+      _onBoxOrderListChanged();
+
       hasInitialized = true;
     }
-
-    _boxBankAccount.listenable.addListener(() {
-      _onBoxBankAccountsChanged();
-    });
   }
 
   @action
@@ -48,11 +70,14 @@ abstract class _StoreOrderListBase with Store {
       final response = await _apiService
           .getOrderList(Modular.get<StoreApp>().userProfile.id);
       if (response.body.message.toLowerCase() == "success") {
-        orders.clear();
-        orders.addAll(response.body.order);
+        List<Order> sortedOrders = List.from(response.body.order);
+        sortedOrders.sort((a, b) => a.status.compareTo(b.status));
+        _boxOrderList.deleteAll();
+        _boxOrderList.saveAll(sortedOrders);
       }
     } catch (e) {
       exception = AppException(message: e.toString());
+      orders = _boxOrderList.getAllOrders() ?? [];
     }
   }
 
@@ -68,11 +93,47 @@ abstract class _StoreOrderListBase with Store {
       }
     } catch (e) {
       exception = AppException(message: e.toString());
+      bankAccounts = _boxBankAccount.getAllAccounts() ?? [];
     }
   }
 
   @action
   void _onBoxBankAccountsChanged() {
-    bankAccounts.addAll(_boxBankAccount.listenable.value.values);
+    bankAccounts = ObservableList.of(_boxBankAccount.listenable.value.values);
+    selectedBankAccount = bankAccounts.first;
+  }
+
+  @action
+  void _onBoxOrderListChanged() {
+    orders = ObservableList.of(_boxOrderList.listenable.value.values);
+  }
+
+  @action
+  Future<void> payOrder(String orderId) async {
+    payOrderSuccess = false;
+    if (slipImage == null) {
+      exception = AppException(message: "Please upload Slip Image.");
+    } else {
+      showLoading = true;
+      try {
+        MultipartFile mediaFile = await MultipartFile.fromPath(
+            'file', slipImage?.path,
+            contentType: MediaType.parse('image/*'));
+
+        final PayOrderPayload _payOrderPayload = PayOrderPayload((b) {
+          b.bankid = selectedBankAccount.id;
+          b.orderid = orderId;
+          // b.slipimg = mediaFile;
+        });
+        final response =
+            await _payOrderService.payOrder(_payOrderPayload.toJson());
+        Modular.get<Logger>().d("payorderresponse ${response.toString()}");
+        showLoading = false;
+        payOrderSuccess = true;
+      } catch (e) {
+        showLoading = false;
+        exception = AppException(message: e.toString());
+      }
+    }
   }
 }
