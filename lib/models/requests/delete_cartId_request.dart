@@ -4,7 +4,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-import '../serializers.dart';
+import 'package:m2mobile/models/serializers.dart';
 
 part 'delete_cartId_request.g.dart';
 
@@ -13,7 +13,7 @@ abstract class DeleteCartRequest
   DeleteCartRequest._();
 
   factory DeleteCartRequest([updates(DeleteCartRequestBuilder b)]) =
-  _$DeleteCartRequest;
+      _$DeleteCartRequest;
 
   @BuiltValueField(wireName: 'cartIdList')
   BuiltList<String> get cartIdList;
