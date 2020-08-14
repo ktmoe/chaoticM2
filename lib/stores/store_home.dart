@@ -73,6 +73,7 @@ abstract class _StoreHome with Store {
 
   @action
   Future getLatestProducts(bool refresh) async {
+    print("get latest get called");
     loadMore = false;
     if (refresh) {
       latestCurrentPage = 0;
@@ -89,6 +90,7 @@ abstract class _StoreHome with Store {
         _boxProduct.saveAll(products);
       }
     } catch (e) {
+      print("latest err : ${e.toString()}");
       exception = AppException(message: e.toString());
     }
   }

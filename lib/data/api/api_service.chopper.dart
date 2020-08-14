@@ -199,6 +199,54 @@ class _$ApiService extends ApiService {
   }
 
   @override
+  Future<Response<FavoriteOperateResponse>> operateFavorite(
+      String customerId, String productId) {
+    final $url = '/api/customerview/operateFavorite';
+    final $params = <String, dynamic>{
+      'customerid': customerId,
+      'productid': productId
+    };
+    final $request = Request('POST', $url, client.baseUrl, parameters: $params);
+    return client
+        .send<FavoriteOperateResponse, FavoriteOperateResponse>($request);
+  }
+
+  @override
+  Future<Response<ProductResponse>> getCartList(String customerId) {
+    final $url = '/api/cartview/getCartItemList';
+    final $params = <String, dynamic>{'customerId': customerId};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<ProductResponse, ProductResponse>($request);
+  }
+
+  @override
+  Future<Response<CartListResponse>> addToCart(String item) {
+    final $url = '/api/cartview/addToCart';
+    final $body = item;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<CartListResponse, CartListResponse>($request);
+  }
+
+  @override
+  Future<Response<CartListResponse>> updateCart(
+      String cartId, String updateCount) {
+    final $url = '/api/cartview/updateCartItem';
+    final $params = <String, dynamic>{'cartId': cartId};
+    final $body = updateCount;
+    final $request =
+        Request('PUT', $url, client.baseUrl, body: $body, parameters: $params);
+    return client.send<CartListResponse, CartListResponse>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> deleteCartItems(String cartIds) {
+    final $url = '/api/cartview/deleteCartItems';
+    final $body = cartIds;
+    final $request = Request('DELETE', $url, client.baseUrl, body: $body);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
   Future<Response<PostOrderResponse>> postOrder(String orderCustomerInfo) {
     final $url = '/api/orderview/orderItems';
     final $body = orderCustomerInfo;

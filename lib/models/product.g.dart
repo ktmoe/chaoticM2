@@ -103,6 +103,18 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
         ..add(serializers.serialize(object.soldCount,
             specifiedType: const FullType(int)));
     }
+    if (object.quantity != null) {
+      result
+        ..add('quantity')
+        ..add(serializers.serialize(object.quantity,
+            specifiedType: const FullType(int)));
+    }
+    if (object.cartId != null) {
+      result
+        ..add('id')
+        ..add(serializers.serialize(object.cartId,
+            specifiedType: const FullType(String)));
+    }
     return result;
   }
 
@@ -183,6 +195,14 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
           result.soldCount = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
+        case 'quantity':
+          result.quantity = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'id':
+          result.cartId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
       }
     }
 
@@ -223,6 +243,10 @@ class _$Product extends Product {
   final String discountType;
   @override
   final int soldCount;
+  @override
+  final int quantity;
+  @override
+  final String cartId;
 
   factory _$Product([void Function(ProductBuilder) updates]) =>
       (new ProductBuilder()..update(updates)).build();
@@ -243,7 +267,9 @@ class _$Product extends Product {
       this.percentAmount,
       this.discountPrice,
       this.discountType,
-      this.soldCount})
+      this.soldCount,
+      this.quantity,
+      this.cartId})
       : super._() {
     if (productCode == null) {
       throw new BuiltValueNullFieldError('Product', 'productCode');
@@ -285,7 +311,9 @@ class _$Product extends Product {
         percentAmount == other.percentAmount &&
         discountPrice == other.discountPrice &&
         discountType == other.discountType &&
-        soldCount == other.soldCount;
+        soldCount == other.soldCount &&
+        quantity == other.quantity &&
+        cartId == other.cartId;
   }
 
   @override
@@ -306,26 +334,32 @@ class _$Product extends Product {
                                                         $jc(
                                                             $jc(
                                                                 $jc(
-                                                                    0,
-                                                                    favoriteId
+                                                                    $jc(
+                                                                        $jc(
+                                                                            0,
+                                                                            favoriteId
+                                                                                .hashCode),
+                                                                        productId
+                                                                            .hashCode),
+                                                                    productCode
                                                                         .hashCode),
-                                                                productId
+                                                                productName
                                                                     .hashCode),
-                                                            productCode
+                                                            categoryid
                                                                 .hashCode),
-                                                        productName.hashCode),
-                                                    categoryid.hashCode),
-                                                subcategoryid.hashCode),
-                                            description.hashCode),
-                                        specification.hashCode),
-                                    price.hashCode),
-                                status.hashCode),
-                            favorite.hashCode),
-                        images.hashCode),
-                    percentAmount.hashCode),
-                discountPrice.hashCode),
-            discountType.hashCode),
-        soldCount.hashCode));
+                                                        subcategoryid.hashCode),
+                                                    description.hashCode),
+                                                specification.hashCode),
+                                            price.hashCode),
+                                        status.hashCode),
+                                    favorite.hashCode),
+                                images.hashCode),
+                            percentAmount.hashCode),
+                        discountPrice.hashCode),
+                    discountType.hashCode),
+                soldCount.hashCode),
+            quantity.hashCode),
+        cartId.hashCode));
   }
 
   @override
@@ -346,7 +380,9 @@ class _$Product extends Product {
           ..add('percentAmount', percentAmount)
           ..add('discountPrice', discountPrice)
           ..add('discountType', discountType)
-          ..add('soldCount', soldCount))
+          ..add('soldCount', soldCount)
+          ..add('quantity', quantity)
+          ..add('cartId', cartId))
         .toString();
   }
 }
@@ -421,6 +457,14 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
   int get soldCount => _$this._soldCount;
   set soldCount(int soldCount) => _$this._soldCount = soldCount;
 
+  int _quantity;
+  int get quantity => _$this._quantity;
+  set quantity(int quantity) => _$this._quantity = quantity;
+
+  String _cartId;
+  String get cartId => _$this._cartId;
+  set cartId(String cartId) => _$this._cartId = cartId;
+
   ProductBuilder();
 
   ProductBuilder get _$this {
@@ -441,6 +485,8 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
       _discountPrice = _$v.discountPrice;
       _discountType = _$v.discountType;
       _soldCount = _$v.soldCount;
+      _quantity = _$v.quantity;
+      _cartId = _$v.cartId;
       _$v = null;
     }
     return this;
@@ -480,7 +526,9 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
               percentAmount: percentAmount,
               discountPrice: discountPrice,
               discountType: discountType,
-              soldCount: soldCount);
+              soldCount: soldCount,
+              quantity: quantity,
+              cartId: cartId);
     } catch (_) {
       String _$failedField;
       try {
@@ -529,14 +577,16 @@ class ProductAdapter extends TypeAdapter<Product> {
           ..percentAmount = fields[12] as int
           ..discountPrice = fields[13] as int
           ..discountType = fields[14] as String
-          ..soldCount = fields[15] as int)
+          ..soldCount = fields[15] as int
+          ..quantity = fields[17] as int
+          ..cartId = fields[16] as String)
         .build();
   }
 
   @override
   void write(BinaryWriter writer, Product obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(18)
       ..writeByte(0)
       ..write(obj.favoriteId)
       ..writeByte(1)
@@ -568,6 +618,10 @@ class ProductAdapter extends TypeAdapter<Product> {
       ..writeByte(14)
       ..write(obj.discountType)
       ..writeByte(15)
-      ..write(obj.soldCount);
+      ..write(obj.soldCount)
+      ..writeByte(17)
+      ..write(obj.quantity)
+      ..writeByte(16)
+      ..write(obj.cartId);
   }
 }

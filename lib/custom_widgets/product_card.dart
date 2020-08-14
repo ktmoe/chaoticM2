@@ -4,6 +4,7 @@ import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/pages/main/product_detail/product_detail_widget.dart';
+import 'package:m2mobile/stores/cart_store.dart';
 import 'package:m2mobile/stores/store_cart.dart';
 import 'package:m2mobile/stores/store_home.dart';
 import 'package:m2mobile/utils/constants.dart';
@@ -184,6 +185,8 @@ class ProductCardBottom extends StatefulWidget {
   final StoreCart _storeCart = Modular.get<StoreCart>();
   final Product product;
 
+  final CartStore _cartStore = Modular.get<CartStore>();
+
   ProductCardBottom({Key key, this.product}) : super(key: key);
 
   @override
@@ -220,18 +223,23 @@ class _ProductCardBottomState extends State<ProductCardBottom> {
               endIndent: Dimens.marginMedium,
             ),
             InkWell(
-              onTap: () {
-                if (widget._storeCart.cartProducts
-                    .containsKey(widget.product)) {
+              onTap: () async{
+                print("items in cart before adding => ${widget._cartStore.cartItems.length}");
+                if (widget._cartStore.cartItems
+                    .contains(widget.product)) {
                   "Item removed from cart.".showSnack(context);
-                  widget._storeCart.removeFromCart(widget.product);
+                  widget._cartStore.removeItemFromCart(widget.product.productId);
+                  // widget._storeCart.removeFromCart(widget.product);
                 } else {
                   "Item added to cart.".showSnack(context);
-                  widget._storeCart.addToCart(widget.product);
+                  await widget._cartStore.addToCart(widget.product);
+                  print("items in cart => ${widget._cartStore.cartItems.toString()}");
+                  // widget._storeCart.addToCart(widget.product);
                 }
               },
+              // widget._storeCart.cartProducts.containsKey(widget.product)
               child: Icon(
-                widget._storeCart.cartProducts.containsKey(widget.product)
+                widget._cartStore.containsInList(widget.product)
                     ? M2Icon.cart_cross
                     : M2Icon.cart_plus,
                 color: Colors.white,

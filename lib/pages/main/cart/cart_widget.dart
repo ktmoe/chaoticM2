@@ -6,6 +6,7 @@ import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/custom_widgets/order_item_card.dart';
 import 'package:m2mobile/pages/main/cart/order/order_widget.dart';
 import 'package:m2mobile/pages/main/more/order_list/complete_order/complete_order_widget.dart';
+import 'package:m2mobile/stores/cart_store.dart';
 import 'package:m2mobile/stores/store_cart.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:m2mobile/models/product.dart';
@@ -24,6 +25,14 @@ class CartWidget extends StatefulWidget {
 
 class _CartWidgetState extends State<CartWidget> {
   final StoreCart _storeCart = Modular.get<StoreCart>();
+
+  final CartStore _cartStore = Modular.get<CartStore>();
+
+  @override
+  void initState() {
+    _cartStore.init();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +66,9 @@ class _CartWidgetState extends State<CartWidget> {
       );
 
   Widget _buildOrderList() {
-    final cartProductsMap = _storeCart.cartProducts;
-    final cartProducts = cartProductsMap.keys.toList();
-    final cartCounts = cartProductsMap.values.toList();
+    //final cartProductsMap = _storeCart.cartProducts;
+    //final cartProducts = cartProductsMap.keys.toList();
+    //final cartCounts = cartProductsMap.values.toList();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: Dimens.marginMedium),
       margin: const EdgeInsets.only(bottom: Dimens.marginLargeX),
@@ -87,13 +96,18 @@ class _CartWidgetState extends State<CartWidget> {
                   ],
                 )
               : Container(height: Dimens.marginLarge),
-          Expanded(
-              child: ListView.builder(
-                  itemCount: cartProductsMap.length,
-                  itemBuilder: (context, index) {
-                    return _buildOrderRow(
-                        cartProducts[index], cartCounts[index]);
-                  }))
+          Observer(
+            builder: (_) {
+              final items = _cartStore.cartItems.toList();
+              return Expanded(
+                  child: ListView.builder(
+                      itemCount: items.length,
+                      itemBuilder: (context, index) {
+                        return _buildOrderRow(
+                            items[index], items[index].quantity);
+                      }));
+            },
+          )
         ],
       ),
     );
@@ -200,9 +214,10 @@ class BottomSheet extends StatefulWidget {
 
 class _BottomSheetState extends State<BottomSheet> {
   final StoreCart _storeCart = Modular.get<StoreCart>();
+  final CartStore _cartStore = Modular.get<CartStore>();
   @override
   Widget build(BuildContext context) {
-    return _storeCart.cartCount == 0
+    return _cartStore.cartItems.isEmpty
         ? _buildEmptyCartBottomSheet()
         : _buildNonEmptyCartBottomSheet();
   }
@@ -247,7 +262,7 @@ class _BottomSheetState extends State<BottomSheet> {
                 style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: Dimens.textRegular2_5x)),
-            Text(_storeCart.amount.toDouble().money(),
+            Text(_cartStore.amount.toDouble().money(),
                 textAlign: TextAlign.end,
                 style: TextStyle(
                     color: Theme.of(context).accentColor,
@@ -266,7 +281,7 @@ class _BottomSheetState extends State<BottomSheet> {
                 style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: Dimens.textRegular2_5x)),
-            Text(_storeCart.tax.toDouble().money(),
+            Text(_cartStore.tax.toDouble().money(),
                 textAlign: TextAlign.end,
                 style: TextStyle(
                     color: Theme.of(context).accentColor,
@@ -285,7 +300,7 @@ class _BottomSheetState extends State<BottomSheet> {
                 style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: Dimens.textRegular2_5x)),
-            Text(_storeCart.total.toDouble().money(),
+            Text(_cartStore.total.toDouble().money(),
                 textAlign: TextAlign.end,
                 style: TextStyle(
                     color: Theme.of(context).accentColor,

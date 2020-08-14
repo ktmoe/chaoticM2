@@ -7,8 +7,11 @@ part of 'serializers.dart';
 // **************************************************************************
 
 Serializers _$serializers = (new Serializers().toBuilder()
+      ..add(AddToCartRequest.serializer)
       ..add(BankAccount.serializer)
       ..add(BankInfoResponse.serializer)
+      ..add(CartItem.serializer)
+      ..add(CartListResponse.serializer)
       ..add(CompanyInfo.serializer)
       ..add(CompanyInfoResponse.serializer)
       ..add(DeleteFavoriteItemPayload.serializer)
@@ -40,10 +43,15 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(RefreshTokenResponse.serializer)
       ..add(SubCategory.serializer)
       ..add(SubCategoryResponse.serializer)
+      ..add(UpdateCartRequest.serializer)
+      ..add(UpdateItem.serializer)
       ..add(UserProfile.serializer)
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(BankAccount)]),
           () => new ListBuilder<BankAccount>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(CartItem)]),
+          () => new ListBuilder<CartItem>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(FavoriteId)]),
           () => new ListBuilder<FavoriteId>())

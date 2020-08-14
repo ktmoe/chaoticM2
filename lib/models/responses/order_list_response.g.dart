@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of order_list_response;
+part of 'order_list_response.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
