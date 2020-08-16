@@ -15,7 +15,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(CompanyInfo.serializer)
       ..add(CompanyInfoResponse.serializer)
       ..add(DeleteCartListRequest.serializer)
-      ..add(DeleteCartRequest.serializer)
       ..add(DeleteFavoriteItemPayload.serializer)
       ..add(FavoriteId.serializer)
       ..add(FavoriteItem.serializer)
@@ -69,9 +68,6 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Product)]),
           () => new ListBuilder<Product>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(String)]),
-          () => new ListBuilder<String>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>())

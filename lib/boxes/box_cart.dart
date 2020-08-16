@@ -25,13 +25,36 @@ class BoxCart implements Disposable {
   ValueListenable<Box<Product>> get listenable => _box.listenable();
 
   void save(Product data) {
-    _box.put(data.productId, data);
+    _box.put(data.cartId, data);
   }
 
   void addAll(List<Product> items) {
     items.forEach((element) {
       save(element);
     });
+  }
+
+  List<Product> getAll() {
+    List<Product> value = [];
+    _box.keys.forEach((element) {
+      value.add(_box.get(element));
+    });
+    return value;
+  }
+
+  String getCartId(String productId) {
+    return _box.values
+        .firstWhere((element) => element.productId == productId)
+        .cartId;
+  }
+
+  void remove(Product product) {
+    final toDelete = _box.values
+        .firstWhere((element) => element.productId == product.productId);
+    if (toDelete != null) {
+      var index = _box.values.toList().indexOf(toDelete);
+      _box.deleteAt(index);
+    }
   }
 
   void delete() {

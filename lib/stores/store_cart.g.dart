@@ -53,53 +53,125 @@ mixin _$StoreCart on _StoreCartBase, Store {
   final _$cartProductsAtom = Atom(name: '_StoreCartBase.cartProducts');
 
   @override
-  ObservableMap<Product, int> get cartProducts {
+  ObservableMap<String, Product> get cartProducts {
     _$cartProductsAtom.reportRead();
     return super.cartProducts;
   }
 
   @override
-  set cartProducts(ObservableMap<Product, int> value) {
+  set cartProducts(ObservableMap<String, Product> value) {
     _$cartProductsAtom.reportWrite(value, super.cartProducts, () {
       super.cartProducts = value;
     });
   }
 
-  final _$selectedProductsAtom = Atom(name: '_StoreCartBase.selectedProducts');
+  final _$selectedProductIdsAtom =
+      Atom(name: '_StoreCartBase.selectedProductIds');
 
   @override
-  ObservableList<Product> get selectedProducts {
-    _$selectedProductsAtom.reportRead();
-    return super.selectedProducts;
+  ObservableList<String> get selectedProductIds {
+    _$selectedProductIdsAtom.reportRead();
+    return super.selectedProductIds;
   }
 
   @override
-  set selectedProducts(ObservableList<Product> value) {
-    _$selectedProductsAtom.reportWrite(value, super.selectedProducts, () {
-      super.selectedProducts = value;
+  set selectedProductIds(ObservableList<String> value) {
+    _$selectedProductIdsAtom.reportWrite(value, super.selectedProductIds, () {
+      super.selectedProductIds = value;
     });
+  }
+
+  final _$exceptionAtom = Atom(name: '_StoreCartBase.exception');
+
+  @override
+  AppException<dynamic> get exception {
+    _$exceptionAtom.reportRead();
+    return super.exception;
+  }
+
+  @override
+  set exception(AppException<dynamic> value) {
+    _$exceptionAtom.reportWrite(value, super.exception, () {
+      super.exception = value;
+    });
+  }
+
+  final _$addToCartAsyncAction = AsyncAction('_StoreCartBase.addToCart');
+
+  @override
+  Future<void> addToCart(Product product) {
+    return _$addToCartAsyncAction.run(() => super.addToCart(product));
+  }
+
+  final _$removeFromCartAsyncAction =
+      AsyncAction('_StoreCartBase.removeFromCart');
+
+  @override
+  Future<dynamic> removeFromCart(Product product, {bool all = false}) {
+    return _$removeFromCartAsyncAction
+        .run(() => super.removeFromCart(product, all: all));
+  }
+
+  final _$getCartItemsAsyncAction = AsyncAction('_StoreCartBase.getCartItems');
+
+  @override
+  Future<dynamic> getCartItems() {
+    return _$getCartItemsAsyncAction.run(() => super.getCartItems());
   }
 
   final _$_StoreCartBaseActionController =
       ActionController(name: '_StoreCartBase');
 
   @override
-  void addToCart(Product product) {
+  void _onBoxCartChanged() {
     final _$actionInfo = _$_StoreCartBaseActionController.startAction(
-        name: '_StoreCartBase.addToCart');
+        name: '_StoreCartBase._onBoxCartChanged');
     try {
-      return super.addToCart(product);
+      return super._onBoxCartChanged();
     } finally {
       _$_StoreCartBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void removeFromCart(Product product, {bool all = false}) {
+  AddToCartRequest _addToCartRequest(Product p) {
     final _$actionInfo = _$_StoreCartBaseActionController.startAction(
-        name: '_StoreCartBase.removeFromCart');
+        name: '_StoreCartBase._addToCartRequest');
     try {
-      return super.removeFromCart(product, all: all);
+      return super._addToCartRequest(p);
+    } finally {
+      _$_StoreCartBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  UpdateCartRequest _updateCartRequest(Product p) {
+    final _$actionInfo = _$_StoreCartBaseActionController.startAction(
+        name: '_StoreCartBase._updateCartRequest');
+    try {
+      return super._updateCartRequest(p);
+    } finally {
+      _$_StoreCartBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  DeleteCartListRequest _deleteCartListRequest(Product p) {
+    final _$actionInfo = _$_StoreCartBaseActionController.startAction(
+        name: '_StoreCartBase._deleteCartListRequest');
+    try {
+      return super._deleteCartListRequest(p);
+    } finally {
+      _$_StoreCartBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Product cartProductById(String id) {
+    final _$actionInfo = _$_StoreCartBaseActionController.startAction(
+        name: '_StoreCartBase.cartProductById');
+    try {
+      return super.cartProductById(id);
     } finally {
       _$_StoreCartBaseActionController.endAction(_$actionInfo);
     }
@@ -110,7 +182,8 @@ mixin _$StoreCart on _StoreCartBase, Store {
     return '''
 showSelect: ${showSelect},
 cartProducts: ${cartProducts},
-selectedProducts: ${selectedProducts},
+selectedProductIds: ${selectedProductIds},
+exception: ${exception},
 cartCount: ${cartCount},
 amount: ${amount},
 tax: ${tax},

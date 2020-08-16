@@ -10,7 +10,6 @@ import 'package:m2mobile/modules/cart_module.dart';
 import 'package:m2mobile/modules/notification_module.dart';
 import 'package:m2mobile/modules/favourite_module.dart';
 import 'package:m2mobile/modules/order_list_module.dart';
-import 'package:m2mobile/stores/cart_store.dart';
 import 'package:m2mobile/stores/store_home.dart';
 import 'package:m2mobile/stores/store_cart.dart';
 import 'package:m2mobile/stores/store_order.dart';
@@ -20,7 +19,6 @@ class MainScreenModule extends ChildModule {
   List<Bind> get binds => [
         Bind((i) => StoreHome()),
         Bind((i) => StoreCart()),
-        Bind((i) => CartStore()),
         Bind((i) => StoreOrder())
       ];
 

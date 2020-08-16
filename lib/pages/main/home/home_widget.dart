@@ -9,6 +9,7 @@ import 'package:m2mobile/res/styles.dart';
 import 'package:m2mobile/custom_widgets/creation_aware_widget.dart';
 import 'package:m2mobile/custom_widgets/product_card.dart';
 import 'package:m2mobile/stores/store_home.dart';
+import 'package:m2mobile/stores/store_cart.dart';
 import 'package:m2mobile/utils/constants.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -28,6 +29,7 @@ class _HomeWidgetState extends State<HomeWidget>
   ];
 
   final StoreHome _storeHome = Modular.get<StoreHome>();
+  final StoreCart _storeCart = Modular.get<StoreCart>();
   final List<ReactionDisposer> _disposer = [];
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorState = GlobalKey();
 
@@ -50,7 +52,7 @@ class _HomeWidgetState extends State<HomeWidget>
   void initState() {
     super.initState();
     _disposer.addAll([_onException(), _onLoadMoreChanged()]);
-    _storeHome.init();
+    Future.wait([_storeHome.init(), _storeCart.init()]);
   }
 
   @override

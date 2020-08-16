@@ -2,10 +2,9 @@ import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:m2mobile/models/cart_item.dart';
 import 'package:m2mobile/models/force_update.dart';
-import 'package:m2mobile/models/requests/add_to_cart_request.dart';
-import 'package:m2mobile/models/requests/delete_cartId_request.dart';
-import 'package:m2mobile/models/requests/delete_cart_items_request.dart';
-import 'package:m2mobile/models/requests/update_cart_request.dart';
+import 'package:m2mobile/models/payloads/add_to_cart_request.dart';
+import 'package:m2mobile/models/payloads/delete_cart_items_request.dart';
+import 'package:m2mobile/models/payloads/update_cart_request.dart';
 import 'package:m2mobile/models/responses/cart_list_response.dart';
 import 'package:m2mobile/models/responses/favorite_id.dart';
 import 'package:m2mobile/models/responses/force_update_response.dart';
@@ -23,7 +22,7 @@ import 'package:m2mobile/models/m2_category.dart';
 import 'package:m2mobile/models/responses/m2_category_response.dart';
 import 'package:m2mobile/models/responses/sub_category_response.dart';
 import 'package:m2mobile/models/sub_category.dart';
-import 'package:m2mobile/models/update_item.dart';
+import 'package:m2mobile/models/payloads/update_item.dart';
 import 'package:m2mobile/models/user_profile.dart';
 import 'package:m2mobile/models/responses/file_upload_response.dart';
 import 'package:m2mobile/models/responses/post_profile_response.dart';
@@ -84,7 +83,6 @@ part 'serializers.g.dart';
   CartListResponse,
   UpdateCartRequest,
   UpdateItem,
-  DeleteCartRequest,
   DeleteCartListRequest
 ])
 final Serializers serializers =

@@ -4,7 +4,6 @@ import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/pages/main/product_detail/product_detail_widget.dart';
-import 'package:m2mobile/stores/cart_store.dart';
 import 'package:m2mobile/stores/store_cart.dart';
 import 'package:m2mobile/stores/store_home.dart';
 import 'package:m2mobile/utils/constants.dart';
@@ -191,60 +190,61 @@ class ProductCardBottom extends StatefulWidget {
 }
 
 class _ProductCardBottomState extends State<ProductCardBottom> {
-  final CartStore _cartStore = Modular.get<CartStore>();
+  final StoreCart _storeCart = Modular.get<StoreCart>();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: const EdgeInsets.only(top: Dimens.marginSmall),
-        decoration: BoxDecoration(
-            color: Theme.of(context).accentColor,
-            borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(Dimens.marginMedium2),
-                bottomRight: Radius.circular(Dimens.marginMedium2))),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            InkWell(
-              onTap: () async {
-                await Modular.get<StoreHome>().operateFavorite(widget.product);
-              },
-              child: Icon(M2Icon.favourite,
-                  size: 16,
-                  color: (widget.product.favoriteId ?? "").isNotEmpty
-                      ? Theme.of(context).iconTheme.color
-                      : Colors.white),
-            ),
-            VerticalDivider(
-              color: Colors.white,
-              indent: Dimens.marginMedium,
-              endIndent: Dimens.marginMedium,
-            ),
-            InkWell(
-              onTap: () async {
-                print(
-                    "items in cart before adding => ${_cartStore.cartItems.length}");
-                if (_cartStore.cartItems.contains(widget.product)) {
-                  "Item removed from cart.".showSnack(context);
-                  _cartStore.removeItemFromCart(widget.product.productId);
-                  // widget._storeCart.removeFromCart(widget.product);
-                } else {
-                  "Item added to cart.".showSnack(context);
-                  await _cartStore.addToCart(widget.product);
-                  print("items in cart => ${_cartStore.cartItems.toString()}");
-                  // widget._storeCart.addToCart(widget.product);
-                }
-              },
-              // widget._storeCart.cartProducts.containsKey(widget.product)
-              child: Icon(
-                _cartStore.containsInList(widget.product)
-                    ? M2Icon.cart_cross
-                    : M2Icon.cart_plus,
-                color: Colors.white,
-                size: 18,
+    return Observer(builder: (_) {
+      return Container(
+          margin: const EdgeInsets.only(top: Dimens.marginSmall),
+          decoration: BoxDecoration(
+              color: Theme.of(context).accentColor,
+              borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(Dimens.marginMedium2),
+                  bottomRight: Radius.circular(Dimens.marginMedium2))),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              InkWell(
+                onTap: () async {
+                  await Modular.get<StoreHome>()
+                      .operateFavorite(widget.product);
+                },
+                child: Icon(M2Icon.favourite,
+                    size: 16,
+                    color: (widget.product.favoriteId ?? "").isNotEmpty
+                        ? Theme.of(context).iconTheme.color
+                        : Colors.white),
               ),
-            )
-          ],
-        ));
+              VerticalDivider(
+                color: Colors.white,
+                indent: Dimens.marginMedium,
+                endIndent: Dimens.marginMedium,
+              ),
+              InkWell(
+                onTap: () async {
+                  if (_storeCart.cartProducts
+                      .containsKey(widget.product.productId)) {
+                    "Item removed from cart.".showSnack(context);
+                    _storeCart.removeFromCart(widget.product);
+                    // widget._storeCart.removeFromCart(widget.product);
+                  } else {
+                    "Item added to cart.".showSnack(context);
+                    _storeCart.addToCart(widget.product);
+                    // widget._storeCart.addToCart(widget.product);
+                  }
+                },
+                // widget._storeCart.cartProducts.containsKey(widget.product)
+                child: Icon(
+                  _storeCart.cartProducts.containsKey(widget.product.productId)
+                      ? M2Icon.cart_cross
+                      : M2Icon.cart_plus,
+                  color: Colors.white,
+                  size: 18,
+                ),
+              )
+            ],
+          ));
+    });
   }
 }

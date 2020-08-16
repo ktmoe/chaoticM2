@@ -17,8 +17,8 @@ abstract class DeleteCartListRequest
   factory DeleteCartListRequest([updates(DeleteCartListRequestBuilder b)]) =
       _$DeleteCartListRequest;
 
-  @BuiltValueField(wireName: 'cartIdList')
-  BuiltList<String> get cartIdList;
+  @BuiltValueField(wireName: 'productIdList')
+  BuiltList<String> get productIdList;
   String toJson() {
     return json.encode(
         serializers.serializeWith(DeleteCartListRequest.serializer, this));

@@ -52,6 +52,7 @@ abstract class _StoreHome with Store {
     _discountProductBox = await DiscountProductBox.create();
     _boxFav = await BoxFav.create();
     _boxProductByCategory = await BoxProductByCategory.create();
+
     updateProducts();
     updateDiscountProducts();
     _boxProduct.listenable.addListener(updateProducts);

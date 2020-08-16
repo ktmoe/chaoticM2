@@ -6,7 +6,6 @@ import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/custom_widgets/order_item_card.dart';
 import 'package:m2mobile/pages/main/cart/order/order_widget.dart';
 import 'package:m2mobile/pages/main/more/order_list/complete_order/complete_order_widget.dart';
-import 'package:m2mobile/stores/cart_store.dart';
 import 'package:m2mobile/stores/store_cart.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:m2mobile/models/product.dart';
@@ -26,11 +25,8 @@ class CartWidget extends StatefulWidget {
 class _CartWidgetState extends State<CartWidget> {
   final StoreCart _storeCart = Modular.get<StoreCart>();
 
-  final CartStore _cartStore = Modular.get<CartStore>();
-
   @override
   void initState() {
-    _cartStore.init();
     super.initState();
   }
 
@@ -50,7 +46,7 @@ class _CartWidgetState extends State<CartWidget> {
                 },
                 onDeletePressed: widget.isSummary ? null : _cartDeletePressed,
               ),
-              body: _cartStore.cartCount == 0
+              body: _storeCart.cartCount == 0
                   ? _buildEmptyBody()
                   : _buildNonEmptyBody()));
     });
@@ -81,13 +77,14 @@ class _CartWidgetState extends State<CartWidget> {
                   children: <Widget>[
                     Checkbox(
                         activeColor: Colors.green,
-                        value: _storeCart.selectedProducts.length ==
+                        value: _storeCart.selectedProductIds.length ==
                             _storeCart.cartProducts.length,
                         onChanged: (val) {
-                          _storeCart.selectedProducts.clear();
+                          _storeCart.selectedProductIds.clear();
                           if (val)
-                            _storeCart.selectedProducts
-                                .addAll(_storeCart.cartProducts.keys);
+                            _storeCart.selectedProductIds.addAll(_storeCart
+                                .cartProducts.values
+                                .map((e) => e.productId));
                         }),
                     const Text('Select all',
                         style: TextStyle(
@@ -98,13 +95,12 @@ class _CartWidgetState extends State<CartWidget> {
               : Container(height: Dimens.marginLarge),
           Observer(
             builder: (_) {
-              final items = _cartStore.cartItems.toList();
               return Expanded(
                   child: ListView.builder(
-                      itemCount: items.length,
+                      itemCount: _storeCart.cartProducts.length,
                       itemBuilder: (context, index) {
                         return _buildOrderRow(
-                            items[index], items[index].quantity);
+                            _storeCart.cartProducts.values.toList()[index]);
                       }));
             },
           )
@@ -113,7 +109,7 @@ class _CartWidgetState extends State<CartWidget> {
     );
   }
 
-  Widget _buildOrderRow(Product product, int count) => Container(
+  Widget _buildOrderRow(Product product) => Container(
         padding: const EdgeInsets.only(bottom: Dimens.marginMedium3),
         child: Wrap(
           alignment: WrapAlignment.spaceAround,
@@ -124,12 +120,14 @@ class _CartWidgetState extends State<CartWidget> {
                 duration: Duration(milliseconds: 400),
                 firstChild: Checkbox(
                     activeColor: Colors.green,
-                    value:
-                        _storeCart.selectedProducts.contains(product) ?? false,
+                    value: _storeCart.selectedProductIds
+                            .contains(product.productId) ??
+                        false,
                     onChanged: (val) {
                       val
-                          ? _storeCart.selectedProducts.add(product)
-                          : _storeCart.selectedProducts.remove(product);
+                          ? _storeCart.selectedProductIds.add(product.productId)
+                          : _storeCart.selectedProductIds
+                              .remove(product.productId);
                     }),
                 secondChild: Container(width: 20),
                 crossFadeState: _storeCart.showSelect
@@ -140,14 +138,12 @@ class _CartWidgetState extends State<CartWidget> {
                   if (!widget.isSummary) {
                     if (!_storeCart.showSelect) {
                       _storeCart.showSelect = true;
-                      _storeCart.selectedProducts.add(product);
+                      _storeCart.selectedProductIds.add(product.productId);
                     }
                   }
                 },
                 child: OrderItemCard(
-                    product: product,
-                    count: count,
-                    isSummary: widget.isSummary))
+                    product: product, isSummary: widget.isSummary))
           ],
         ),
       );
@@ -185,13 +181,14 @@ class _CartWidgetState extends State<CartWidget> {
 
   void _cartDeletePressed() {
     if (_storeCart.showSelect) {
-      _storeCart.selectedProducts.forEach((delete) {
-        _storeCart.removeFromCart(delete, all: true);
+      _storeCart.selectedProductIds.forEach((delete) {
+        _storeCart.removeFromCart(_storeCart.cartProductById(delete),
+            all: true);
       });
-      _storeCart.selectedProducts.clear();
+      _storeCart.selectedProductIds.clear();
       if (_storeCart.cartProducts.isEmpty) _storeCart.showSelect = false;
     } else {
-      _storeCart.selectedProducts.clear();
+      _storeCart.selectedProductIds.clear();
       _storeCart.showSelect = true;
     }
   }
@@ -215,10 +212,10 @@ class BottomSheet extends StatefulWidget {
 }
 
 class _BottomSheetState extends State<BottomSheet> {
-  final CartStore _cartStore = Modular.get<CartStore>();
+  final StoreCart _storeCart = Modular.get<StoreCart>();
   @override
   Widget build(BuildContext context) {
-    return _cartStore.cartItems.isEmpty
+    return _storeCart.cartProducts.isEmpty
         ? _buildEmptyCartBottomSheet()
         : _buildNonEmptyCartBottomSheet();
   }
@@ -263,7 +260,7 @@ class _BottomSheetState extends State<BottomSheet> {
                 style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: Dimens.textRegular2_5x)),
-            Text(_cartStore.amount.toDouble().money(),
+            Text(_storeCart.amount.toDouble().money(),
                 textAlign: TextAlign.end,
                 style: TextStyle(
                     color: Theme.of(context).accentColor,
@@ -282,7 +279,7 @@ class _BottomSheetState extends State<BottomSheet> {
                 style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: Dimens.textRegular2_5x)),
-            Text(_cartStore.tax.toDouble().money(),
+            Text(_storeCart.tax.toDouble().money(),
                 textAlign: TextAlign.end,
                 style: TextStyle(
                     color: Theme.of(context).accentColor,
@@ -301,7 +298,7 @@ class _BottomSheetState extends State<BottomSheet> {
                 style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: Dimens.textRegular2_5x)),
-            Text(_cartStore.total.toDouble().money(),
+            Text(_storeCart.total.toDouble().money(),
                 textAlign: TextAlign.end,
                 style: TextStyle(
                     color: Theme.of(context).accentColor,

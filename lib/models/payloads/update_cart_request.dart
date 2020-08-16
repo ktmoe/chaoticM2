@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-import '../serializers.dart';
-import '../update_item.dart';
+import 'package:m2mobile/models/serializers.dart';
+import 'package:m2mobile/models/payloads/update_item.dart';
 
 part 'update_cart_request.g.dart';
 

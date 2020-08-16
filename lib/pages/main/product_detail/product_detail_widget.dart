@@ -297,7 +297,7 @@ class _BottomSheetState extends State<BottomSheet> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       disabledColor: Colors.white,
       onPressed: () {
-        if (_storeCart.cartProducts.containsKey(widget.product)) {
+        if (_storeCart.cartProducts.containsKey(widget.product.productId)) {
           _storeCart.removeFromCart(widget.product);
         } else {
           _storeCart.addToCart(widget.product);
@@ -308,13 +308,13 @@ class _BottomSheetState extends State<BottomSheet> {
       child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Icon(_storeCart.cartProducts.containsKey(widget.product)
+            Icon(_storeCart.cartProducts.containsKey(widget.product.productId)
                 ? M2Icon.cart_cross
                 : M2Icon.cart_plus),
             Container(
                 margin: const EdgeInsets.only(left: 10),
                 child: Text(
-                  _storeCart.cartProducts.containsKey(widget.product)
+                  _storeCart.cartProducts.containsKey(widget.product.productId)
                       ? 'REMOVE FROM CART'
                       : 'ADD TO CART',
                   style: TextStyle(color: Theme.of(context).accentColor),

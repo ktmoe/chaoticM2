@@ -52,11 +52,11 @@ abstract class _StoreOrderBase with Store {
       final response =
           await _apiService.postOrder(_getOrderCustomerInfoPayload().toJson());
       if (response.body.message.toLowerCase() == "success") {
-        orderPostSuccess = true;
         Modular.get<StoreHome>().selectedOrderId =
             response.body.wrapper.order.id;
+        showLoading = false;
+        orderPostSuccess = true;
       }
-      showLoading = false;
     } catch (e) {
       showLoading = false;
       exception = AppException(message: e.toString());

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:m2mobile/models/requests/update_cart_request.dart';
 import 'package:m2mobile/res/dimens.dart';
-import 'package:m2mobile/stores/cart_store.dart';
 import 'package:m2mobile/utils/extensions.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/models/product.dart';
@@ -11,11 +9,9 @@ import 'package:m2mobile/utils/constants.dart';
 
 class OrderItemCard extends StatefulWidget {
   final Product product;
-  final int count;
   final bool isSummary;
 
-  const OrderItemCard(
-      {Key key, @required this.product, @required this.count, this.isSummary})
+  const OrderItemCard({Key key, @required this.product, this.isSummary})
       : super(key: key);
 
   @override
@@ -24,14 +20,9 @@ class OrderItemCard extends StatefulWidget {
 
 class _OrderItemCardState extends State<OrderItemCard> {
   final StoreCart _storeCart = Modular.get<StoreCart>();
-  final CartStore _cartStore = Modular.get<CartStore>();
-
-  int qty = 0;
 
   @override
   void initState() {
-    qty = widget.count;
-    print("item card jsonstring => ${widget.product.toJson()}");
     super.initState();
   }
 
@@ -61,84 +52,6 @@ class _OrderItemCardState extends State<OrderItemCard> {
                 ])));
   }
 
-  Widget _buildOrderProductQuantity() => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          InkWell(
-            onTap: () {
-              setState(() {
-                qty += 1;
-              });
-              Future.delayed(const Duration(milliseconds: 1300), () async {
-                final updateItem =
-                    UpdateCartRequest((b) => b..updateItem.quantity = qty);
-                _cartStore.updateCartItemQty(
-                    widget.product.cartId, updateItem.toJson());
-                _cartStore.fetchCartItems(refresh: true);
-              });
-            },
-            child: Card(
-              elevation: Dimens.cardElevation,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: Dimens.marginSmall),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                alignment: Alignment.center,
-                child: Icon(M2Icon.plus, color: Colors.green),
-              ),
-            ),
-          ),
-          const SizedBox(width: Dimens.marginMedium),
-          Text("$qty"),
-          const SizedBox(width: Dimens.marginMedium),
-          InkWell(
-            onTap: () {
-              setState(() {
-                qty--;
-                qty = (qty < 0) ? 0 : qty;
-              });
-              Future.delayed(const Duration(milliseconds: 1300), () async {
-                final updateItem =
-                    UpdateCartRequest((b) => b..updateItem.quantity = qty);
-                _cartStore.updateCartItemQty(
-                    widget.product.cartId, updateItem.toJson());
-                _cartStore.fetchCartItems(refresh: true);
-              });
-              // _storeCart.removeFromCart(widget.product);
-            },
-            child: Card(
-              elevation: Dimens.cardElevation,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: Dimens.marginSmall),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                alignment: Alignment.center,
-                child: Icon(M2Icon.minus, color: Colors.red),
-              ),
-            ),
-          ),
-        ],
-      );
-
-  Widget _buildOrderProductInfo() => Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(widget.product.productName,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  fontSize: Dimens.textRegular2x, fontWeight: FontWeight.w600)),
-          const SizedBox(height: Dimens.marginMedium2),
-          Text("Price: ${widget.product.price.toDouble().money()}")
-        ],
-      );
-
   Widget _buildOrderProductImage() => ClipRRect(
         borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(16), topLeft: Radius.circular(16)),
@@ -154,17 +67,30 @@ class _OrderItemCardState extends State<OrderItemCard> {
         ),
       );
 
-  // Widget _buildOrderProductQuantity() => Column(
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: <Widget>[
-  //         _buildIncreamentBtn(),
-  //         const SizedBox(height: Dimens.marginMedium),
-  //         Text('${widget.count}',
-  //             style: TextStyle(fontWeight: FontWeight.w800)),
-  //         const SizedBox(height: Dimens.marginMedium),
-  //         _buildDecrementBtn()
-  //       ],
-  //     );
+  Widget _buildOrderProductInfo() => Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(widget.product.productName,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  fontSize: Dimens.textRegular2x, fontWeight: FontWeight.w600)),
+          const SizedBox(height: Dimens.marginMedium2),
+          Text("Price: ${widget.product.price.toDouble().money()}")
+        ],
+      );
+
+  Widget _buildOrderProductQuantity() => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          _buildIncreamentBtn(),
+          const SizedBox(height: Dimens.marginMedium),
+          Text('${widget.product.quantity}',
+              style: TextStyle(fontWeight: FontWeight.w800)),
+          const SizedBox(height: Dimens.marginMedium),
+          _buildDecrementBtn()
+        ],
+      );
 
   Widget _buildIncreamentBtn() {
     return widget.isSummary
