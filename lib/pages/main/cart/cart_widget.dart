@@ -348,7 +348,8 @@ class _BottomSheetState extends State<BottomSheet> {
                     disabledTextColor: Colors.white,
                     onPressed: () {
                       widget.isSummary
-                          ? Modular.to.pushNamed(CompleteOrderWidget.route)
+                          ? Modular.to
+                              .pushReplacementNamed(CompleteOrderWidget.route)
                           : Modular.to.pushNamed(OrderWidget.route);
                     },
                     child: Text(
@@ -360,4 +361,10 @@ class _BottomSheetState extends State<BottomSheet> {
           );
         },
       );
+
+  @override
+  void dispose() {
+    Modular.get<StoreCart>().emptyTheCart();
+    super.dispose();
+  }
 }

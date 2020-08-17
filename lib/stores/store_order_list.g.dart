@@ -160,6 +160,15 @@ mixin _$StoreOrderList on _StoreOrderListBase, Store {
     return _$payOrderAsyncAction.run(() => super.payOrder(orderId));
   }
 
+  final _$_uploadSlipImageAsyncAction =
+      AsyncAction('_StoreOrderListBase._uploadSlipImage');
+
+  @override
+  Future<String> _uploadSlipImage(File file) {
+    return _$_uploadSlipImageAsyncAction
+        .run(() => super._uploadSlipImage(file));
+  }
+
   final _$_StoreOrderListBaseActionController =
       ActionController(name: '_StoreOrderListBase');
 
@@ -180,6 +189,17 @@ mixin _$StoreOrderList on _StoreOrderListBase, Store {
         name: '_StoreOrderListBase._onBoxOrderListChanged');
     try {
       return super._onBoxOrderListChanged();
+    } finally {
+      _$_StoreOrderListBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  PayOrderPayload _payOrderPayload(String imageUrl) {
+    final _$actionInfo = _$_StoreOrderListBaseActionController.startAction(
+        name: '_StoreOrderListBase._payOrderPayload');
+    try {
+      return super._payOrderPayload(imageUrl);
     } finally {
       _$_StoreOrderListBaseActionController.endAction(_$actionInfo);
     }

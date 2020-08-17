@@ -26,6 +26,9 @@ class _$PayOrderPayloadSerializer
       'bankid',
       serializers.serialize(object.bankid,
           specifiedType: const FullType(String)),
+      'imageurl',
+      serializers.serialize(object.slipimg,
+          specifiedType: const FullType(String)),
     ];
 
     return result;
@@ -51,6 +54,10 @@ class _$PayOrderPayloadSerializer
           result.bankid = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'imageurl':
+          result.slipimg = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
       }
     }
 
@@ -63,16 +70,21 @@ class _$PayOrderPayload extends PayOrderPayload {
   final String orderid;
   @override
   final String bankid;
+  @override
+  final String slipimg;
 
   factory _$PayOrderPayload([void Function(PayOrderPayloadBuilder) updates]) =>
       (new PayOrderPayloadBuilder()..update(updates)).build();
 
-  _$PayOrderPayload._({this.orderid, this.bankid}) : super._() {
+  _$PayOrderPayload._({this.orderid, this.bankid, this.slipimg}) : super._() {
     if (orderid == null) {
       throw new BuiltValueNullFieldError('PayOrderPayload', 'orderid');
     }
     if (bankid == null) {
       throw new BuiltValueNullFieldError('PayOrderPayload', 'bankid');
+    }
+    if (slipimg == null) {
+      throw new BuiltValueNullFieldError('PayOrderPayload', 'slipimg');
     }
   }
 
@@ -89,19 +101,22 @@ class _$PayOrderPayload extends PayOrderPayload {
     if (identical(other, this)) return true;
     return other is PayOrderPayload &&
         orderid == other.orderid &&
-        bankid == other.bankid;
+        bankid == other.bankid &&
+        slipimg == other.slipimg;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, orderid.hashCode), bankid.hashCode));
+    return $jf(
+        $jc($jc($jc(0, orderid.hashCode), bankid.hashCode), slipimg.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('PayOrderPayload')
           ..add('orderid', orderid)
-          ..add('bankid', bankid))
+          ..add('bankid', bankid)
+          ..add('slipimg', slipimg))
         .toString();
   }
 }
@@ -118,12 +133,17 @@ class PayOrderPayloadBuilder
   String get bankid => _$this._bankid;
   set bankid(String bankid) => _$this._bankid = bankid;
 
+  String _slipimg;
+  String get slipimg => _$this._slipimg;
+  set slipimg(String slipimg) => _$this._slipimg = slipimg;
+
   PayOrderPayloadBuilder();
 
   PayOrderPayloadBuilder get _$this {
     if (_$v != null) {
       _orderid = _$v.orderid;
       _bankid = _$v.bankid;
+      _slipimg = _$v.slipimg;
       _$v = null;
     }
     return this;
@@ -144,8 +164,9 @@ class PayOrderPayloadBuilder
 
   @override
   _$PayOrderPayload build() {
-    final _$result =
-        _$v ?? new _$PayOrderPayload._(orderid: orderid, bankid: bankid);
+    final _$result = _$v ??
+        new _$PayOrderPayload._(
+            orderid: orderid, bankid: bankid, slipimg: slipimg);
     replace(_$result);
     return _$result;
   }

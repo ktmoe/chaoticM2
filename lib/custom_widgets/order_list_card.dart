@@ -29,7 +29,8 @@ class _OrderListCardState extends State<OrderListCard> {
           onTap: () {
             Modular.get<StoreHome>().selectedOrderId = widget.order.id;
             widget.order.status == "Complete"
-                ? Modular.to.pushNamed(OrderDetailWidget.route)
+                ? Modular.to
+                    .pushNamed(OrderDetailWidget.route, arguments: widget.order)
                 : Modular.to.pushNamed(CompleteOrderWidget.route);
           },
           child: Stack(

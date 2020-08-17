@@ -23,6 +23,9 @@ class _$OrderItemSerializer implements StructuredSerializer<OrderItem> {
       'orderid',
       serializers.serialize(object.orderid,
           specifiedType: const FullType(String)),
+      'productName',
+      serializers.serialize(object.productName,
+          specifiedType: const FullType(String)),
       'productid',
       serializers.serialize(object.productid,
           specifiedType: const FullType(String)),
@@ -61,6 +64,10 @@ class _$OrderItemSerializer implements StructuredSerializer<OrderItem> {
           result.orderid = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'productName':
+          result.productName = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'productid':
           result.productid = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
@@ -94,6 +101,8 @@ class _$OrderItem extends OrderItem {
   @override
   final String orderid;
   @override
+  final String productName;
+  @override
   final String productid;
   @override
   final int price;
@@ -110,6 +119,7 @@ class _$OrderItem extends OrderItem {
   _$OrderItem._(
       {this.id,
       this.orderid,
+      this.productName,
       this.productid,
       this.price,
       this.quantity,
@@ -121,6 +131,9 @@ class _$OrderItem extends OrderItem {
     }
     if (orderid == null) {
       throw new BuiltValueNullFieldError('OrderItem', 'orderid');
+    }
+    if (productName == null) {
+      throw new BuiltValueNullFieldError('OrderItem', 'productName');
     }
     if (productid == null) {
       throw new BuiltValueNullFieldError('OrderItem', 'productid');
@@ -152,6 +165,7 @@ class _$OrderItem extends OrderItem {
     return other is OrderItem &&
         id == other.id &&
         orderid == other.orderid &&
+        productName == other.productName &&
         productid == other.productid &&
         price == other.price &&
         quantity == other.quantity &&
@@ -165,7 +179,9 @@ class _$OrderItem extends OrderItem {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, id.hashCode), orderid.hashCode),
+                    $jc(
+                        $jc($jc($jc(0, id.hashCode), orderid.hashCode),
+                            productName.hashCode),
                         productid.hashCode),
                     price.hashCode),
                 quantity.hashCode),
@@ -178,6 +194,7 @@ class _$OrderItem extends OrderItem {
     return (newBuiltValueToStringHelper('OrderItem')
           ..add('id', id)
           ..add('orderid', orderid)
+          ..add('productName', productName)
           ..add('productid', productid)
           ..add('price', price)
           ..add('quantity', quantity)
@@ -197,6 +214,10 @@ class OrderItemBuilder implements Builder<OrderItem, OrderItemBuilder> {
   String _orderid;
   String get orderid => _$this._orderid;
   set orderid(String orderid) => _$this._orderid = orderid;
+
+  String _productName;
+  String get productName => _$this._productName;
+  set productName(String productName) => _$this._productName = productName;
 
   String _productid;
   String get productid => _$this._productid;
@@ -224,6 +245,7 @@ class OrderItemBuilder implements Builder<OrderItem, OrderItemBuilder> {
     if (_$v != null) {
       _id = _$v.id;
       _orderid = _$v.orderid;
+      _productName = _$v.productName;
       _productid = _$v.productid;
       _price = _$v.price;
       _quantity = _$v.quantity;
@@ -253,6 +275,7 @@ class OrderItemBuilder implements Builder<OrderItem, OrderItemBuilder> {
         new _$OrderItem._(
             id: id,
             orderid: orderid,
+            productName: productName,
             productid: productid,
             price: price,
             quantity: quantity,

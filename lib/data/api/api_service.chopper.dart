@@ -269,4 +269,14 @@ class _$ApiService extends ApiService {
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<OrderDetailResponse, OrderDetailResponse>($request);
   }
+
+  @override
+  Future<Response<BuiltList<OrderPaymentResponse>>> payOrder(
+      String payOrderPayload) {
+    final $url = '/order-payment';
+    final $body = payOrderPayload;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client
+        .send<BuiltList<OrderPaymentResponse>, OrderPaymentResponse>($request);
+  }
 }

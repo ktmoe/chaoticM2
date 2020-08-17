@@ -27,4 +27,16 @@ class _$FileUploadService extends FileUploadService {
         Request('POST', $url, client.baseUrl, parts: $parts, multipart: true);
     return client.send<FileUploadResponse, FileUploadResponse>($request);
   }
+
+  @override
+  Future<Response<FileUploadResponse>> uploadSlipImage(
+      MultipartFile imageFile) {
+    final $url = '/file/upload/pay_order';
+    final $parts = <PartValue>[
+      PartValueFile<MultipartFile>('image', imageFile)
+    ];
+    final $request =
+        Request('POST', $url, client.baseUrl, parts: $parts, multipart: true);
+    return client.send<FileUploadResponse, FileUploadResponse>($request);
+  }
 }

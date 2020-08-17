@@ -29,6 +29,7 @@ import 'package:m2mobile/models/responses/post_profile_response.dart';
 import 'package:m2mobile/models/responses/favorite_operate_response.dart';
 import 'package:m2mobile/models/responses/bank_info_response.dart';
 import 'package:m2mobile/models/responses/post_order_response.dart';
+import 'package:m2mobile/models/responses/order_payment_response.dart';
 import 'package:m2mobile/models/payloads/favorite_item.dart';
 import 'package:m2mobile/models/payloads/favorite_item_payload.dart';
 import 'package:m2mobile/models/payloads/delete_favorite_item_payload.dart';
@@ -62,6 +63,7 @@ part 'serializers.g.dart';
   LoginResponse,
   FavoriteOperateResponse,
   RefreshTokenResponse,
+  OrderPaymentResponse,
   BankAccount,
   BankInfoResponse,
   FavoriteItemPayload,

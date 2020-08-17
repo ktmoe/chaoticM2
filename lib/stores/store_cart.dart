@@ -78,7 +78,6 @@ abstract class _StoreCartBase with Store {
       final renewed = product.rebuild((b) => b
         ..quantity = 1
         ..cartId = response.body.cartItem.first.id);
-      // cartIdMap.putIfAbsent(renewed.productId, () => renewed.cartId);
       _boxCart.save(renewed);
     }
   }
@@ -118,7 +117,9 @@ abstract class _StoreCartBase with Store {
 
   @action
   DeleteCartListRequest _deleteCartListRequest(Product p) =>
-      DeleteCartListRequest((b) => b..productIdList.add(p.productId));
+      DeleteCartListRequest((b) => b
+        ..customerId = Modular.get<StoreApp>().userProfile.id
+        ..productIdList.add(p.productId));
 
   @action
   Product cartProductById(String id) {
@@ -135,5 +136,10 @@ abstract class _StoreCartBase with Store {
     } catch (e) {
       exception = AppException(message: e.toString());
     }
+  }
+
+  @action
+  void emptyTheCart() {
+    _boxCart.delete();
   }
 }

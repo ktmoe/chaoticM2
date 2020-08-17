@@ -23,12 +23,14 @@ class _$OrderListResponseSerializer
       'message',
       serializers.serialize(object.message,
           specifiedType: const FullType(String)),
-      'data',
-      serializers.serialize(object.order,
-          specifiedType:
-              const FullType(BuiltList, const [const FullType(Order)])),
     ];
-
+    if (object.order != null) {
+      result
+        ..add('data')
+        ..add(serializers.serialize(object.order,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(Order)])));
+    }
     return result;
   }
 
@@ -74,9 +76,6 @@ class _$OrderListResponse extends OrderListResponse {
   _$OrderListResponse._({this.message, this.order}) : super._() {
     if (message == null) {
       throw new BuiltValueNullFieldError('OrderListResponse', 'message');
-    }
-    if (order == null) {
-      throw new BuiltValueNullFieldError('OrderListResponse', 'order');
     }
   }
 
@@ -151,12 +150,12 @@ class OrderListResponseBuilder
     _$OrderListResponse _$result;
     try {
       _$result = _$v ??
-          new _$OrderListResponse._(message: message, order: order.build());
+          new _$OrderListResponse._(message: message, order: _order?.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'order';
-        order.build();
+        _order?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'OrderListResponse', _$failedField, e.toString());

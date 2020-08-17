@@ -19,8 +19,8 @@ abstract class PayOrderPayload
   String get orderid;
   @BuiltValueField(wireName: 'bankid')
   String get bankid;
-  // @BuiltValueField(wireName: 'slipimg')
-  // MultipartFile get slipimg;
+  @BuiltValueField(wireName: 'imageurl')
+  String get slipimg;
   String toJson() {
     return json
         .encode(serializers.serializeWith(PayOrderPayload.serializer, this));

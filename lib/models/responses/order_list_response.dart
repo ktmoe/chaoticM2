@@ -17,6 +17,7 @@ abstract class OrderListResponse
 
   @BuiltValueField(wireName: 'message')
   String get message;
+  @nullable
   @BuiltValueField(wireName: 'data')
   BuiltList<Order> get order;
   String toJson() {

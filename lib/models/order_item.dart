@@ -16,6 +16,8 @@ abstract class OrderItem implements Built<OrderItem, OrderItemBuilder> {
   String get id;
   @BuiltValueField(wireName: 'orderid')
   String get orderid;
+  @BuiltValueField(wireName: 'productName')
+  String get productName;
   @BuiltValueField(wireName: 'productid')
   String get productid;
   @BuiltValueField(wireName: 'price')

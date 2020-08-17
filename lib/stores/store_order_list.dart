@@ -1,19 +1,20 @@
 import 'dart:io';
 
 import 'package:m2mobile/stores/store_app.dart';
+import 'package:m2mobile/stores/store_home.dart';
 import 'package:mobx/mobx.dart';
 import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:m2mobile/models/bank_account.dart';
 import 'package:m2mobile/data/api/api_service.dart';
-import 'package:m2mobile/data/api/pay_order_service.dart';
+import 'package:m2mobile/data/api/file_upload_service.dart';
 import 'package:m2mobile/boxes/box_bank_account.dart';
 import 'package:m2mobile/boxes/box_order_list.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:m2mobile/models/order.dart';
-import 'package:logger/logger.dart';
 import 'package:m2mobile/models/payloads/pay_order_payload.dart';
+import 'package:m2mobile/utils/extensions.dart';
 
 part 'store_order_list.g.dart';
 
@@ -21,7 +22,8 @@ class StoreOrderList = _StoreOrderListBase with _$StoreOrderList;
 
 abstract class _StoreOrderListBase with Store {
   ApiService _apiService = Modular.get<ApiService>();
-  PayOrderService _payOrderService = Modular.get<PayOrderService>();
+  FileUploadService _fileUploadService = Modular.get<FileUploadService>();
+
   BoxBankAccount _boxBankAccount;
   BoxOrderList _boxOrderList;
 
@@ -77,7 +79,7 @@ abstract class _StoreOrderListBase with Store {
       }
     } catch (e) {
       exception = AppException(message: e.toString());
-      orders = _boxOrderList.getAllOrders() ?? [];
+      orders = ObservableList.of([]);
     }
   }
 
@@ -100,7 +102,9 @@ abstract class _StoreOrderListBase with Store {
   @action
   void _onBoxBankAccountsChanged() {
     bankAccounts = ObservableList.of(_boxBankAccount.listenable.value.values);
-    selectedBankAccount = bankAccounts.first;
+    if (bankAccounts.isNotEmpty) {
+      selectedBankAccount = bankAccounts.first;
+    }
   }
 
   @action
@@ -116,18 +120,8 @@ abstract class _StoreOrderListBase with Store {
     } else {
       showLoading = true;
       try {
-        MultipartFile mediaFile = await MultipartFile.fromPath(
-            'file', slipImage?.path,
-            contentType: MediaType.parse('image/*'));
-
-        final PayOrderPayload _payOrderPayload = PayOrderPayload((b) {
-          b.bankid = selectedBankAccount.id;
-          b.orderid = orderId;
-          // b.slipimg = mediaFile;
-        });
-        final response =
-            await _payOrderService.payOrder(_payOrderPayload.toJson());
-        Modular.get<Logger>().d("payorderresponse ${response.toString()}");
+        final imageUrl = await _uploadSlipImage(slipImage);
+        await _apiService.payOrder(_payOrderPayload(imageUrl).toJson());
         showLoading = false;
         payOrderSuccess = true;
       } catch (e) {
@@ -136,4 +130,27 @@ abstract class _StoreOrderListBase with Store {
       }
     }
   }
+
+  @action
+  Future<String> _uploadSlipImage(File file) async {
+    String imageUrl;
+    MultipartFile mediaFile = await MultipartFile.fromPath('file', file.path,
+        contentType: MediaType.parse('image/*'));
+    try {
+      final uploadResponse =
+          await _fileUploadService.uploadSlipImage(mediaFile);
+      if (uploadResponse.body.message.toLowerCase() == "success") {
+        imageUrl = uploadResponse.body.data.createImageUrl();
+      }
+    } catch (e) {
+      exception = AppException(message: e.toString());
+    }
+    return imageUrl;
+  }
+
+  @action
+  PayOrderPayload _payOrderPayload(String imageUrl) => PayOrderPayload((b) => b
+    ..bankid = selectedBankAccount.id
+    ..orderid = Modular.get<StoreHome>().selectedOrderId
+    ..slipimg = imageUrl);
 }

@@ -5,7 +5,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:logger/logger.dart';
 import 'package:m2mobile/app_widget.dart';
 import 'package:m2mobile/data/api/api_service.dart';
-import 'package:m2mobile/data/api/pay_order_service.dart';
 import 'package:m2mobile/data/api/jwt_service.dart';
 import 'package:m2mobile/interceptors/jwt_interceptor.dart';
 import 'package:m2mobile/interceptors/logging_request_interceptor.dart';
@@ -39,16 +38,11 @@ class AppModule extends MainModule {
               baseUrl: baseUrl,
               converter: const CustomJsonConverter(),
               errorConverter: const CustomJsonConverter(),
-              services: [
-                ApiService.create(),
-                FileUploadService.create(),
-                PayOrderService.create()
-              ],
+              services: [ApiService.create(), FileUploadService.create()],
             )),
         Bind((i) => JwtService.create()),
         Bind((i) => ApiService.create(i.get<ChopperClient>())),
         Bind((i) => FileUploadService.create(i.get<ChopperClient>())),
-        Bind((i) => PayOrderService.create(i.get<ChopperClient>())),
         Bind((i) => FirebaseMessaging()),
         Bind((i) => ImagePicker())
       ];

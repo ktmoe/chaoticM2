@@ -14,4 +14,10 @@ abstract class FileUploadService extends ChopperService {
   Future<Response<FileUploadResponse>> uploadProfileImage(
     @PartFile("image") MultipartFile imageFile,
   );
+
+  @Post(path: '/upload/pay_order')
+  @Multipart()
+  Future<Response<FileUploadResponse>> uploadSlipImage(
+    @PartFile("image") MultipartFile imageFile,
+  );
 }

@@ -178,6 +178,17 @@ mixin _$StoreCart on _StoreCartBase, Store {
   }
 
   @override
+  void emptyTheCart() {
+    final _$actionInfo = _$_StoreCartBaseActionController.startAction(
+        name: '_StoreCartBase.emptyTheCart');
+    try {
+      return super.emptyTheCart();
+    } finally {
+      _$_StoreCartBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 showSelect: ${showSelect},
