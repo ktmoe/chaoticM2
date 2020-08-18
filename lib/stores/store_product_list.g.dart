@@ -54,6 +54,21 @@ mixin _$StoreProductList on _StoreProductListBase, Store {
     });
   }
 
+  final _$exceptionAtom = Atom(name: '_StoreProductListBase.exception');
+
+  @override
+  AppException<dynamic> get exception {
+    _$exceptionAtom.reportRead();
+    return super.exception;
+  }
+
+  @override
+  set exception(AppException<dynamic> value) {
+    _$exceptionAtom.reportWrite(value, super.exception, () {
+      super.exception = value;
+    });
+  }
+
   final _$initAsyncAction = AsyncAction('_StoreProductListBase.init');
 
   @override
@@ -89,7 +104,8 @@ mixin _$StoreProductList on _StoreProductListBase, Store {
     return '''
 products: ${products},
 subCategory: ${subCategory},
-initDone: ${initDone}
+initDone: ${initDone},
+exception: ${exception}
     ''';
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:logger/logger.dart';
 import 'package:m2mobile/boxes/box_fav_products.dart';
 import 'package:m2mobile/data/api/api_service.dart';
 import 'package:m2mobile/models/product.dart';
@@ -39,10 +38,13 @@ abstract class _StoreFav with Store {
     try {
       final favResponse =
           await apiService.getFavList(Modular.get<StoreApp>().userProfile.id);
-      final favItems = favResponse.body.product.toList();
-      Modular.get<Logger>().i("Favorite count ${favItems.length}");
       _boxFav.delete();
-      _boxFav.addAll(favItems);
+      if (favResponse.error == null) {
+        final favItems = favResponse.body.product.toList();
+        _boxFav.addAll(favItems);
+      } else {
+        favs = ObservableList.of([]);
+      }
     } catch (e) {
       exception = AppException(message: e.toString());
     }

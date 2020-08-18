@@ -1,5 +1,4 @@
 import 'package:mobx/mobx.dart';
-import 'package:logger/logger.dart';
 import 'package:m2mobile/data/api/api_service.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/stores/store_home.dart';

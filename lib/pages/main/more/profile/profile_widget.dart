@@ -6,6 +6,7 @@ import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/stores/store_app.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:m2mobile/utils/extensions.dart';
 
 class ProfileWidget extends StatefulWidget {
   static const route = "/main/more/profile";
@@ -72,7 +73,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                         height: 100,
                         fit: BoxFit.cover,
                         placeholder: AssetImage("lib/res/images/profile.png"),
-                        image: NetworkImage(_storeApp.userProfile.imageurl))
+                        image: NetworkImage(
+                            _storeApp.userProfile.imageurl.createImageUrl()))
                     : AssetImage("lib/res/images/profile.png"),
               ),
             ),

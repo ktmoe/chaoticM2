@@ -54,21 +54,6 @@ mixin _$StoreHome on _StoreHome, Store {
     });
   }
 
-  final _$loadMoreAtom = Atom(name: '_StoreHome.loadMore');
-
-  @override
-  bool get loadMore {
-    _$loadMoreAtom.reportRead();
-    return super.loadMore;
-  }
-
-  @override
-  set loadMore(bool value) {
-    _$loadMoreAtom.reportWrite(value, super.loadMore, () {
-      super.loadMore = value;
-    });
-  }
-
   final _$productsAtom = Atom(name: '_StoreHome.products');
 
   @override
@@ -218,7 +203,6 @@ mixin _$StoreHome on _StoreHome, Store {
 exception: ${exception},
 latestCurrentPage: ${latestCurrentPage},
 latestTotalPage: ${latestTotalPage},
-loadMore: ${loadMore},
 products: ${products},
 discountProducts: ${discountProducts},
 selectedOrderId: ${selectedOrderId}

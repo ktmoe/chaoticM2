@@ -8,6 +8,8 @@ part of 'serializers.dart';
 
 Serializers _$serializers = (new Serializers().toBuilder()
       ..add(AddToCartRequest.serializer)
+      ..add(Ads.serializer)
+      ..add(AdsResponse.serializer)
       ..add(BankAccount.serializer)
       ..add(BankInfoResponse.serializer)
       ..add(CartItem.serializer)
@@ -16,6 +18,7 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(CompanyInfoResponse.serializer)
       ..add(DeleteCartListRequest.serializer)
       ..add(DeleteFavoriteItemPayload.serializer)
+      ..add(ErrorMessage.serializer)
       ..add(FavoriteId.serializer)
       ..add(FavoriteItem.serializer)
       ..add(FavoriteItemPayload.serializer)
@@ -48,6 +51,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(UpdateCartRequest.serializer)
       ..add(UpdateItem.serializer)
       ..add(UserProfile.serializer)
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(Ads)]),
+          () => new ListBuilder<Ads>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(BankAccount)]),
           () => new ListBuilder<BankAccount>())

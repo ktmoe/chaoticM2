@@ -11,6 +11,7 @@ import 'package:m2mobile/stores/store_app.dart';
 import 'package:m2mobile/models/payloads/favorite_item_payload.dart';
 import 'package:m2mobile/models/payloads/delete_favorite_item_payload.dart';
 import 'package:m2mobile/models/payloads/favorite_item.dart';
+import 'package:m2mobile/stores/store_search.dart';
 import 'package:mobx/mobx.dart';
 
 part 'store_home.g.dart';
@@ -33,9 +34,6 @@ abstract class _StoreHome with Store {
 
   @observable
   int latestTotalPage = 1;
-
-  @observable
-  bool loadMore = false;
 
   @observable
   ObservableList<Product> products = ObservableList.of([]);
@@ -74,8 +72,6 @@ abstract class _StoreHome with Store {
 
   @action
   Future getLatestProducts(bool refresh) async {
-    print("get latest get called");
-    loadMore = false;
     if (refresh) {
       latestCurrentPage = 0;
     }
@@ -91,7 +87,6 @@ abstract class _StoreHome with Store {
         _boxProduct.saveAll(products);
       }
     } catch (e) {
-      print("latest err : ${e.toString()}");
       exception = AppException(message: e.toString());
     }
   }
@@ -153,14 +148,27 @@ abstract class _StoreHome with Store {
       ..favorite = favoriteId == null ? false : true
       ..favoriteId = favoriteId == null ? "" : favoriteId.id);
     await _syncFavoriteBox(renewedProduct);
+    //for discount products to be reactive
     if (product.discountPrice != 0) {
       _discountProductBox.save(renewedProduct);
     }
+    //for latest products to be reactive
     if (_boxProduct.contain(product)) {
       _boxProduct.save(renewedProduct);
     }
+    //for products by category to be reactive
     if (_boxProductByCategory.contain(product)) {
       _boxProductByCategory.save(renewedProduct);
+    }
+    //for searched products to be reactive
+    if (Modular.get<StoreSearch>().results.isNotEmpty) {
+      final searched = Modular.get<StoreSearch>().results.toList();
+      if (searched.map((e) => e.productId).contains(product.productId)) {
+        final index = searched
+            .indexWhere((element) => element.productId == product.productId);
+        searched.replaceRange(index, index + 1, [renewedProduct]);
+        Modular.get<StoreSearch>().results = ObservableList.of(searched);
+      }
     }
   }
 

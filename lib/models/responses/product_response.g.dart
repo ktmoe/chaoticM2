@@ -37,6 +37,12 @@ class _$ProductResponseSerializer
         ..add(serializers.serialize(object.lastPage,
             specifiedType: const FullType(int)));
     }
+    if (object.error != null) {
+      result
+        ..add('error')
+        ..add(serializers.serialize(object.error,
+            specifiedType: const FullType(ErrorMessage)));
+    }
     return result;
   }
 
@@ -66,6 +72,10 @@ class _$ProductResponseSerializer
           result.lastPage = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
+        case 'error':
+          result.error.replace(serializers.deserialize(value,
+              specifiedType: const FullType(ErrorMessage)) as ErrorMessage);
+          break;
       }
     }
 
@@ -80,11 +90,14 @@ class _$ProductResponse extends ProductResponse {
   final BuiltList<Product> product;
   @override
   final int lastPage;
+  @override
+  final ErrorMessage error;
 
   factory _$ProductResponse([void Function(ProductResponseBuilder) updates]) =>
       (new ProductResponseBuilder()..update(updates)).build();
 
-  _$ProductResponse._({this.message, this.product, this.lastPage}) : super._() {
+  _$ProductResponse._({this.message, this.product, this.lastPage, this.error})
+      : super._() {
     if (product == null) {
       throw new BuiltValueNullFieldError('ProductResponse', 'product');
     }
@@ -104,13 +117,15 @@ class _$ProductResponse extends ProductResponse {
     return other is ProductResponse &&
         message == other.message &&
         product == other.product &&
-        lastPage == other.lastPage;
+        lastPage == other.lastPage &&
+        error == other.error;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc(0, message.hashCode), product.hashCode), lastPage.hashCode));
+        $jc($jc($jc(0, message.hashCode), product.hashCode), lastPage.hashCode),
+        error.hashCode));
   }
 
   @override
@@ -118,7 +133,8 @@ class _$ProductResponse extends ProductResponse {
     return (newBuiltValueToStringHelper('ProductResponse')
           ..add('message', message)
           ..add('product', product)
-          ..add('lastPage', lastPage))
+          ..add('lastPage', lastPage)
+          ..add('error', error))
         .toString();
   }
 }
@@ -140,6 +156,10 @@ class ProductResponseBuilder
   int get lastPage => _$this._lastPage;
   set lastPage(int lastPage) => _$this._lastPage = lastPage;
 
+  ErrorMessageBuilder _error;
+  ErrorMessageBuilder get error => _$this._error ??= new ErrorMessageBuilder();
+  set error(ErrorMessageBuilder error) => _$this._error = error;
+
   ProductResponseBuilder();
 
   ProductResponseBuilder get _$this {
@@ -147,6 +167,7 @@ class ProductResponseBuilder
       _message = _$v.message;
       _product = _$v.product?.toBuilder();
       _lastPage = _$v.lastPage;
+      _error = _$v.error?.toBuilder();
       _$v = null;
     }
     return this;
@@ -171,12 +192,18 @@ class ProductResponseBuilder
     try {
       _$result = _$v ??
           new _$ProductResponse._(
-              message: message, product: product.build(), lastPage: lastPage);
+              message: message,
+              product: product.build(),
+              lastPage: lastPage,
+              error: _error?.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'product';
         product.build();
+
+        _$failedField = 'error';
+        _error?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'ProductResponse', _$failedField, e.toString());

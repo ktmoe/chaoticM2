@@ -17,6 +17,7 @@ import 'package:m2mobile/models/responses/refresh_token_response.dart';
 import 'package:m2mobile/models/responses/order_detail_response.dart';
 import 'package:m2mobile/models/responses/post_order_response.dart';
 import 'package:m2mobile/models/responses/order_payment_response.dart';
+import 'package:m2mobile/models/responses/ads_response.dart';
 import 'package:built_collection/built_collection.dart';
 
 part 'api_service.chopper.dart';
@@ -26,7 +27,6 @@ abstract class ApiService extends ChopperService {
   static ApiService create([ChopperClient client]) => _$ApiService(client);
 
   /// product ///
-
   @Get(path: 'api/productview/getProductByID')
   Future<Response<Product>> getProductById(@Query('productid') String id);
 
@@ -36,14 +36,20 @@ abstract class ApiService extends ChopperService {
       @Query('currentPage') int currentPage,
       @Query('perPage') int perPage = 10});
 
-  @Get(path: 'api/productview/getDiscountProducts')
-  Future<Response<ProductResponse>> getDiscountProducts(
-      @Query('customerid') String customerId);
-
   @Get(path: 'api/productview/getProductListByCategory')
   Future<Response<ProductResponse>> getProductsByCategory(
       @Query('customerId') String customerId,
       @Query('subCategoryId') String subCategoryId);
+
+  @Get(path: 'api/productview/getDiscountProductList')
+  Future<Response<ProductResponse>> getDiscountProducts(
+      @Query('customerId') String customerId);
+
+  @Get(path: 'api/productview/searchProduct')
+  Future<Response<ProductResponse>> searchProduct(
+      @Query('keyword') String keyword, @Query('customerId') String customerId,
+      {@Query('perPage') int perPage = 10,
+      @Query('currentPage') int currentPage = 1});
 
   /// help ///
   @Get(path: 'api/helpview')
@@ -123,7 +129,6 @@ abstract class ApiService extends ChopperService {
       @Query('productid') String productId);
 
   /// cart  ///
-
   @Get(path: 'api/cartview/getCartItemList')
   Future<Response<ProductResponse>> getCartList(
     @Query('customerId') String customerId,
@@ -140,7 +145,6 @@ abstract class ApiService extends ChopperService {
   Future<Response> deleteCartItems(@Body() String cartIds);
 
   /// order ///
-
   @Post(path: 'api/orderview/orderItems')
   Future<Response<PostOrderResponse>> postOrder(
       @Body() String orderCustomerInfo);
@@ -157,4 +161,7 @@ abstract class ApiService extends ChopperService {
   @Multipart()
   Future<Response<BuiltList<OrderPaymentResponse>>> payOrder(
       @Body() String payOrderPayload);
+
+  @Get(path: 'api/adsview/getAds')
+  Future<Response<AdsResponse>> getAds();
 }

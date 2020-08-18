@@ -62,9 +62,6 @@ class _CartWidgetState extends State<CartWidget> {
       );
 
   Widget _buildOrderList() {
-    //final cartProductsMap = _storeCart.cartProducts;
-    //final cartProducts = cartProductsMap.keys.toList();
-    //final cartCounts = cartProductsMap.values.toList();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: Dimens.marginMedium),
       margin: const EdgeInsets.only(bottom: Dimens.marginLargeX),
@@ -215,9 +212,10 @@ class _BottomSheetState extends State<BottomSheet> {
   final StoreCart _storeCart = Modular.get<StoreCart>();
   @override
   Widget build(BuildContext context) {
-    return _storeCart.cartProducts.isEmpty
-        ? _buildEmptyCartBottomSheet()
-        : _buildNonEmptyCartBottomSheet();
+    return Observer(
+        builder: (_) => _storeCart.cartProducts.isEmpty
+            ? _buildEmptyCartBottomSheet()
+            : _buildNonEmptyCartBottomSheet());
   }
 
   Widget _buildEmptyCartBottomSheet() => Container(
@@ -347,10 +345,13 @@ class _BottomSheetState extends State<BottomSheet> {
                     textColor: Colors.white,
                     disabledTextColor: Colors.white,
                     onPressed: () {
-                      widget.isSummary
-                          ? Modular.to
-                              .pushReplacementNamed(CompleteOrderWidget.route)
-                          : Modular.to.pushNamed(OrderWidget.route);
+                      if (widget.isSummary) {
+                        _storeCart.emptyTheCart();
+                        Modular.to
+                            .pushReplacementNamed(CompleteOrderWidget.route);
+                      } else {
+                        Modular.to.pushNamed(OrderWidget.route);
+                      }
                     },
                     child: Text(
                         widget.isSummary ? '‌ငွေလွှဲစလစ်ပို့ရန်' : 'Order'),
@@ -361,10 +362,4 @@ class _BottomSheetState extends State<BottomSheet> {
           );
         },
       );
-
-  @override
-  void dispose() {
-    Modular.get<StoreCart>().emptyTheCart();
-    super.dispose();
-  }
 }

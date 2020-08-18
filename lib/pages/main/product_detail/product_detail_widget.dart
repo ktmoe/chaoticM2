@@ -111,23 +111,8 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
             ),
             Flexible(
               child: Padding(
-                padding: const EdgeInsets.all(Dimens.marginMedium),
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: specifications.length,
-                  itemBuilder: (_, index) {
-                    debugPrint(specifications[index]);
-                    return Padding(
-                      padding: const EdgeInsets.all(Dimens.marginMedium),
-                      child: Text(
-                        "\u2022 " + specifications[index],
-                        style: TextStyle(
-                            color: Theme.of(context).textTheme.headline1.color),
-                      ),
-                    );
-                  },
-                ),
-              ),
+                  padding: const EdgeInsets.all(Dimens.marginMedium),
+                  child: Text(widget.product.specification)),
             )
           ],
         ),
@@ -153,12 +138,15 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                         activeSize: 12)),
                 control: SwiperControl(iconNext: null, iconPrevious: null),
                 itemBuilder: (context, index) {
-                  return FadeInImage(
-                    fit: BoxFit.cover,
-                    placeholder: AssetImage("lib/res/images/placeholder.png"),
-                    image: _images.isEmpty
-                        ? AssetImage("lib/res/images/placeholder.png")
-                        : NetworkImage(baseUrl + '/' + _images[index]),
+                  return AspectRatio(
+                    aspectRatio: 1 / 1,
+                    child: FadeInImage(
+                      fit: BoxFit.cover,
+                      placeholder: AssetImage("lib/res/images/placeholder.png"),
+                      image: _images.isEmpty
+                          ? AssetImage("lib/res/images/placeholder.png")
+                          : NetworkImage(baseUrl + '/' + _images[index]),
+                    ),
                   );
                 },
               ),
@@ -178,10 +166,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
           elevation: Dimens.cardElevation,
           child: Container(
             padding: const EdgeInsets.all(Dimens.marginMedium),
-            child: Text(
-                (_product.discountType == "percent")
-                    ? "${_product.percentAmount} % off"
-                    : "${_product.percentAmount.toDouble().money()} off",
+            child: Text("${_product.discountPrice.toDouble().money()} off",
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w800,
@@ -222,10 +207,10 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
         : Container();
   }
 
-  final List<String> specifications = [
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-  ];
+  // final List<String> specifications = [
+  //   "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+  //   "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+  // ];
 }
 
 class BottomSheet extends StatefulWidget {

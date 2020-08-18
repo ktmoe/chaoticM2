@@ -76,12 +76,15 @@ class ProductCardHeader extends StatelessWidget {
                 borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(Dimens.marginMedium2),
                     topRight: Radius.circular(Dimens.marginMedium2)),
-                child: FadeInImage(
-                  fit: BoxFit.cover,
-                  placeholder: AssetImage("lib/res/images/placeholder.png"),
-                  image: product.images.toList().isEmpty
-                      ? AssetImage("lib/res/images/placeholder.png")
-                      : NetworkImage(baseUrl + '/' + product.images[0]),
+                child: AspectRatio(
+                  aspectRatio: 1 / 1,
+                  child: FadeInImage(
+                    fit: BoxFit.cover,
+                    placeholder: AssetImage("lib/res/images/placeholder.png"),
+                    image: product.images.toList().isEmpty
+                        ? AssetImage("lib/res/images/placeholder.png")
+                        : NetworkImage(baseUrl + '/' + product.images[0]),
+                  ),
                 ),
               ),
             ),
@@ -125,9 +128,10 @@ class ProductCardHeader extends StatelessWidget {
             ? Align(
                 alignment: Alignment.topRight,
                 child: _buildDiscountPercentTag(
-                    discount: (product.discountType == "amount")
-                        ? "${product.percentAmount.money()}"
-                        : "${product.percentAmount} %"))
+                    discount: product.discountPrice.money()))
+            // (product.discountType == "amount")
+            //     ? "${product.percentAmount.money()}"
+            //     : "${product.percentAmount} %"))
             : Container()
       ],
     );

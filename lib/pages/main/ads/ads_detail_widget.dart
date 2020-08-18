@@ -3,38 +3,41 @@ import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:m2mobile/models/ads.dart';
+import 'package:m2mobile/utils/extensions.dart';
 
-class NotificationDetailWidget extends StatefulWidget {
-  static const route = "/main/notification/notification_detail";
+class AdsDetailWidget extends StatefulWidget {
+  static const route = "/main/ads/ads_detail";
+
+  final Ads ads;
+
+  const AdsDetailWidget({Key key, this.ads}) : super(key: key);
   @override
-  _NotificationDetailWidgetState createState() =>
-      _NotificationDetailWidgetState();
+  _AdsDetailWidgetState createState() => _AdsDetailWidgetState();
 }
 
-class _NotificationDetailWidgetState extends State<NotificationDetailWidget> {
+class _AdsDetailWidgetState extends State<AdsDetailWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: M2AppBar(
             showSearch: false,
-            title: "Notifications",
+            title: widget.ads.title,
             deleteOnly: false,
             onBackPressed: () => Modular.to.pop()),
         body: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Container(
             height: MediaQuery.of(context).size.height,
-            child: Expanded(
-              child: Stack(
-                children: <Widget>[
-                  _buildNotificationBanner(),
-                  Positioned(
-                      bottom: 0,
-                      top: MediaQuery.of(context).size.height * 0.4 -
-                          Dimens.marginMedium2,
-                      child: _buildNotificationDetail())
-                ],
-              ),
+            child: Stack(
+              children: <Widget>[
+                _buildNotificationBanner(),
+                Positioned(
+                    bottom: 0,
+                    top: MediaQuery.of(context).size.height * 0.4 -
+                        Dimens.marginMedium2,
+                    child: _buildNotificationDetail())
+              ],
             ),
           ),
         ));
@@ -52,16 +55,14 @@ class _NotificationDetailWidgetState extends State<NotificationDetailWidget> {
             children: <Widget>[
               Container(
                 padding: const EdgeInsets.all(Dimens.marginMedium2),
-                child: const Text('Moon Soon Promotion',
+                child: Text(widget.ads.title,
                     style: TextStyle(
                         fontSize: Dimens.textHeading1x,
                         fontWeight: FontWeight.w600)),
               ),
               Container(
                 padding: const EdgeInsets.all(Dimens.marginMedium2),
-                child: Text(
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-                    style: Styles.m2TextTheme),
+                child: Text(widget.ads.description, style: Styles.m2TextTheme),
               )
             ],
           ),
@@ -72,13 +73,15 @@ class _NotificationDetailWidgetState extends State<NotificationDetailWidget> {
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(Dimens.marginMedium2),
             topRight: Radius.circular(Dimens.marginMedium2)),
-        child: Container(
-          child: AspectRatio(
-            aspectRatio: 4 / 3,
+        child: AspectRatio(
+          aspectRatio: 4 / 3,
+          child: Container(
             child: FadeInImage(
                 fit: BoxFit.cover,
                 placeholder: AssetImage("lib/res/images/placeholder.png"),
-                image: NetworkImage("")),
+                image: widget.ads.imageurl.isNotEmpty
+                    ? NetworkImage(widget.ads.imageurl.createImageUrl())
+                    : AssetImage("lib/res/images/placeholder.png")),
           ),
         ),
       );

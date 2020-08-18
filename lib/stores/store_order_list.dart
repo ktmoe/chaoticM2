@@ -14,7 +14,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:m2mobile/models/order.dart';
 import 'package:m2mobile/models/payloads/pay_order_payload.dart';
-import 'package:m2mobile/utils/extensions.dart';
 
 part 'store_order_list.g.dart';
 
@@ -140,7 +139,7 @@ abstract class _StoreOrderListBase with Store {
       final uploadResponse =
           await _fileUploadService.uploadSlipImage(mediaFile);
       if (uploadResponse.body.message.toLowerCase() == "success") {
-        imageUrl = uploadResponse.body.data.createImageUrl();
+        imageUrl = uploadResponse.body.data;
       }
     } catch (e) {
       exception = AppException(message: e.toString());

@@ -38,20 +38,35 @@ class _$ApiService extends ApiService {
   }
 
   @override
-  Future<Response<ProductResponse>> getDiscountProducts(String customerId) {
-    final $url = '/api/productview/getDiscountProducts';
-    final $params = <String, dynamic>{'customerid': customerId};
-    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
-    return client.send<ProductResponse, ProductResponse>($request);
-  }
-
-  @override
   Future<Response<ProductResponse>> getProductsByCategory(
       String customerId, String subCategoryId) {
     final $url = '/api/productview/getProductListByCategory';
     final $params = <String, dynamic>{
       'customerId': customerId,
       'subCategoryId': subCategoryId
+    };
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<ProductResponse, ProductResponse>($request);
+  }
+
+  @override
+  Future<Response<ProductResponse>> getDiscountProducts(String customerId) {
+    final $url = '/api/productview/getDiscountProductList';
+    final $params = <String, dynamic>{'customerId': customerId};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<ProductResponse, ProductResponse>($request);
+  }
+
+  @override
+  Future<Response<ProductResponse>> searchProduct(
+      String keyword, String customerId,
+      {int perPage = 10, int currentPage = 1}) {
+    final $url = '/api/productview/searchProduct';
+    final $params = <String, dynamic>{
+      'keyword': keyword,
+      'customerId': customerId,
+      'perPage': perPage,
+      'currentPage': currentPage
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<ProductResponse, ProductResponse>($request);
@@ -278,5 +293,12 @@ class _$ApiService extends ApiService {
     final $request = Request('POST', $url, client.baseUrl, body: $body);
     return client
         .send<BuiltList<OrderPaymentResponse>, OrderPaymentResponse>($request);
+  }
+
+  @override
+  Future<Response<AdsResponse>> getAds() {
+    final $url = '/api/adsview/getAds';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<AdsResponse, AdsResponse>($request);
   }
 }

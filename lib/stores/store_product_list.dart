@@ -4,6 +4,7 @@ import 'package:mobx/mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/data/api/api_service.dart';
 import 'package:m2mobile/boxes/box_products_by_category.dart';
+import 'package:m2mobile/exceptions/app_exception.dart';
 
 part 'store_product_list.g.dart';
 
@@ -21,6 +22,9 @@ abstract class _StoreProductListBase with Store {
 
   @observable
   bool initDone = false;
+
+  @observable
+  AppException exception;
 
   @action
   Future<void> init() async {
@@ -41,14 +45,20 @@ abstract class _StoreProductListBase with Store {
 
   @action
   Future<void> getProductsByCategory(String subcategoryId, bool refresh) async {
-    subCategory = subcategoryId;
-    final response = await _apiService.getProductsByCategory(
-        Modular.get<StoreApp>().userProfile.id, subcategoryId);
-    if (response.body.message.toLowerCase() == 'success') {
-      if (refresh) {
-        _boxProductByCategory.deleteByCategory(subcategoryId);
-      }
-      _boxProductByCategory.saveAll(response.body.product.toList());
+    try {
+      subCategory = subcategoryId;
+      final response = await _apiService.getProductsByCategory(
+          Modular.get<StoreApp>().userProfile.id, subcategoryId);
+      if (response.body.error == null &&
+          response.body.message.toLowerCase() == 'success') {
+        if (refresh) {
+          _boxProductByCategory.deleteByCategory(subcategoryId);
+        }
+        _boxProductByCategory.saveAll(response.body.product.toList());
+      } else
+        products = ObservableList.of([]);
+    } catch (e) {
+      exception = AppException(message: e.toString());
     }
   }
 }

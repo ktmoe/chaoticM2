@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:m2mobile/custom_widgets/list_empty_widget.dart';
 import 'package:m2mobile/custom_widgets/product_card.dart';
-import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/res/dimens.dart';
+import 'package:m2mobile/stores/store_search.dart';
 
 class M2SearchDelegate extends SearchDelegate {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorState = GlobalKey();
+  final StoreSearch _storeSearch = Modular.get<StoreSearch>();
 
   @override
   ThemeData appBarTheme(BuildContext context) {
@@ -55,28 +59,40 @@ class M2SearchDelegate extends SearchDelegate {
             ));
   }
 
-  Widget _buildSearchResultBody() => RefreshIndicator(
-        key: _refreshIndicatorState,
-        onRefresh: () async {},
-        child: Expanded(
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                GridView.count(
-                  primary: false,
-                  crossAxisCount: 2,
-                  padding: const EdgeInsets.all(Dimens.marginMedium),
-                  shrinkWrap: true,
-                  childAspectRatio: (120 / 170),
-                  children: List.generate(17, (index) {
-                    return ProductCard(product: Product(), discountItem: false);
-                  }),
-                ),
-              ],
-            ),
-          ),
+  Widget _buildSearchResultBody() {
+    if (query.isNotEmpty) {
+      Future.wait([_storeSearch.search(query)]);
+    }
+    return RefreshIndicator(
+      key: _refreshIndicatorState,
+      onRefresh: () async {
+        await _storeSearch.search(query);
+      },
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Observer(builder: (_) {
+              return _storeSearch.results.isNotEmpty
+                  ? GridView.count(
+                      crossAxisCount: 2,
+                      childAspectRatio: 120 / 170,
+                      padding: const EdgeInsets.all(Dimens.marginMedium),
+                      shrinkWrap: true,
+                      children:
+                          List.generate(_storeSearch.results.length, (index) {
+                        return ProductCard(
+                            product: _storeSearch.results[index],
+                            discountItem:
+                                _storeSearch.results[index].discountPrice != 0);
+                      }),
+                    )
+                  : ListEmptyWidget(message: 'ပစ္စည်းများ မရှိသေးပါ');
+            })
+          ],
         ),
-      );
+      ),
+    );
+  }
 }

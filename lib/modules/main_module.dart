@@ -10,16 +10,19 @@ import 'package:m2mobile/modules/cart_module.dart';
 import 'package:m2mobile/modules/notification_module.dart';
 import 'package:m2mobile/modules/favourite_module.dart';
 import 'package:m2mobile/modules/order_list_module.dart';
+import 'package:m2mobile/modules/ads_module.dart';
 import 'package:m2mobile/stores/store_home.dart';
 import 'package:m2mobile/stores/store_cart.dart';
 import 'package:m2mobile/stores/store_order.dart';
+import 'package:m2mobile/stores/store_search.dart';
 
 class MainScreenModule extends ChildModule {
   @override
   List<Bind> get binds => [
         Bind((i) => StoreHome()),
         Bind((i) => StoreCart()),
-        Bind((i) => StoreOrder())
+        Bind((i) => StoreOrder()),
+        Bind((i) => StoreSearch())
       ];
 
   @override
@@ -34,6 +37,7 @@ class MainScreenModule extends ChildModule {
         Router('/categories/product_list', module: ProductListModule()),
         Router('/product_detail', module: ProductDetailModule()),
         Router('/cart', module: CartModule()),
-        Router('/notification', module: NotificationModule())
+        Router('/notification', module: NotificationModule()),
+        Router('/ads/ads_detail', module: AdsModule())
       ];
 }

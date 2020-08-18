@@ -174,6 +174,21 @@ mixin _$StoreApp on _StoreApp, Store {
     });
   }
 
+  final _$adsListAtom = Atom(name: '_StoreApp.adsList');
+
+  @override
+  ObservableList<Ads> get adsList {
+    _$adsListAtom.reportRead();
+    return super.adsList;
+  }
+
+  @override
+  set adsList(ObservableList<Ads> value) {
+    _$adsListAtom.reportWrite(value, super.adsList, () {
+      super.adsList = value;
+    });
+  }
+
   final _$proceedAtom = Atom(name: '_StoreApp.proceed');
 
   @override
@@ -230,6 +245,13 @@ mixin _$StoreApp on _StoreApp, Store {
   @override
   Future<dynamic> getSubCategories() {
     return _$getSubCategoriesAsyncAction.run(() => super.getSubCategories());
+  }
+
+  final _$getAdsAsyncAction = AsyncAction('_StoreApp.getAds');
+
+  @override
+  Future<dynamic> getAds() {
+    return _$getAdsAsyncAction.run(() => super.getAds());
   }
 
   final _$checkForceUpdateAsyncAction =
@@ -332,6 +354,17 @@ mixin _$StoreApp on _StoreApp, Store {
   }
 
   @override
+  void _boxAdsChanged() {
+    final _$actionInfo = _$_StoreAppActionController.startAction(
+        name: '_StoreApp._boxAdsChanged');
+    try {
+      return super._boxAdsChanged();
+    } finally {
+      _$_StoreAppActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void _appBoxChanged() {
     final _$actionInfo = _$_StoreAppActionController.startAction(
         name: '_StoreApp._appBoxChanged');
@@ -398,6 +431,7 @@ chosenLanguage: ${chosenLanguage},
 userProfile: ${userProfile},
 categoryList: ${categoryList},
 subCategoryList: ${subCategoryList},
+adsList: ${adsList},
 proceed: ${proceed},
 isNetworkOn: ${isNetworkOn},
 connectivityMessage: ${connectivityMessage},

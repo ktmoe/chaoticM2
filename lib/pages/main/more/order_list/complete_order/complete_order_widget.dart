@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
 import 'package:m2mobile/custom_widgets/one_call_away_widget.dart';
+import 'package:m2mobile/pages/main/main_widget.dart';
 import 'package:m2mobile/utils/extensions.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
@@ -48,7 +49,7 @@ class _CompleteOrderWidgetState extends State<CompleteOrderWidget> {
           final a = await context.successFailDialog(
               dialogType: "You sent slip voucher.", success: true);
           if (a) {
-            Modular.to.pop();
+            Modular.to.popUntil(ModalRoute.withName(MainWidget.route));
           }
         }
       });

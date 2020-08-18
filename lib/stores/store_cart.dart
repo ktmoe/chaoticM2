@@ -52,7 +52,7 @@ abstract class _StoreCartBase with Store {
     int amount = 0;
     if (cartProducts.isNotEmpty) {
       cartProducts.values.forEach((product) {
-        amount += product.price * cartProducts[product.productId].quantity;
+        amount += product.price * product.quantity;
       });
     }
     return amount;

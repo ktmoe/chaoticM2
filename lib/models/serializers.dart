@@ -30,6 +30,7 @@ import 'package:m2mobile/models/responses/favorite_operate_response.dart';
 import 'package:m2mobile/models/responses/bank_info_response.dart';
 import 'package:m2mobile/models/responses/post_order_response.dart';
 import 'package:m2mobile/models/responses/order_payment_response.dart';
+import 'package:m2mobile/models/responses/ads_response.dart';
 import 'package:m2mobile/models/payloads/favorite_item.dart';
 import 'package:m2mobile/models/payloads/favorite_item_payload.dart';
 import 'package:m2mobile/models/payloads/delete_favorite_item_payload.dart';
@@ -42,6 +43,8 @@ import 'package:m2mobile/models/responses/order_detail_response.dart';
 import 'package:m2mobile/models/wrappers/order_item_wrapper.dart';
 import 'package:m2mobile/models/wrappers/post_order_order_wrapper.dart';
 import 'package:m2mobile/models/order_item.dart';
+import 'package:m2mobile/models/error_message.dart';
+import 'package:m2mobile/models/ads.dart';
 part 'serializers.g.dart';
 
 @SerializersFor([
@@ -85,7 +88,10 @@ part 'serializers.g.dart';
   CartListResponse,
   UpdateCartRequest,
   UpdateItem,
-  DeleteCartListRequest
+  DeleteCartListRequest,
+  ErrorMessage,
+  Ads,
+  AdsResponse
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

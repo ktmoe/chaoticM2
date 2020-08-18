@@ -9,7 +9,6 @@ import 'package:m2mobile/stores/store_app.dart';
 import 'package:mobx/mobx.dart';
 import 'package:m2mobile/data/api/file_upload_service.dart';
 import 'package:m2mobile/data/api/api_service.dart';
-import 'package:m2mobile/utils/extensions.dart';
 import 'package:m2mobile/models/user_profile.dart';
 
 part 'store_profile.g.dart';
@@ -101,7 +100,7 @@ abstract class _StoreProfileBase with Store {
       final uploadResponse =
           await _fileUploadService.uploadProfileImage(mediaFile);
       if (uploadResponse.body.message.toLowerCase() == "success") {
-        imageUrl = uploadResponse.body.data.createImageUrl();
+        imageUrl = uploadResponse.body.data;
       }
     } catch (e) {
       exception = AppException(message: e.toString());

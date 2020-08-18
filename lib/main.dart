@@ -13,6 +13,7 @@ import 'package:m2mobile/modules/app_module.dart';
 import 'package:m2mobile/models/m2_category.dart';
 import 'package:m2mobile/models/sub_category.dart';
 import 'package:m2mobile/models/help.dart';
+import 'package:m2mobile/models/ads.dart';
 import 'package:flutter/services.dart';
 
 Future<void> main() async {
@@ -41,5 +42,6 @@ void _registerAdapters() {
   Hive.registerAdapter<Help>(HelpAdapter()); //HiveType 5
   Hive.registerAdapter<ImageUrlHolder>(ImageUrlHolderAdapter()); //HiveType 6
   Hive.registerAdapter<Order>(OrderAdapter()); //HiveType 7
-  Hive.registerAdapter<BankAccount>(BankAccountAdapter()); //HiveType 6
+  Hive.registerAdapter<BankAccount>(BankAccountAdapter()); //HiveType 8
+  Hive.registerAdapter<Ads>(AdsAdapter()); //HiveType 9
 }

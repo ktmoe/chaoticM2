@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/data/api/api_service.dart';
+import 'package:m2mobile/models/ads.dart';
 import 'package:m2mobile/models/user_profile.dart';
 import 'package:m2mobile/models/m2_category.dart';
 import 'package:m2mobile/models/sub_category.dart';
@@ -13,6 +14,7 @@ import 'package:package_info/package_info.dart';
 import 'package:m2mobile/models/company_info.dart';
 import 'package:m2mobile/boxes/box_category.dart';
 import 'package:m2mobile/boxes/box_sub_category.dart';
+import 'package:m2mobile/boxes/box_ads.dart';
 import 'package:logger/logger.dart';
 
 part 'store_app.g.dart';
@@ -23,6 +25,7 @@ abstract class _StoreApp with Store {
   AppBox _appBox;
   BoxCategory _boxCategory;
   BoxSubCategory _boxSubCategory;
+  BoxAds _boxAds;
 
   final ApiService _apiService = Modular.get<ApiService>();
 
@@ -66,6 +69,9 @@ abstract class _StoreApp with Store {
   ObservableList<SubCategory> subCategoryList;
 
   @observable
+  ObservableList<Ads> adsList;
+
+  @observable
   bool proceed = false;
 
   @computed
@@ -88,7 +94,6 @@ abstract class _StoreApp with Store {
 
   @action
   Future init() async {
-    Modular.get<Logger>().d("AppStore init");
     proceed = false;
     await _createBoxes();
     _setupBoxListeners();
@@ -103,21 +108,12 @@ abstract class _StoreApp with Store {
 
   @action
   void _setupBoxListeners() {
-    _appBox.listenable.addListener(() {
-      _appBoxChanged();
-    });
-    _appBox.userProfileListenable.addListener(() {
-      _userProfileChanged();
-    });
-    _appBox.companyInfoListenable.addListener(() {
-      _companyInfoChanged();
-    });
-    _boxCategory.listenable.addListener(() {
-      _boxCategoryChanged();
-    });
-    _boxSubCategory.listenable.addListener(() {
-      _boxSubCategoryChanged();
-    });
+    _appBox.listenable.addListener(_appBoxChanged);
+    _appBox.userProfileListenable.addListener(_userProfileChanged);
+    _appBox.companyInfoListenable.addListener(_companyInfoChanged);
+    _boxCategory.listenable.addListener(_boxCategoryChanged);
+    _boxSubCategory.listenable.addListener(_boxSubCategoryChanged);
+    _boxAds.listenable.addListener(_boxAdsChanged);
   }
 
   @action
@@ -125,6 +121,7 @@ abstract class _StoreApp with Store {
     _appBox = await AppBox.create();
     _boxCategory = await BoxCategory.create();
     _boxSubCategory = await BoxSubCategory.create();
+    _boxAds = await BoxAds.create();
   }
 
   @action
@@ -132,6 +129,7 @@ abstract class _StoreApp with Store {
     await getCompanyInfo();
     await getCategories();
     await getSubCategories();
+    await getAds();
   }
 
   @action
@@ -149,6 +147,7 @@ abstract class _StoreApp with Store {
   Future getCategories() async {
     try {
       final response = await _apiService.getCategories();
+      _boxCategory.deleteAll();
       await _boxCategory.saveAll(response.body.m2Category.toList());
     } catch (e) {
       exception = AppException(message: e.toString());
@@ -159,7 +158,21 @@ abstract class _StoreApp with Store {
   Future getSubCategories() async {
     try {
       final response = await _apiService.getSubCategories();
+      _boxSubCategory.deleteAll();
       await _boxSubCategory.saveAll(response.body.subCategory.toList());
+    } catch (e) {
+      exception = AppException(message: e.toString());
+    }
+  }
+
+  @action
+  Future getAds() async {
+    try {
+      final response = await _apiService.getAds();
+      if (response.body.error == null) {
+        _boxAds.deleteAll();
+        await _boxAds.saveAll(response.body.ads.toList());
+      }
     } catch (e) {
       exception = AppException(message: e.toString());
     }
@@ -199,6 +212,11 @@ abstract class _StoreApp with Store {
   void _boxSubCategoryChanged() {
     subCategoryList =
         ObservableList.of(_boxSubCategory.listenable.value.values);
+  }
+
+  @action
+  void _boxAdsChanged() {
+    adsList = ObservableList.of(_boxAds.listenable.value.values);
   }
 
   @action

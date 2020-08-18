@@ -10,6 +10,7 @@ import 'package:m2mobile/utils/image_picker_utils.dart';
 import 'package:m2mobile/stores/store_profile.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:m2mobile/res/strings.dart';
+import 'package:m2mobile/utils/extensions.dart';
 import 'package:mobx/mobx.dart';
 
 class EditProfileWidget extends StatefulWidget {
@@ -191,7 +192,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                                 fit: BoxFit.cover,
                                 placeholder:
                                     AssetImage("lib/res/images/profile.png"),
-                                image: NetworkImage(_storeProfile.imageUrl))
+                                image: NetworkImage(
+                                    _storeProfile.imageUrl.createImageUrl()))
                             : AssetImage("lib/res/images/profile.png"),
                       ),
                     ),
