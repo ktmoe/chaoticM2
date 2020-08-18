@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:m2mobile/models/responses/noti.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
+import 'package:m2mobile/utils/extensions.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/pages/main/notification/notification_detail/notification_detail_widget.dart';
 
 class NotificationCard extends StatefulWidget {
+
+  Noti _noti;
+
+  NotificationCard(this._noti);
+
   @override
   _NotificationCardState createState() => _NotificationCardState();
 }
@@ -28,7 +35,7 @@ class _NotificationCardState extends State<NotificationCard> {
                 Container(
                     padding: const EdgeInsets.all(Dimens.marginMedium),
                     child: Text(
-                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                        widget._noti.description,
                         style: Styles.m2TextTheme)),
                 const Divider(
                     height: 3,
@@ -37,7 +44,7 @@ class _NotificationCardState extends State<NotificationCard> {
                     endIndent: Dimens.marginMedium2),
                 Container(
                     padding: const EdgeInsets.all(Dimens.marginMedium),
-                    child: Text('5 Jan 2020 / 9 : 00 AM',
+                    child: Text(widget._noti.date.dateTimeFromString().dateAndTime(),
                         style: Styles.m2TextTheme.copyWith(
                             fontWeight: FontWeight.w500,
                             fontSize: Dimens.textRegular2x)))

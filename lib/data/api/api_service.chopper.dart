@@ -301,4 +301,11 @@ class _$ApiService extends ApiService {
     final $request = Request('GET', $url, client.baseUrl);
     return client.send<AdsResponse, AdsResponse>($request);
   }
+
+  @override
+  Future<Response<NotiListResponse>> getAllNoti() {
+    final $url = '/api/notificationview/getNoti';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<NotiListResponse, NotiListResponse>($request);
+  }
 }
