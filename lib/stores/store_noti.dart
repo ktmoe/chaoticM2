@@ -26,9 +26,10 @@ abstract class _StoreNoti with Store{
   }
 
   Future init() async{
+    print("store noti init get called");
     _boxNoti = await BoxNoti.create();
-    updateNotis();
     _boxNoti.listenable.addListener(updateNotis);
+    updateNotis();
   }
 
   @action
@@ -39,6 +40,7 @@ abstract class _StoreNoti with Store{
   @action
   Future fetchNotis({bool refresh}) async{
     try{
+      print("fetch notis called");
       final response = await api.getAllNoti();
       if(response.body.message.toLowerCase() == "success" && response.body.error == null){
         final notis = response.body.noti.toList();
