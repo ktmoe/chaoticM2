@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_page_indicator/flutter_page_indicator.dart';
+import 'package:m2mobile/data/api/api_service.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
+import 'package:m2mobile/fcm_service/fcm_service.dart';
+import 'package:m2mobile/fcm_service/notification_service.dart';
 import 'package:m2mobile/pages/main/ads/ads_detail_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
@@ -33,15 +38,18 @@ class _HomeWidgetState extends State<HomeWidget>
 
   ReactionDisposer _onException() {
     return reaction<AppException>((_) => _storeHome.exception, (exception) {
+      print("exception => $exception");
       exception.message.showSnack(context);
     });
   }
+
+  StreamSubscription _streamSubscription;
 
   @override
   void initState() {
     super.initState();
     _disposer.addAll([_onException()]);
-    Future.wait([_storeHome.init(), _storeCart.init()]);
+    Future.wait([_storeHome.init(), _storeCart.init(), _setUpMessagingAndNotificationService()]);
   }
 
   @override
@@ -50,6 +58,23 @@ class _HomeWidgetState extends State<HomeWidget>
     _disposer.forEach((element) {
       element();
     });
+  }
+
+  Future _setUpMessagingAndNotificationService() async {
+    print("firebase setup get called");
+    if (!FcmService().hasListener) {
+      print("service has listeners");
+      _streamSubscription = FcmService().onMessageReceived
+          .listen((message) async {
+        print("Homepage message : ${message['data']}");
+        await NotificationService().show(message);
+      },onError: (err){
+         print("err in stream is => $err");
+      });
+    }
+    else {
+      print("already got listeners");
+    }
   }
 
   @override

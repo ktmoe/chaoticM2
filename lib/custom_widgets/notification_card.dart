@@ -26,7 +26,7 @@ class _NotificationCardState extends State<NotificationCard> {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Dimens.marginMedium2)),
         child: InkWell(
-          onTap: () => Modular.to.pushNamed(NotificationDetailWidget.route),
+          onTap: () => Modular.to.pushNamed(NotificationDetailWidget.route,arguments: widget._noti),
           child: Container(
             padding: const EdgeInsets.all(Dimens.marginMedium),
             child: Column(

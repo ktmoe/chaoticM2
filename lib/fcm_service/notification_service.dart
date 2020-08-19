@@ -19,7 +19,8 @@ class NotificationService {
 
   Future init() async {
     if (isInit) {
-      throw Exception("notification already initialized");
+      print("noti already init");
+    //  throw Exception("notification already initialized");
     } else {
       isInit = true;
     }
@@ -39,17 +40,11 @@ class NotificationService {
         onSelectNotification: (payload) async {
       final message = json.decode(payload);
       print("message when onTapped => $message");
-      if (message['type'] == "other") {
-        print("noti others tapped");
-        //  Modular.to.pushNamed(AppRoutes.notiOthers);
-      } else {
-        //  Modular.to.pushNamed(NotiOrderDetailWidget.route,arguments: message['orderid'] as String);
-      }
     });
   }
 
   Future show(dynamic message) async {
-    if (!isInit) throw "Noti not initialized";
+    if (!isInit) print("Noti service not initialized");
 
     print("init status when showing noti => $isInit");
 
@@ -64,15 +59,15 @@ class NotificationService {
         'M2 Notification Channel',
         'This is channel description',
         priority: Priority.Max,
-        importance: Importance.Max,
-        playSound: true,
+        icon: "app_icon",
         largeIcon: const DrawableResourceAndroidBitmap("app_icon"),
-        icon: 'app_icon');
+        importance: Importance.Max,
+        playSound: true,);
 
     const iosNotificationDetails = IOSNotificationDetails();
 
     final platformChannelSpecifics =
-        NotificationDetails(androidNotificationDetails, iosNotificationDetails);
+        NotificationDetails(androidNotificationDetails,iosNotificationDetails);
 
     print("message inside notification service => $data");
 

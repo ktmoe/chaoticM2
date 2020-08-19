@@ -32,7 +32,7 @@ class _$RefreshTokenResponseSerializer
       result
         ..add('data')
         ..add(serializers.serialize(object.data,
-            specifiedType: const FullType(int)));
+            specifiedType: const FullType(String)));
     }
     return result;
   }
@@ -55,7 +55,7 @@ class _$RefreshTokenResponseSerializer
           break;
         case 'data':
           result.data = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(String)) as String;
           break;
       }
     }
@@ -68,7 +68,7 @@ class _$RefreshTokenResponse extends RefreshTokenResponse {
   @override
   final String message;
   @override
-  final int data;
+  final String data;
 
   factory _$RefreshTokenResponse(
           [void Function(RefreshTokenResponseBuilder) updates]) =>
@@ -119,9 +119,9 @@ class RefreshTokenResponseBuilder
   String get message => _$this._message;
   set message(String message) => _$this._message = message;
 
-  int _data;
-  int get data => _$this._data;
-  set data(int data) => _$this._data = data;
+  String _data;
+  String get data => _$this._data;
+  set data(String data) => _$this._data = data;
 
   RefreshTokenResponseBuilder();
 

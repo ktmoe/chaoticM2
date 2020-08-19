@@ -99,7 +99,7 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
     }
     if (object.soldCount != null) {
       result
-        ..add('soldcount')
+        ..add('sold_count')
         ..add(serializers.serialize(object.soldCount,
             specifiedType: const FullType(int)));
     }
@@ -191,7 +191,7 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
           result.discountType = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'soldcount':
+        case 'sold_count':
           result.soldCount = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;

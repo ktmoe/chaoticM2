@@ -36,7 +36,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
   void initState() {
     super.initState();
     _disposer.addAll([_onException()]);
-    Future.wait([storeNoti.init()]);
+    Future.wait([storeNoti.init(),storeNoti.fetchNotis(refresh: true)]); //not sure refreshing here is good
   }
 
   @override
@@ -58,6 +58,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
       body: RefreshIndicator(
         key: _refreshIndicatorState,
         onRefresh: () async{
+          print("refresh get called");
           await storeNoti.fetchNotis(refresh: true);
         },
         child: Stack(

@@ -43,14 +43,14 @@ class FcmService {
   }
 
   void _setupIsolate() {
+    print("isolate setup get called");
     final ReceivePort receivePort = ReceivePort();
     final SendPort sendPort = receivePort.sendPort;
     IsolateNameServer.registerPortWithName(sendPort, isolateChannelName);
     receivePort.listen((data) {
       print("data after listen => $data");
       _streamController.add(data);
-    }, onError: (e) {
-      //_streamController.addError(e);
+    }, onError:(e){
       print("error at listen => $e");
     });
   }
@@ -71,10 +71,10 @@ class FcmService {
 
     firebaseMessaging.configure(
         onResume: (Map<String, dynamic> message) async {
-          //  print("onResume: $message");
+            print("onResume: $message");
         },
         onMessage: (Map<String, dynamic> message) async {
-          //  print("onMessage: $message");
+            print("onMessage: $message");
           _streamController.add(message);
         },
         onBackgroundMessage: backgroundMessageHandler,
@@ -103,10 +103,9 @@ class FcmService {
         'M2 Notification Channel',
         'This is channel description',
         playSound: true,
+        icon: "app_icon",
         enableVibration: true,
         importance: Importance.Max,
-        icon: "app_icon",
-        largeIcon: const DrawableResourceAndroidBitmap("app_icon"),
         priority: Priority.High,
       );
 

@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
+import 'package:m2mobile/models/responses/noti.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:m2mobile/utils/extensions.dart';
 
 class NotificationDetailWidget extends StatefulWidget {
+
+  Noti noti;
+
+  NotificationDetailWidget({this.noti});
+
   static const route = "/main/notification/notification_detail";
   @override
   _NotificationDetailWidgetState createState() =>
@@ -52,7 +59,7 @@ class _NotificationDetailWidgetState extends State<NotificationDetailWidget> {
             children: <Widget>[
               Container(
                 padding: const EdgeInsets.all(Dimens.marginMedium2),
-                child: const Text('Moon Soon Promotion',
+                child: Text(widget.noti.title,
                     style: TextStyle(
                         fontSize: Dimens.textHeading1x,
                         fontWeight: FontWeight.w600)),
@@ -60,7 +67,7 @@ class _NotificationDetailWidgetState extends State<NotificationDetailWidget> {
               Container(
                 padding: const EdgeInsets.all(Dimens.marginMedium2),
                 child: Text(
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                    widget.noti.description,
                     style: Styles.m2TextTheme),
               )
             ],
@@ -78,7 +85,7 @@ class _NotificationDetailWidgetState extends State<NotificationDetailWidget> {
             child: FadeInImage(
                 fit: BoxFit.cover,
                 placeholder: AssetImage("lib/res/images/placeholder.png"),
-                image: NetworkImage("")),
+                image: NetworkImage(widget.noti.imageurl.createImageUrl())),
           ),
         ),
       );
