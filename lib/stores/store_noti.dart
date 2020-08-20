@@ -58,4 +58,8 @@ abstract class _StoreNoti with Store{
     }
   }
 
+  void save(Noti noti){
+    _boxNoti.save(noti);
+  }
+
 }

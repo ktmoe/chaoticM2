@@ -35,7 +35,7 @@ class FcmService {
 
   // ignore: sort_unnamed_constructors_first
   factory FcmService() {
-    if (instance == null) {
+    if (instance == null){
       instance = FcmService._();
       instance.init();
     }
@@ -65,7 +65,7 @@ class FcmService {
         var refreshResponse =
             await Modular.get<ApiService>().refreshToken(userId, token);
         Modular.get<Logger>()
-            .i('FCM Token Refreshed and ${refreshResponse.body.message}');
+            .i('FCM Token Refreshed and ${refreshResponse.body.data}');
       }
     });
 
@@ -103,9 +103,10 @@ class FcmService {
         'M2 Notification Channel',
         'This is channel description',
         playSound: true,
-        icon: "app_icon",
+        icon: "m2_noti_icon",
         enableVibration: true,
         importance: Importance.Max,
+        largeIcon: const DrawableResourceAndroidBitmap("m2_noti_icon"),
         priority: Priority.High,
       );
 

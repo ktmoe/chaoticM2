@@ -40,7 +40,7 @@ class BoxNoti implements Disposable{
   }
 
   Future save(Noti noti) async {
-    await _box.put(noti.id, noti);
+    await _box.put(noti.id,noti);
   }
 
   void deleteAll() => _box.deleteAll(_box.keys);

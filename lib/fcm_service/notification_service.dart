@@ -27,7 +27,7 @@ class NotificationService {
     print("Initializing local notifications...");
 
     const initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+        AndroidInitializationSettings('m2_noti_icon');
 
     const initializationSettingsIOS = IOSInitializationSettings();
 
@@ -59,8 +59,8 @@ class NotificationService {
         'M2 Notification Channel',
         'This is channel description',
         priority: Priority.Max,
-        icon: "app_icon",
-        largeIcon: const DrawableResourceAndroidBitmap("app_icon"),
+        icon: "m2_noti_icon",
+        largeIcon: const DrawableResourceAndroidBitmap("m2_noti_icon"),
         importance: Importance.Max,
         playSound: true,);
 
@@ -75,4 +75,5 @@ class NotificationService {
         data['message'] as String, platformChannelSpecifics,
         payload: json.encode(data));
   }
+
 }
