@@ -30,6 +30,8 @@ extension StringX on String {
   String createImageUrl() => "$baseUrl/$this";
 
   DateTime dateTimeFromString() => DateTime.parse(this);
+
+  String dottedListFromString() => "\u2022${this.replaceAll("\n", "\n\u2022")}";
 }
 
 extension DateTimeX on DateTime {

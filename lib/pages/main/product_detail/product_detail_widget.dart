@@ -112,7 +112,8 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
             Flexible(
               child: Padding(
                   padding: const EdgeInsets.all(Dimens.marginMedium),
-                  child: Text(widget.product.specification)),
+                  child: Text(
+                      widget.product.specification.dottedListFromString())),
             )
           ],
         ),
