@@ -121,7 +121,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
   Widget _buildProductImagesSlider() => Stack(
         children: <Widget>[
           Container(
-            height: MediaQuery.of(context).size.height * 0.3,
+            height: MediaQuery.of(context).size.height * 0.5,
             child: ClipRRect(
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(Dimens.marginMedium2),
@@ -141,7 +141,6 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                   return AspectRatio(
                     aspectRatio: 1 / 1,
                     child: FadeInImage(
-                      fit: BoxFit.cover,
                       placeholder: AssetImage("lib/res/images/placeholder.png"),
                       image: _images.isEmpty
                           ? AssetImage("lib/res/images/placeholder.png")
@@ -206,11 +205,6 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
           )
         : Container();
   }
-
-  // final List<String> specifications = [
-  //   "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-  //   "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-  // ];
 }
 
 class BottomSheet extends StatefulWidget {

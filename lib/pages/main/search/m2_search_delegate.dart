@@ -12,7 +12,10 @@ class M2SearchDelegate extends SearchDelegate {
 
   @override
   ThemeData appBarTheme(BuildContext context) {
-    return Theme.of(context).copyWith(scaffoldBackgroundColor: Colors.white);
+    return Theme.of(context).copyWith(
+        scaffoldBackgroundColor: Colors.white,
+        inputDecorationTheme:
+            InputDecorationTheme(hintStyle: TextStyle(color: Colors.white)));
   }
 
   @override
@@ -88,7 +91,7 @@ class M2SearchDelegate extends SearchDelegate {
                                 _storeSearch.results[index].discountPrice != 0);
                       }),
                     )
-                  : ListEmptyWidget(message: 'ပစ္စည်းများ မရှိသေးပါ');
+                  : ListEmptyWidget(message: 'ရှာဖွေ၍ မတွေ့ရှိပါ။');
             })
           ],
         ),
