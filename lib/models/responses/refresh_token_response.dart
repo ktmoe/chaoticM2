@@ -19,7 +19,7 @@ abstract class RefreshTokenResponse
   String get message;
   @nullable
   @BuiltValueField(wireName: 'data')
-  int get data;
+  String get data;
   String toJson() {
     return json.encode(
         serializers.serializeWith(RefreshTokenResponse.serializer, this));

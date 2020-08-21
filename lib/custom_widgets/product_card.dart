@@ -103,7 +103,7 @@ class ProductCardHeader extends StatelessWidget {
                     ),
                   ),
                 ),
-                discountItem
+               (discountItem && product.soldCount > 0)
                     ? _buildSoldCountTag(soldCount: product.soldCount)
                     : Container()
               ],

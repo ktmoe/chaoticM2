@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/data/api/api_service.dart';
+import 'package:m2mobile/fcm_service/notification_service.dart';
 import 'package:m2mobile/models/ads.dart';
 import 'package:m2mobile/models/user_profile.dart';
 import 'package:m2mobile/models/m2_category.dart';
@@ -95,6 +96,11 @@ abstract class _StoreApp with Store {
   @action
   Future init() async {
     proceed = false;
+    try{
+      await NotificationService().init();
+    }catch(e){
+      print("noti init err => $e");
+    }
     await _createBoxes();
     _setupBoxListeners();
     readIsFirstTime();

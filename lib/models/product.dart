@@ -73,7 +73,7 @@ abstract class Product implements Built<Product, ProductBuilder> {
   String get discountType;
   @nullable
   @HiveField(15)
-  @BuiltValueField(wireName: 'soldcount')
+  @BuiltValueField(wireName: 'sold_count')
   int get soldCount;
   @nullable
   @HiveField(17)

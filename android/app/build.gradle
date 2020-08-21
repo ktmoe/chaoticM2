@@ -8,7 +8,7 @@ if (localPropertiesFile.exists()) {
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+    throw new FileNotFoundException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -68,5 +68,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     //For Firebase Authentication Service
     implementation 'com.android.support:multidex:1.0.3'
+    //For Cloud Messaging
+    implementation 'com.google.firebase:firebase-messaging:20.2.4'
 }
 apply plugin: 'com.google.gms.google-services' 

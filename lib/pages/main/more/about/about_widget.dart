@@ -169,9 +169,9 @@ class _AboutWidgetState extends State<AboutWidget> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: GoogleMap(
-              minMaxZoomPreference: const MinMaxZoomPreference(20, 50),
+              minMaxZoomPreference: const MinMaxZoomPreference(20,50),
               markers: _markers,
-              onTap: (latLong) {},
+              onTap: (latLong){},
               initialCameraPosition: const CameraPosition(target: location),
               onMapCreated: _onMapCreated,
             ),

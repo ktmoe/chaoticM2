@@ -7,6 +7,7 @@ import 'package:m2mobile/models/responses/force_update_response.dart';
 import 'package:m2mobile/models/responses/help_response.dart';
 import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/models/responses/login_response.dart';
+import 'package:m2mobile/models/responses/noti_list_response.dart';
 import 'package:m2mobile/models/responses/post_profile_response.dart';
 import 'package:m2mobile/models/responses/product_response.dart';
 import 'package:m2mobile/models/responses/order_list_response.dart';
@@ -164,4 +165,10 @@ abstract class ApiService extends ChopperService {
 
   @Get(path: 'api/adsview/getAds')
   Future<Response<AdsResponse>> getAds();
+
+  /// noti ///
+  @Get(path: 'api/notificationview/getNoti')
+  Future<Response<NotiListResponse>> getAllNoti();
+
+
 }

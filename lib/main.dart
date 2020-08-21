@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:m2mobile/models/bank_account.dart';
 import 'package:m2mobile/models/image_url_holder.dart';
 import 'package:m2mobile/models/order.dart';
+import 'package:m2mobile/models/responses/noti.dart';
 import 'package:m2mobile/models/user_profile.dart';
 import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/models/company_info.dart';
@@ -44,4 +45,5 @@ void _registerAdapters() {
   Hive.registerAdapter<Order>(OrderAdapter()); //HiveType 7
   Hive.registerAdapter<BankAccount>(BankAccountAdapter()); //HiveType 8
   Hive.registerAdapter<Ads>(AdsAdapter()); //HiveType 9
+  Hive.registerAdapter<Noti>(NotiAdapter()); //HiveType 10
 }
