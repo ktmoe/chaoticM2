@@ -20,6 +20,8 @@ import 'package:m2mobile/route_guard.dart';
 import 'package:m2mobile/utils/connectivity_service.dart';
 import 'package:m2mobile/data/api/file_upload_service.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:m2mobile/fcm_service/fcm_service.dart';
+import 'package:m2mobile/fcm_service/notification_service.dart';
 
 import 'package:m2mobile/utils/custom_json_converter.dart';
 
@@ -44,6 +46,8 @@ class AppModule extends MainModule {
         Bind((i) => ApiService.create(i.get<ChopperClient>())),
         Bind((i) => FileUploadService.create(i.get<ChopperClient>())),
         Bind((i) => FirebaseMessaging()),
+        Bind((i) => NotificationService(), lazy: false),
+        Bind((i) => FirebaseMessagingService(), lazy: false),
         Bind((i) => ImagePicker())
       ];
 

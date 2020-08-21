@@ -62,43 +62,59 @@ class _ProductListWidgetState extends State<ProductListWidget> {
         deleteOnly: false,
         onBackPressed: () => Modular.to.pop(),
       ),
-      body: Stack(
-        children: <Widget>[
-          ScreenBgCard(),
-          RefreshIndicator(
-            key: _refreshIndicatorState,
-            onRefresh: () async {
-              await _storeProductList.getProductsByCategory(
-                  widget.productName.subcategoryId, true);
-            },
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Observer(builder: (_) {
-                    return _storeProductList.products.isNotEmpty
-                        ? GridView.count(
-                            crossAxisCount: 2,
-                            childAspectRatio: 120 / 170,
-                            padding: const EdgeInsets.all(Dimens.marginMedium),
-                            shrinkWrap: true,
-                            children: List.generate(
-                                _storeProductList.products.length, (index) {
-                              return ProductCard(
-                                  product: _storeProductList.products[index],
-                                  discountItem: _storeProductList
-                                          .products[index].discountPrice !=
-                                      0);
-                            }),
-                          )
-                        : ListEmptyWidget(message: 'ပစ္စည်းများ မရှိသေးပါ');
-                  }),
-                ],
-              ),
-            ),
-          )
-        ],
+      body: NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          if (notification.metrics.pixels ==
+              notification.metrics.maxScrollExtent) {
+            Future.wait([
+              _storeProductList.getProductsByCategory(
+                  widget.productName.subcategoryId, false)
+            ]);
+          }
+          return true;
+        },
+        child: RefreshIndicator(
+          key: _refreshIndicatorState,
+          onRefresh: () async {
+            await _storeProductList.getProductsByCategory(
+                widget.productName.subcategoryId, true);
+          },
+          child: Stack(
+            children: <Widget>[
+              ScreenBgCard(),
+              SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Observer(builder: (_) {
+                      return _storeProductList.products.isNotEmpty
+                          ? GridView.count(
+                              crossAxisCount: 2,
+                              childAspectRatio: 120 / 170,
+                              padding:
+                                  const EdgeInsets.all(Dimens.marginMedium),
+                              shrinkWrap: true,
+                              children: List.generate(
+                                  _storeProductList.products.length, (index) {
+                                return ProductCard(
+                                    product: _storeProductList.products[index],
+                                    discountItem: _storeProductList
+                                            .products[index].discountPrice !=
+                                        0,
+                                    discountByPercent: _storeProductList
+                                            .products[index].discountType !=
+                                        "amount");
+                              }),
+                            )
+                          : ListEmptyWidget(message: 'ပစ္စည်းများ မရှိသေးပါ');
+                    }),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

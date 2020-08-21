@@ -7,8 +7,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/pages/main/notification/notification_detail/notification_detail_widget.dart';
 
 class NotificationCard extends StatefulWidget {
-
-  Noti _noti;
+  final Noti _noti;
 
   NotificationCard(this._noti);
 
@@ -26,7 +25,8 @@ class _NotificationCardState extends State<NotificationCard> {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Dimens.marginMedium2)),
         child: InkWell(
-          onTap: () => Modular.to.pushNamed(NotificationDetailWidget.route,arguments: widget._noti),
+          onTap: () => Modular.to.pushNamed(NotificationDetailWidget.route,
+              arguments: widget._noti),
           child: Container(
             padding: const EdgeInsets.all(Dimens.marginMedium),
             child: Column(
@@ -34,8 +34,7 @@ class _NotificationCardState extends State<NotificationCard> {
               children: <Widget>[
                 Container(
                     padding: const EdgeInsets.all(Dimens.marginMedium),
-                    child: Text(
-                        widget._noti.description,
+                    child: Text(widget._noti.description,
                         style: Styles.m2TextTheme)),
                 const Divider(
                     height: 3,
@@ -44,7 +43,8 @@ class _NotificationCardState extends State<NotificationCard> {
                     endIndent: Dimens.marginMedium2),
                 Container(
                     padding: const EdgeInsets.all(Dimens.marginMedium),
-                    child: Text(widget._noti.date.dateTimeFromString().dateAndTime(),
+                    child: Text(
+                        widget._noti.date.dateTimeFromString().dateAndTime(),
                         style: Styles.m2TextTheme.copyWith(
                             fontWeight: FontWeight.w500,
                             fontSize: Dimens.textRegular2x)))

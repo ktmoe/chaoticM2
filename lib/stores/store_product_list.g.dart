@@ -54,6 +54,38 @@ mixin _$StoreProductList on _StoreProductListBase, Store {
     });
   }
 
+  final _$latestCurrentPageAtom =
+      Atom(name: '_StoreProductListBase.latestCurrentPage');
+
+  @override
+  int get latestCurrentPage {
+    _$latestCurrentPageAtom.reportRead();
+    return super.latestCurrentPage;
+  }
+
+  @override
+  set latestCurrentPage(int value) {
+    _$latestCurrentPageAtom.reportWrite(value, super.latestCurrentPage, () {
+      super.latestCurrentPage = value;
+    });
+  }
+
+  final _$latestTotalPageAtom =
+      Atom(name: '_StoreProductListBase.latestTotalPage');
+
+  @override
+  int get latestTotalPage {
+    _$latestTotalPageAtom.reportRead();
+    return super.latestTotalPage;
+  }
+
+  @override
+  set latestTotalPage(int value) {
+    _$latestTotalPageAtom.reportWrite(value, super.latestTotalPage, () {
+      super.latestTotalPage = value;
+    });
+  }
+
   final _$exceptionAtom = Atom(name: '_StoreProductListBase.exception');
 
   @override
@@ -105,6 +137,8 @@ mixin _$StoreProductList on _StoreProductListBase, Store {
 products: ${products},
 subCategory: ${subCategory},
 initDone: ${initDone},
+latestCurrentPage: ${latestCurrentPage},
+latestTotalPage: ${latestTotalPage},
 exception: ${exception}
     ''';
   }

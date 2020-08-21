@@ -79,8 +79,7 @@ abstract class _StoreHome with Store {
       latestCurrentPage += 1;
       if (latestCurrentPage <= latestTotalPage) {
         final productResponse = await _api.getLatestProducts(
-            customerId: Modular.get<StoreApp>().userProfile.id,
-            currentPage: latestCurrentPage);
+            Modular.get<StoreApp>().userProfile.id, latestCurrentPage);
         latestTotalPage = productResponse.body.lastPage;
         final products = productResponse.body.product.toList();
         if (refresh && _boxProduct != null) _boxProduct.deleteAll();

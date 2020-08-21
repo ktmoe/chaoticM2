@@ -81,7 +81,7 @@ class _AdsDetailWidgetState extends State<AdsDetailWidget> {
                 placeholder: AssetImage("lib/res/images/placeholder.png"),
                 image: widget.ads.imageurl.isNotEmpty
                     ? NetworkImage(widget.ads.imageurl.createImageUrl())
-                    : AssetImage("lib/res/images/placeholder.png")),
+                    : Image.asset("lib/res/images/placeholder.png")),
           ),
         ),
       );

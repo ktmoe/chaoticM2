@@ -24,6 +24,36 @@ mixin _$StoreFav on _StoreFav, Store {
     });
   }
 
+  final _$latestCurrentPageAtom = Atom(name: '_StoreFav.latestCurrentPage');
+
+  @override
+  int get latestCurrentPage {
+    _$latestCurrentPageAtom.reportRead();
+    return super.latestCurrentPage;
+  }
+
+  @override
+  set latestCurrentPage(int value) {
+    _$latestCurrentPageAtom.reportWrite(value, super.latestCurrentPage, () {
+      super.latestCurrentPage = value;
+    });
+  }
+
+  final _$latestTotalPageAtom = Atom(name: '_StoreFav.latestTotalPage');
+
+  @override
+  int get latestTotalPage {
+    _$latestTotalPageAtom.reportRead();
+    return super.latestTotalPage;
+  }
+
+  @override
+  set latestTotalPage(int value) {
+    _$latestTotalPageAtom.reportWrite(value, super.latestTotalPage, () {
+      super.latestTotalPage = value;
+    });
+  }
+
   final _$exceptionAtom = Atom(name: '_StoreFav.exception');
 
   @override
@@ -49,9 +79,8 @@ mixin _$StoreFav on _StoreFav, Store {
   final _$fetchFavListAsyncAction = AsyncAction('_StoreFav.fetchFavList');
 
   @override
-  Future<dynamic> fetchFavList({bool refresh = true}) {
-    return _$fetchFavListAsyncAction
-        .run(() => super.fetchFavList(refresh: refresh));
+  Future<dynamic> fetchFavList(bool refresh) {
+    return _$fetchFavListAsyncAction.run(() => super.fetchFavList(refresh));
   }
 
   final _$_StoreFavActionController = ActionController(name: '_StoreFav');
@@ -71,6 +100,8 @@ mixin _$StoreFav on _StoreFav, Store {
   String toString() {
     return '''
 favs: ${favs},
+latestCurrentPage: ${latestCurrentPage},
+latestTotalPage: ${latestTotalPage},
 exception: ${exception}
     ''';
   }

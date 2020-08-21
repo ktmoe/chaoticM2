@@ -18,7 +18,7 @@ void main() {
 
   test('LatestProducts', () async {
     await _apiService.getLatestProducts(
-        customerId: "6bc0cd5e-f193-42f6-bbcd-618e985670f0");
+        "6bc0cd5e-f193-42f6-bbcd-618e985670f0", 1);
   });
 
   test('DiscountProducts', () async {
@@ -27,7 +27,7 @@ void main() {
   });
 
   test("FavoriteProducts", () async {
-    await _apiService.getFavList("6bc0cd5e-f193-42f6-bbcd-618e985670f0");
+    await _apiService.getFavList("6bc0cd5e-f193-42f6-bbcd-618e985670f0", 1);
   });
 
   test("AddToFavorite", () async {

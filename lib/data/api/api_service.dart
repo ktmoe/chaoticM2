@@ -33,14 +33,16 @@ abstract class ApiService extends ChopperService {
 
   @Get(path: 'api/productview/getLatestProductList')
   Future<Response<ProductResponse>> getLatestProducts(
-      {@Query('customerId') String customerId,
+      @Query('customerId') String customerId,
       @Query('currentPage') int currentPage,
-      @Query('perPage') int perPage = 10});
+      {@Query('perPage') int perPage = 10});
 
   @Get(path: 'api/productview/getProductListByCategory')
   Future<Response<ProductResponse>> getProductsByCategory(
       @Query('customerId') String customerId,
-      @Query('subCategoryId') String subCategoryId);
+      @Query('subCategoryId') String subCategoryId,
+      @Query('currentPage') int currentPage,
+      {@Query('perPage') int perPage = 10});
 
   @Get(path: 'api/productview/getDiscountProductList')
   Future<Response<ProductResponse>> getDiscountProducts(
@@ -48,9 +50,10 @@ abstract class ApiService extends ChopperService {
 
   @Get(path: 'api/productview/searchProduct')
   Future<Response<ProductResponse>> searchProduct(
-      @Query('keyword') String keyword, @Query('customerId') String customerId,
-      {@Query('perPage') int perPage = 10,
-      @Query('currentPage') int currentPage = 1});
+      @Query('keyword') String keyword,
+      @Query('customerId') String customerId,
+      @Query('currentPage') int currentPage,
+      {@Query('perPage') int perPage = 10});
 
   /// help ///
   @Get(path: 'api/helpview')
@@ -58,7 +61,9 @@ abstract class ApiService extends ChopperService {
 
   /// Favorite ///
   @Get(path: 'api/favoriteview/getFavoriteList')
-  Future<Response<ProductResponse>> getFavList(@Query('customerId') String id);
+  Future<Response<ProductResponse>> getFavList(
+      @Query('customerId') String id, @Query('currentPage') int currentPage,
+      {@Query('perPage') int perPage = 10});
 
   @Post(path: 'api/favoriteview/addToFavorite')
   Future<Response<FavoriteOperateResponse>> addToFav(
@@ -169,6 +174,4 @@ abstract class ApiService extends ChopperService {
   /// noti ///
   @Get(path: 'api/notificationview/getNoti')
   Future<Response<NotiListResponse>> getAllNoti();
-
-
 }

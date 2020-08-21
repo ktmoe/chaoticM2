@@ -4,8 +4,8 @@ import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
-import '../error_message.dart';
-import '../serializers.dart';
+import 'package:m2mobile/models/error_message.dart';
+import 'package:m2mobile/models/serializers.dart';
 import 'noti.dart';
 
 part 'noti_list_response.g.dart';
@@ -15,7 +15,7 @@ abstract class NotiListResponse
   NotiListResponse._();
 
   factory NotiListResponse([updates(NotiListResponseBuilder b)]) =
-  _$NotiListResponse;
+      _$NotiListResponse;
 
   @BuiltValueField(wireName: 'message')
   String get message;

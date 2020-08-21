@@ -18,15 +18,28 @@ abstract class _StoreSearchBase with Store {
   @observable
   AppException exception;
 
+  @observable
+  int latestCurrentPage = 0;
+
+  @observable
+  int latestTotalPage = 1;
+
   @action
-  Future<void> search(String keyword) async {
+  Future<void> search(String keyword, bool refresh) async {
+    if (refresh) {
+      latestCurrentPage = 0;
+    }
     try {
-      final response = await _apiService.searchProduct(
-          keyword, Modular.get<StoreApp>().userProfile.id);
-      if (response.body.error == null) {
-        results = ObservableList.of(response.body.product);
-      } else {
-        results = ObservableList.of([]);
+      latestCurrentPage += 1;
+      if (latestCurrentPage <= latestTotalPage) {
+        final response = await _apiService.searchProduct(
+            keyword, Modular.get<StoreApp>().userProfile.id, latestCurrentPage);
+        if (response.body.error == null) {
+          latestTotalPage = response.body.lastPage;
+          results = ObservableList.of(response.body.product);
+        } else {
+          results = ObservableList.of([]);
+        }
       }
     } catch (e) {
       exception = AppException(message: e.toString());

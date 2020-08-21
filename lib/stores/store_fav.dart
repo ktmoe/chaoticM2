@@ -19,6 +19,12 @@ abstract class _StoreFav with Store {
   ObservableList<Product> favs = ObservableList.of([]);
 
   @observable
+  int latestCurrentPage = 0;
+
+  @observable
+  int latestTotalPage = 1;
+
+  @observable
   AppException exception;
 
   @action
@@ -34,16 +40,25 @@ abstract class _StoreFav with Store {
   }
 
   @action
-  Future fetchFavList({bool refresh = true}) async {
+  Future fetchFavList(bool refresh) async {
+    if (refresh) {
+      latestCurrentPage = 0;
+    }
     try {
-      final favResponse =
-          await apiService.getFavList(Modular.get<StoreApp>().userProfile.id);
-      _boxFav.delete();
-      if (favResponse.error == null) {
-        final favItems = favResponse.body.product.toList();
-        _boxFav.addAll(favItems);
-      } else {
-        favs = ObservableList.of([]);
+      latestCurrentPage += 1;
+      if (latestCurrentPage <= latestTotalPage) {
+        final favResponse = await apiService.getFavList(
+            Modular.get<StoreApp>().userProfile.id, latestCurrentPage);
+        if (refresh) {
+          _boxFav.delete();
+        }
+        if (favResponse.error == null) {
+          latestTotalPage = favResponse.body.lastPage;
+          final favItems = favResponse.body.product.toList();
+          _boxFav.addAll(favItems);
+        } else {
+          favs = ObservableList.of([]);
+        }
       }
     } catch (e) {
       exception = AppException(message: e.toString());

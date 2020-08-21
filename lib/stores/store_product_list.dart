@@ -24,6 +24,12 @@ abstract class _StoreProductListBase with Store {
   bool initDone = false;
 
   @observable
+  int latestCurrentPage = 0;
+
+  @observable
+  int latestTotalPage = 1;
+
+  @observable
   AppException exception;
 
   @action
@@ -45,18 +51,27 @@ abstract class _StoreProductListBase with Store {
 
   @action
   Future<void> getProductsByCategory(String subcategoryId, bool refresh) async {
+    if (refresh) {
+      latestCurrentPage = 0;
+    }
     try {
+      latestCurrentPage += 1;
       subCategory = subcategoryId;
-      final response = await _apiService.getProductsByCategory(
-          Modular.get<StoreApp>().userProfile.id, subcategoryId);
-      if (response.body.error == null &&
-          response.body.message.toLowerCase() == 'success') {
-        if (refresh) {
-          _boxProductByCategory.deleteByCategory(subcategoryId);
-        }
-        _boxProductByCategory.saveAll(response.body.product.toList());
-      } else
-        products = ObservableList.of([]);
+      if (latestCurrentPage <= latestTotalPage) {
+        final response = await _apiService.getProductsByCategory(
+            Modular.get<StoreApp>().userProfile.id,
+            subcategoryId,
+            latestCurrentPage);
+        if (response.body.error == null &&
+            response.body.message.toLowerCase() == 'success') {
+          if (refresh) {
+            _boxProductByCategory.deleteByCategory(subcategoryId);
+          }
+          latestTotalPage = response.body.lastPage;
+          _boxProductByCategory.saveAll(response.body.product.toList());
+        } else
+          products = ObservableList.of([]);
+      }
     } catch (e) {
       exception = AppException(message: e.toString());
     }

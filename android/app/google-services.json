@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "651597124747-4btsago935btrq2b9n4qn6h8m8muokf7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gnwt.m2mobile",
+            "certificate_hash": "54335b4ff3a50c0e1cc1434bd7d5c77471bea1e3"
+          }
+        },
+        {
           "client_id": "651597124747-7erfgua62j2k0gmj0c3l28igmmsrt41s.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -64,36 +64,49 @@ class M2SearchDelegate extends SearchDelegate {
 
   Widget _buildSearchResultBody() {
     if (query.isNotEmpty) {
-      Future.wait([_storeSearch.search(query)]);
+      Future.wait([_storeSearch.search(query, true)]);
     }
-    return RefreshIndicator(
-      key: _refreshIndicatorState,
-      onRefresh: () async {
-        await _storeSearch.search(query);
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        if (notification.metrics.pixels ==
+            notification.metrics.maxScrollExtent) {
+          Future.wait([_storeSearch.search(query, false)]);
+        }
+        return true;
       },
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Observer(builder: (_) {
-              return _storeSearch.results.isNotEmpty
-                  ? GridView.count(
-                      crossAxisCount: 2,
-                      childAspectRatio: 120 / 170,
-                      padding: const EdgeInsets.all(Dimens.marginMedium),
-                      shrinkWrap: true,
-                      children:
-                          List.generate(_storeSearch.results.length, (index) {
-                        return ProductCard(
-                            product: _storeSearch.results[index],
-                            discountItem:
-                                _storeSearch.results[index].discountPrice != 0);
-                      }),
-                    )
-                  : ListEmptyWidget(message: 'ရှာဖွေ၍ မတွေ့ရှိပါ။');
-            })
-          ],
+      child: RefreshIndicator(
+        key: _refreshIndicatorState,
+        onRefresh: () async {
+          await _storeSearch.search(query, true);
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Observer(builder: (_) {
+                return _storeSearch.results.isNotEmpty
+                    ? GridView.count(
+                        crossAxisCount: 2,
+                        childAspectRatio: 120 / 170,
+                        padding: const EdgeInsets.all(Dimens.marginMedium),
+                        shrinkWrap: true,
+                        children:
+                            List.generate(_storeSearch.results.length, (index) {
+                          return ProductCard(
+                              product: _storeSearch.results[index],
+                              discountItem:
+                                  _storeSearch.results[index].discountPrice !=
+                                      0,
+                              discountByPercent:
+                                  _storeSearch.results[index].discountType !=
+                                      'amount');
+                        }),
+                      )
+                    : ListEmptyWidget(message: 'ရှာဖွေ၍ မတွေ့ရှိပါ။');
+              })
+            ],
+          ),
         ),
       ),
     );

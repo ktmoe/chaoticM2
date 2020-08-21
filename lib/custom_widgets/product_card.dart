@@ -13,9 +13,13 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 class ProductCard extends StatefulWidget {
   final Product product;
   final bool discountItem;
+  final bool discountByPercent;
 
   const ProductCard(
-      {Key key, @required this.product, @required this.discountItem})
+      {Key key,
+      @required this.product,
+      @required this.discountItem,
+      this.discountByPercent})
       : super(key: key);
   @override
   _ProductCardState createState() => _ProductCardState();
@@ -43,7 +47,8 @@ class _ProductCardState extends State<ProductCard> {
                   },
                   child: ProductCardHeader(
                       product: widget.product,
-                      discountItem: widget.discountItem)),
+                      discountItem: widget.discountItem,
+                      discountByPercent: widget.discountByPercent)),
             ),
             Expanded(
               flex: 1,
@@ -59,8 +64,10 @@ class _ProductCardState extends State<ProductCard> {
 class ProductCardHeader extends StatelessWidget {
   final Product product;
   final bool discountItem;
+  final bool discountByPercent;
 
-  const ProductCardHeader({Key key, this.product, this.discountItem})
+  const ProductCardHeader(
+      {Key key, this.product, this.discountItem, this.discountByPercent})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -82,7 +89,7 @@ class ProductCardHeader extends StatelessWidget {
                     fit: BoxFit.cover,
                     placeholder: AssetImage("lib/res/images/placeholder.png"),
                     image: product.images.toList().isEmpty
-                        ? AssetImage("lib/res/images/placeholder.png")
+                        ? Image.asset("lib/res/images/placeholder.png")
                         : NetworkImage(baseUrl + '/' + product.images[0]),
                   ),
                 ),
@@ -103,7 +110,7 @@ class ProductCardHeader extends StatelessWidget {
                     ),
                   ),
                 ),
-               (discountItem && product.soldCount > 0)
+                (discountItem && (product.soldCount ?? 0) > 0)
                     ? _buildSoldCountTag(soldCount: product.soldCount)
                     : Container()
               ],
@@ -124,14 +131,11 @@ class ProductCardHeader extends StatelessWidget {
                 : Container()
           ],
         ),
-        discountItem
+        discountItem && discountByPercent
             ? Align(
                 alignment: Alignment.topRight,
                 child: _buildDiscountPercentTag(
-                    discount: product.discountPrice.money()))
-            // (product.discountType == "amount")
-            //     ? "${product.percentAmount.money()}"
-            //     : "${product.percentAmount} %"))
+                    discount: product.percentAmount.toString()))
             : Container()
       ],
     );
@@ -156,7 +160,7 @@ class ProductCardHeader extends StatelessWidget {
       elevation: Dimens.cardElevation,
       child: Container(
         padding: const EdgeInsets.all(Dimens.marginMedium),
-        child: Text("$discount off",
+        child: Text("$discount % off",
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w800,

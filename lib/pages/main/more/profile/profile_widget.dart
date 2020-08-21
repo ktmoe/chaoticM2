@@ -67,7 +67,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                   borderRadius: BorderRadius.circular(50)),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(50),
-                child: _storeApp.userProfile.imageurl.isNotEmpty
+                child: (_storeApp.userProfile.imageurl ?? "").isNotEmpty
                     ? FadeInImage(
                         width: 100,
                         height: 100,
@@ -75,7 +75,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                         placeholder: AssetImage("lib/res/images/profile.png"),
                         image: NetworkImage(
                             _storeApp.userProfile.imageurl.createImageUrl()))
-                    : AssetImage("lib/res/images/profile.png"),
+                    : Image.asset("lib/res/images/profile.png",
+                        width: 100, height: 100),
               ),
             ),
           )

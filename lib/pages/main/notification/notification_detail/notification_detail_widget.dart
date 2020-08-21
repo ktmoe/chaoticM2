@@ -7,8 +7,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/utils/extensions.dart';
 
 class NotificationDetailWidget extends StatefulWidget {
-
-  Noti noti;
+  final Noti noti;
 
   NotificationDetailWidget({this.noti});
 
@@ -30,8 +29,7 @@ class _NotificationDetailWidgetState extends State<NotificationDetailWidget> {
         body: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Container(
-            height: MediaQuery.of(context).size.height,
-            child: Expanded(
+              height: MediaQuery.of(context).size.height,
               child: Stack(
                 children: <Widget>[
                   _buildNotificationBanner(),
@@ -41,9 +39,7 @@ class _NotificationDetailWidgetState extends State<NotificationDetailWidget> {
                           Dimens.marginMedium2,
                       child: _buildNotificationDetail())
                 ],
-              ),
-            ),
-          ),
+              )),
         ));
   }
 
@@ -66,9 +62,7 @@ class _NotificationDetailWidgetState extends State<NotificationDetailWidget> {
               ),
               Container(
                 padding: const EdgeInsets.all(Dimens.marginMedium2),
-                child: Text(
-                    widget.noti.description,
-                    style: Styles.m2TextTheme),
+                child: Text(widget.noti.description, style: Styles.m2TextTheme),
               )
             ],
           ),

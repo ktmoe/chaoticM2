@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_page_indicator/flutter_page_indicator.dart';
-import 'package:m2mobile/data/api/api_service.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
-import 'package:m2mobile/fcm_service/fcm_service.dart';
-import 'package:m2mobile/fcm_service/notification_service.dart';
 import 'package:m2mobile/pages/main/ads/ads_detail_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
@@ -26,10 +23,6 @@ class HomeWidget extends StatefulWidget {
 
 class _HomeWidgetState extends State<HomeWidget>
     with AutomaticKeepAliveClientMixin<HomeWidget> {
-  // List<String> _images = [
-  //   "$baseUrl/upload/product/akrales_181019_3014_0770-(1).jpg",
-  //   "$baseUrl/upload/product/akrales_181019_3014_0770-(1).jpg"
-  // ];
   final StoreApp _storeApp = Modular.get<StoreApp>();
   final StoreHome _storeHome = Modular.get<StoreHome>();
   final StoreCart _storeCart = Modular.get<StoreCart>();
@@ -43,13 +36,11 @@ class _HomeWidgetState extends State<HomeWidget>
     });
   }
 
-  StreamSubscription _streamSubscription;
-
   @override
   void initState() {
     super.initState();
     _disposer.addAll([_onException()]);
-    Future.wait([_storeHome.init(), _storeCart.init(), _setUpMessagingAndNotificationService()]);
+    Future.wait([_storeHome.init(), _storeCart.init()]);
   }
 
   @override
@@ -60,54 +51,40 @@ class _HomeWidgetState extends State<HomeWidget>
     });
   }
 
-  Future _setUpMessagingAndNotificationService() async {
-    print("firebase setup get called");
-    if (!FcmService().hasListener) {
-      print("service has listeners");
-      _streamSubscription = FcmService().onMessageReceived
-          .listen((message) async {
-        print("Homepage message : ${message['data']}");
-        await NotificationService().show(message);
-      },onError: (err){
-         print("err in stream is => $err");
-      });
-    }
-    else {
-      print("already got listeners");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return RefreshIndicator(
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        if (notification.metrics.pixels ==
+            notification.metrics.maxScrollExtent) {
+          Future.wait([_storeHome.getLatestProducts(false)]);
+        }
+        return true;
+      },
+      child: RefreshIndicator(
         key: _refreshIndicatorState,
         onRefresh: () async {
           await _storeHome.getDiscountProducts(refresh: true);
           await _storeHome.getLatestProducts(true);
           await _storeApp.getAds();
         },
-        child: NotificationListener<ScrollNotification>(
-          onNotification: (notification) {
-            if (notification.metrics.pixels ==
-                notification.metrics.maxScrollExtent) {
-              Future.wait([_storeHome.getLatestProducts(false)]);
-            }
-            return true;
-          },
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Observer(builder: (_) {
+            return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 _buildProductImagesSlider(),
-                Container(
-                    margin: const EdgeInsets.only(
-                        left: Dimens.marginMedium2,
-                        right: Dimens.marginMedium2),
-                    child: Text('Discount Items',
-                        style: Styles.m2TextTheme
-                            .copyWith(fontWeight: FontWeight.bold))),
+                _storeHome.discountProducts.isNotEmpty
+                    ? Container(
+                        margin: const EdgeInsets.only(
+                            left: Dimens.marginMedium2,
+                            right: Dimens.marginMedium2),
+                        child: Text('Discount Items',
+                            style: Styles.m2TextTheme
+                                .copyWith(fontWeight: FontWeight.bold)))
+                    : Container(),
                 _buildDiscountItemList(),
                 Container(
                     margin: const EdgeInsets.only(
@@ -118,29 +95,35 @@ class _HomeWidgetState extends State<HomeWidget>
                             .copyWith(fontWeight: FontWeight.bold))),
                 _buildLatestItemGrid(),
               ],
-            ),
-          ),
-        ));
+            );
+          }),
+        ),
+      ),
+    );
   }
 
   Widget _buildDiscountItemList() {
-    return Container(
-        constraints:
-            BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.4),
-        margin: const EdgeInsets.only(left: Dimens.marginMedium),
-        child: Observer(
-          builder: (_) {
-            final discountItems = _storeHome.discountProducts;
-            return ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: discountItems.length,
-                itemBuilder: (_, index) {
-                  return ProductCard(
-                      discountItem: discountItems[index].discountPrice != 0,
-                      product: discountItems[index]);
-                });
-          },
-        ));
+    return Observer(builder: (_) {
+      return _storeHome.discountProducts.isNotEmpty
+          ? Container(
+              constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.4),
+              margin: const EdgeInsets.only(left: Dimens.marginMedium),
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _storeHome.discountProducts.length,
+                  itemBuilder: (_, index) {
+                    return ProductCard(
+                        discountItem:
+                            _storeHome.discountProducts[index].discountPrice !=
+                                0,
+                        product: _storeHome.discountProducts[index],
+                        discountByPercent:
+                            _storeHome.discountProducts[index].discountType !=
+                                "amount");
+                  }))
+          : Container();
+    });
   }
 
   Widget _buildLatestItemGrid() {
@@ -158,7 +141,9 @@ class _HomeWidgetState extends State<HomeWidget>
               childAspectRatio: (120 / 170)),
           itemBuilder: (context, index) => ProductCard(
               product: _storeHome.products[index],
-              discountItem: _storeHome.products[index].discountPrice != 0));
+              discountItem: _storeHome.products[index].discountPrice != 0,
+              discountByPercent:
+                  _storeHome.products[index].discountType != 'amount'));
     });
   }
 

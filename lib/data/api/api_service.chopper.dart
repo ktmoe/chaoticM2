@@ -26,7 +26,8 @@ class _$ApiService extends ApiService {
 
   @override
   Future<Response<ProductResponse>> getLatestProducts(
-      {String customerId, int currentPage, int perPage = 10}) {
+      String customerId, int currentPage,
+      {int perPage = 10}) {
     final $url = '/api/productview/getLatestProductList';
     final $params = <String, dynamic>{
       'customerId': customerId,
@@ -39,11 +40,14 @@ class _$ApiService extends ApiService {
 
   @override
   Future<Response<ProductResponse>> getProductsByCategory(
-      String customerId, String subCategoryId) {
+      String customerId, String subCategoryId, int currentPage,
+      {int perPage = 10}) {
     final $url = '/api/productview/getProductListByCategory';
     final $params = <String, dynamic>{
       'customerId': customerId,
-      'subCategoryId': subCategoryId
+      'subCategoryId': subCategoryId,
+      'currentPage': currentPage,
+      'perPage': perPage
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<ProductResponse, ProductResponse>($request);
@@ -59,14 +63,14 @@ class _$ApiService extends ApiService {
 
   @override
   Future<Response<ProductResponse>> searchProduct(
-      String keyword, String customerId,
-      {int perPage = 10, int currentPage = 1}) {
+      String keyword, String customerId, int currentPage,
+      {int perPage = 10}) {
     final $url = '/api/productview/searchProduct';
     final $params = <String, dynamic>{
       'keyword': keyword,
       'customerId': customerId,
-      'perPage': perPage,
-      'currentPage': currentPage
+      'currentPage': currentPage,
+      'perPage': perPage
     };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<ProductResponse, ProductResponse>($request);
@@ -80,9 +84,14 @@ class _$ApiService extends ApiService {
   }
 
   @override
-  Future<Response<ProductResponse>> getFavList(String id) {
+  Future<Response<ProductResponse>> getFavList(String id, int currentPage,
+      {int perPage = 10}) {
     final $url = '/api/favoriteview/getFavoriteList';
-    final $params = <String, dynamic>{'customerId': id};
+    final $params = <String, dynamic>{
+      'customerId': id,
+      'currentPage': currentPage,
+      'perPage': perPage
+    };
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<ProductResponse, ProductResponse>($request);
   }

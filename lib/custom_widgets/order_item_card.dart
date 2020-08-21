@@ -62,7 +62,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
             placeholder: AssetImage("lib/res/images/placeholder.png"),
             image: widget.product.images.isNotEmpty
                 ? NetworkImage(baseUrl + '/' + widget.product.images[0] ?? "")
-                : AssetImage("lib/res/images/placeholder.png"),
+                : Image.asset("lib/res/images/placeholder.png"),
           ),
         ),
       );

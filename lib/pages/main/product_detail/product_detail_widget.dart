@@ -143,7 +143,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                     child: FadeInImage(
                       placeholder: AssetImage("lib/res/images/placeholder.png"),
                       image: _images.isEmpty
-                          ? AssetImage("lib/res/images/placeholder.png")
+                          ? Image.asset("lib/res/images/placeholder.png")
                           : NetworkImage(baseUrl + '/' + _images[index]),
                     ),
                   );

@@ -194,7 +194,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                                     AssetImage("lib/res/images/profile.png"),
                                 image: NetworkImage(
                                     _storeProfile.imageUrl.createImageUrl()))
-                            : AssetImage("lib/res/images/profile.png"),
+                            : Image.asset("lib/res/images/profile.png"),
                       ),
                     ),
             ),
