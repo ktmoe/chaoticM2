@@ -1,6 +1,7 @@
 import 'package:chopper/chopper.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:logger/logger.dart';
 import 'package:m2mobile/app_widget.dart';
@@ -47,6 +48,7 @@ class AppModule extends MainModule {
         Bind((i) => FileUploadService.create(i.get<ChopperClient>())),
         Bind((i) => FirebaseMessaging()),
         Bind((i) => NotificationService(), lazy: false),
+        Bind((i) => FlutterLocalNotificationsPlugin(), lazy: false),
         Bind((i) => FirebaseMessagingService(), lazy: false),
         Bind((i) => ImagePicker())
       ];

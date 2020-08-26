@@ -69,13 +69,14 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
   }
 
   Widget _buildProductDetailInfos() => Container(
-        height: MediaQuery.of(context).size.height * 0.6,
+        // height: MediaQuery.of(context).size.height * 0.6,
         padding: EdgeInsets.all(Dimens.marginMedium2),
         decoration: const BoxDecoration(
             color: Color(0xFFF6F6F6),
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(

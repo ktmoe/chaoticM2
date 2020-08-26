@@ -4,7 +4,7 @@ import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/custom_widgets/notification_card.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
-import 'package:m2mobile/models/responses/noti.dart';
+import 'package:m2mobile/models/noti.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/stores/store_noti.dart';
@@ -19,7 +19,6 @@ class NotificationWidget extends StatefulWidget {
 }
 
 class _NotificationWidgetState extends State<NotificationWidget> {
-
   final StoreNoti storeNoti = Modular.get<StoreNoti>();
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorState = GlobalKey();
@@ -36,13 +35,16 @@ class _NotificationWidgetState extends State<NotificationWidget> {
   void initState() {
     super.initState();
     _disposer.addAll([_onException()]);
-    Future.wait([storeNoti.init(),storeNoti.fetchNotis(refresh: true)]); //not sure refreshing here is good
+    Future.wait([
+      storeNoti.init(),
+      storeNoti.fetchNotis(refresh: true)
+    ]); //not sure refreshing here is good
   }
 
   @override
   void dispose() {
     super.dispose();
-    for(final d in _disposer){
+    for (final d in _disposer) {
       d();
     }
   }
@@ -57,7 +59,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
           onBackPressed: () => Modular.to.pop()),
       body: RefreshIndicator(
         key: _refreshIndicatorState,
-        onRefresh: () async{
+        onRefresh: () async {
           print("refresh get called");
           await storeNoti.fetchNotis(refresh: true);
         },
@@ -70,10 +72,10 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                 builder: (_) {
                   List<Noti> notis = storeNoti.notis.toList();
                   return ListView.builder(
-                    itemCount: notis.length,
-                    itemBuilder: (_, index) {
-                      return NotificationCard(notis[index]);
-                    });
+                      itemCount: notis.length,
+                      itemBuilder: (_, index) {
+                        return NotificationCard(notis[index]);
+                      });
                 },
               ),
             ),

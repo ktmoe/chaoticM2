@@ -216,7 +216,7 @@ class _LanguageWidgetState extends State<LanguageWidget> {
   Future<void> _onDonePressed() async {
     if (_storeApp.isFirstTime) {
       await _storeApp.changeFirstTime();
-      Modular.to.popAndPushNamed('/');
+      Modular.to.pushReplacementNamed('/');
     } else {
       Modular.to.pop();
     }

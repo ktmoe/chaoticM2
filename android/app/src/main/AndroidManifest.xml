@@ -17,10 +17,22 @@
     android:name=".Application"
         android:label="M2 Mobile"
         android:usesCleartextTraffic="true"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/m2_noti" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorPrimary" />
 
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyDu4QvURLFd280cQkRGbyAyo8_aYl5DYoU"/>
+
+        <meta-data
+                android:name="com.google.firebase.messaging.default_notification_channel_id"
+                android:value="com.gnwt.m2mobile"/>
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"

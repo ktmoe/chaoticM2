@@ -154,11 +154,11 @@ mixin _$StoreHome on _StoreHome, Store {
   final _$_StoreHomeActionController = ActionController(name: '_StoreHome');
 
   @override
-  void updateProducts() {
+  void updateLatestProducts() {
     final _$actionInfo = _$_StoreHomeActionController.startAction(
-        name: '_StoreHome.updateProducts');
+        name: '_StoreHome.updateLatestProducts');
     try {
-      return super.updateProducts();
+      return super.updateLatestProducts();
     } finally {
       _$_StoreHomeActionController.endAction(_$actionInfo);
     }

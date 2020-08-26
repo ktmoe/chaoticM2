@@ -26,6 +26,7 @@ abstract class Noti implements Built<Noti, NotiBuilder> {
   @HiveField(3)
   @BuiltValueField(wireName: 'description')
   String get description;
+  @nullable
   @HiveField(4)
   @BuiltValueField(wireName: 'date')
   String get date;

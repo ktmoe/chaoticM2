@@ -13,7 +13,7 @@ import 'package:m2mobile/models/help.dart';
 import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/models/bank_account.dart';
 import 'package:m2mobile/models/responses/login_response.dart';
-import 'package:m2mobile/models/responses/noti.dart';
+import 'package:m2mobile/models/noti.dart';
 import 'package:m2mobile/models/responses/noti_list_response.dart';
 import 'package:m2mobile/models/responses/refresh_token_response.dart';
 import 'package:m2mobile/models/responses/product_response.dart';

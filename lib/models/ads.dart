@@ -30,13 +30,10 @@ abstract class Ads implements Built<Ads, AdsBuilder> {
   @HiveField(4)
   @BuiltValueField(wireName: 'status')
   int get status;
-  @HiveField(6)
-  @BuiltValueField(wireName: 'date')
-  String get date;
-  @HiveField(7)
+  @HiveField(5)
   @BuiltValueField(wireName: 'createddate')
   String get createddate;
-  @HiveField(8)
+  @HiveField(6)
   @BuiltValueField(wireName: 'updateddate')
   String get updateddate;
   String toJson() {

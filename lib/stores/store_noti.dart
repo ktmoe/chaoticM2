@@ -2,8 +2,9 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/boxes/box_noti.dart';
 import 'package:m2mobile/data/api/api_service.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
-import 'package:m2mobile/models/responses/noti.dart';
+import 'package:m2mobile/models/noti.dart';
 import 'package:mobx/mobx.dart';
+import 'package:m2mobile/utils/extensions.dart';
 
 part 'store_noti.g.dart';
 
@@ -25,7 +26,6 @@ abstract class _StoreNoti with Store {
   }
 
   Future init() async {
-    print("store noti init get called");
     _boxNoti = await BoxNoti.create();
     _boxNoti.listenable.addListener(updateNotis);
     updateNotis();
@@ -33,13 +33,13 @@ abstract class _StoreNoti with Store {
 
   @action
   void updateNotis() {
-    notis = ObservableList.of(_boxNoti.listenable.value.values.toList());
+    notis = ObservableList.of(
+        _sortByDate(_boxNoti.listenable.value.values.toList()));
   }
 
   @action
   Future fetchNotis({bool refresh}) async {
     try {
-      print("fetch notis called");
       final response = await api.getAllNoti();
       if (response.body.message.toLowerCase() == "success" &&
           response.body.error == null) {
@@ -52,9 +52,15 @@ abstract class _StoreNoti with Store {
         notis = ObservableList.of([]);
       }
     } catch (e) {
-      print("exception in store noti => ${e.toString()}");
       exception = AppException(message: e.toString());
     }
+  }
+
+  List<Noti> _sortByDate(List<Noti> notis) {
+    notis.sort((a, b) =>
+        a.date.dateTimeFromString().compareTo(b.date.dateTimeFromString()));
+    print("in update " + notis.toString());
+    return notis.reversed.toList();
   }
 
   void save(Noti noti) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
-import 'package:m2mobile/models/responses/noti.dart';
+import 'package:m2mobile/models/noti.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
 import 'package:flutter_modular/flutter_modular.dart';

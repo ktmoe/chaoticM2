@@ -96,10 +96,10 @@ abstract class _StoreApp with Store {
   @action
   Future init() async {
     proceed = false;
-    try{
+    try {
       await NotificationService().init();
-    }catch(e){
-      print("noti init err => $e");
+    } catch (e) {
+      exception = AppException(message: "Notification initialization error.");
     }
     await _createBoxes();
     _setupBoxListeners();

@@ -44,8 +44,12 @@ abstract class _StoreProductListBase with Store {
   @action
   void updateProducts() {
     if (subCategory.isNotEmpty) {
-      products = ObservableList.of(_boxProductByCategory.listenable.value.values
-          .where((element) => element.subcategoryid == subCategory));
+      final p = _boxProductByCategory.listenable.value.values
+          .where((element) => element.subcategoryid == subCategory);
+      p.toList().sort((a, b) {
+        return a.productName.compareTo(b.productName);
+      });
+      products = ObservableList.of(p.toList().reversed);
     }
   }
 

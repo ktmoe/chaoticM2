@@ -153,28 +153,32 @@ class _HomeWidgetState extends State<HomeWidget>
         child: ClipRRect(
           borderRadius: BorderRadius.circular(Dimens.marginMedium2),
           child: Observer(builder: (_) {
-            return Swiper(
-              itemCount: _storeApp.adsList.length,
-              indicatorLayout: PageIndicatorLayout.SCALE,
-              autoplay: true,
-              autoplayDelay: 2000,
-              pagination: SwiperPagination(builder: SwiperPagination.dots),
-              control: SwiperControl(iconNext: null, iconPrevious: null),
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    Modular.to.pushNamed(AdsDetailWidget.route,
-                        arguments: _storeApp.adsList[index]);
-                  },
-                  child: FadeInImage(
-                    fit: BoxFit.cover,
-                    placeholder: AssetImage("lib/res/images/placeholder.png"),
-                    image: NetworkImage(
-                        _storeApp.adsList[index].imageurl.createImageUrl()),
-                  ),
-                );
-              },
-            );
+            return _storeApp.adsList.isNotEmpty
+                ? Swiper(
+                    itemCount: _storeApp.adsList.length,
+                    indicatorLayout: PageIndicatorLayout.SCALE,
+                    autoplay: true,
+                    autoplayDelay: 2000,
+                    pagination:
+                        SwiperPagination(builder: SwiperPagination.dots),
+                    control: SwiperControl(iconNext: null, iconPrevious: null),
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          Modular.to.pushNamed(AdsDetailWidget.route,
+                              arguments: _storeApp.adsList[index]);
+                        },
+                        child: FadeInImage(
+                          fit: BoxFit.cover,
+                          placeholder:
+                              AssetImage("lib/res/images/placeholder.png"),
+                          image: NetworkImage(_storeApp.adsList[index].imageurl
+                              .createImageUrl()),
+                        ),
+                      );
+                    },
+                  )
+                : Container();
           }),
         ),
       );

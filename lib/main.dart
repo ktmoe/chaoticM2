@@ -6,7 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:m2mobile/models/bank_account.dart';
 import 'package:m2mobile/models/image_url_holder.dart';
 import 'package:m2mobile/models/order.dart';
-import 'package:m2mobile/models/responses/noti.dart';
+import 'package:m2mobile/models/noti.dart';
 import 'package:m2mobile/models/user_profile.dart';
 import 'package:m2mobile/models/product.dart';
 import 'package:m2mobile/models/company_info.dart';
@@ -16,12 +16,24 @@ import 'package:m2mobile/models/sub_category.dart';
 import 'package:m2mobile/models/help.dart';
 import 'package:m2mobile/models/ads.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
   _registerAdapters();
   _setupLogging();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  Crashlytics.instance.enableInDevMode = true;
+  // FlutterError.onError = (FlutterErrorDetails errorDetails) {
+  //   print('This is an error on the Flutter SDK');
+  //   print(errorDetails.exception);
+  //   print('-----');
+  //   print(errorDetails.stack);
+  // };
+
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
   runApp(ModularApp(
     module: AppModule(),
   ));

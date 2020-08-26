@@ -6,7 +6,7 @@ import 'package:built_value/serializer.dart';
 
 import 'package:m2mobile/models/error_message.dart';
 import 'package:m2mobile/models/serializers.dart';
-import 'noti.dart';
+import '../noti.dart';
 
 part 'noti_list_response.g.dart';
 

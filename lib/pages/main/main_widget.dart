@@ -26,8 +26,6 @@ class _MainWidgetState extends State<MainWidget>
   int _selectedIndex = 0;
   List<ReactionDisposer> _disposers = [];
 
-  // StreamSubscription _streamSubscription;
-
   ReactionDisposer _onConnectivityChanged() => autorun((_) {
         if (!_storeApp.isNetworkOn)
           "You are offline.".makeSnack(_scaffoldState);
@@ -43,24 +41,7 @@ class _MainWidgetState extends State<MainWidget>
   void initState() {
     super.initState();
     _disposers.addAll([_onConnectivityChanged()]);
-    // Future.wait([_setUpMessagingAndNotificationService()]);
   }
-
-  // Future _setUpMessagingAndNotificationService() async {
-  //   print("firebase setup get called");
-  //   if (!Modular.get<FcmService>().hasListener) {
-  //     print("service has listeners");
-  //     _streamSubscription =
-  //         Modular.get<FcmService>().onMessageReceived.listen((message) async {
-  //       print("Homepage message : ${message['data']}");
-  //       await NotificationService().show(message);
-  //     }, onError: (err) {
-  //       print("err in stream is => $err");
-  //     });
-  //   } else {
-  //     print("already got listeners");
-  //   }
-  // }
 
   @override
   void dispose() {

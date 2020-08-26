@@ -51,16 +51,16 @@ abstract class _StoreHome with Store {
     _boxFav = await BoxFav.create();
     _boxProductByCategory = await BoxProductByCategory.create();
 
-    updateProducts();
+    updateLatestProducts();
     updateDiscountProducts();
-    _boxProduct.listenable.addListener(updateProducts);
+    _boxProduct.listenable.addListener(updateLatestProducts);
     _discountProductBox.listenable.addListener(updateDiscountProducts);
     await getDiscountProducts();
     await getLatestProducts(true);
   }
 
   @action
-  void updateProducts() {
+  void updateLatestProducts() {
     products = ObservableList.of(_boxProduct.listenable.value.values);
   }
 

@@ -67,18 +67,22 @@ class _OrderItemCardState extends State<OrderItemCard> {
         ),
       );
 
-  Widget _buildOrderProductInfo() => Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(widget.product.productName,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  fontSize: Dimens.textRegular2x, fontWeight: FontWeight.w600)),
-          const SizedBox(height: Dimens.marginMedium2),
-          Text("Price: ${widget.product.price.toDouble().money()}")
-        ],
-      );
+  Widget _buildOrderProductInfo() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(widget.product.productName,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                fontSize: Dimens.textRegular2x, fontWeight: FontWeight.w600)),
+        const SizedBox(height: Dimens.marginMedium2),
+        Text(widget.product.discountPrice == 0
+            ? "Price: ${widget.product.price.toDouble().money()}"
+            : "Price: ${widget.product.discountPrice.toDouble().money()}")
+      ],
+    );
+  }
 
   Widget _buildOrderProductQuantity() => Column(
         mainAxisAlignment: MainAxisAlignment.center,

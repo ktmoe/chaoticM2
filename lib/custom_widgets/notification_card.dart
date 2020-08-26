@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:m2mobile/models/responses/noti.dart';
+import 'package:m2mobile/models/noti.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
 import 'package:m2mobile/utils/extensions.dart';

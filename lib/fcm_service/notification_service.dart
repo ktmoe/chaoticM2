@@ -1,30 +1,16 @@
 import 'dart:convert';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:m2mobile/models/noti.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:m2mobile/pages/main/notification/notification_detail/notification_detail_widget.dart';
 
 class NotificationService {
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
-
-  static NotificationService instance;
-
-  // NotificationService get instance => _instance;
-
   bool isInit = false;
 
-  NotificationService._()
-      : _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-  factory NotificationService() {
-    return instance ??= NotificationService._();
-  }
-
   Future init() async {
-    if (isInit) {
-      print("noti already init");
-    //  throw Exception("notification already initialized");
-    } else {
+    if (!isInit) {
       isInit = true;
     }
-    print("Initializing local notifications...");
 
     const initializationSettingsAndroid =
         AndroidInitializationSettings('m2_noti_icon');
@@ -36,44 +22,21 @@ class NotificationService {
       initializationSettingsIOS,
     );
 
-    await _flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (payload) async {
+    await Modular.get<FlutterLocalNotificationsPlugin>().initialize(
+        initializationSettings, onSelectNotification: (payload) async {
       final message = json.decode(payload);
-      print("message when onTapped => $message");
+
+      final desc = message["description"];
+      final title = message["title"];
+      final image = message["imageurl"];
+      Noti notification = Noti((b) {
+        b.id = "";
+        b.description = desc;
+        b.title = title;
+        b.imageurl = image;
+      });
+      Modular.to
+          .pushNamed(NotificationDetailWidget.route, arguments: notification);
     });
   }
-
-  Future show(dynamic message) async {
-    if (!isInit) print("Noti service not initialized");
-
-    print("init status when showing noti => $isInit");
-
-    print("inside noti show => $message");
-
-    final data = message['data'];
-
-    print("inside noti show data only => $data");
-
-    final androidNotificationDetails = AndroidNotificationDetails(
-        'com.gnwt.m2mobile',
-        'M2 Notification Channel',
-        'This is channel description',
-        priority: Priority.Max,
-        icon: "m2_noti_icon",
-        largeIcon: const DrawableResourceAndroidBitmap("m2_noti_icon"),
-        importance: Importance.Max,
-        playSound: true,);
-
-    const iosNotificationDetails = IOSNotificationDetails();
-
-    final platformChannelSpecifics =
-        NotificationDetails(androidNotificationDetails,iosNotificationDetails);
-
-    print("message inside notification service => $data");
-
-    await _flutterLocalNotificationsPlugin.show(0, data['title'] as String,
-        data['message'] as String, platformChannelSpecifics,
-        payload: json.encode(data));
-  }
-
 }
