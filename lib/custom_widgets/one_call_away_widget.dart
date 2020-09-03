@@ -165,7 +165,7 @@ extension OneCallAwayWidget on BuildContext {
                             fontSize: Dimens.textRegular3x,
                             fontWeight: FontWeight.w500)),
                 const SizedBox(height: Dimens.marginMedium3),
-                Text(dialogType),
+                Text(dialogType, textAlign: TextAlign.center),
                 const SizedBox(height: Dimens.marginMedium3),
                 RaisedButton(
                   shape: Styles.m2ButtonShape,

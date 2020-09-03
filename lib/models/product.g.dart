@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'product.dart';
+part of product;
 
 // **************************************************************************
 // BuiltValueGenerator
@@ -17,19 +17,7 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
   @override
   Iterable<Object> serialize(Serializers serializers, Product object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'productcode',
-      serializers.serialize(object.productCode,
-          specifiedType: const FullType(String)),
-      'productname',
-      serializers.serialize(object.productName,
-          specifiedType: const FullType(String)),
-      'specification',
-      serializers.serialize(object.specification,
-          specifiedType: const FullType(String)),
-      'status',
-      serializers.serialize(object.status, specifiedType: const FullType(int)),
-    ];
+    final result = <Object>[];
     if (object.favoriteId != null) {
       result
         ..add('favoriteid')
@@ -40,6 +28,18 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
       result
         ..add('productid')
         ..add(serializers.serialize(object.productId,
+            specifiedType: const FullType(String)));
+    }
+    if (object.productCode != null) {
+      result
+        ..add('productcode')
+        ..add(serializers.serialize(object.productCode,
+            specifiedType: const FullType(String)));
+    }
+    if (object.productName != null) {
+      result
+        ..add('productname')
+        ..add(serializers.serialize(object.productName,
             specifiedType: const FullType(String)));
     }
     if (object.categoryid != null) {
@@ -60,10 +60,22 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
         ..add(serializers.serialize(object.description,
             specifiedType: const FullType(String)));
     }
+    if (object.specification != null) {
+      result
+        ..add('specification')
+        ..add(serializers.serialize(object.specification,
+            specifiedType: const FullType(String)));
+    }
     if (object.price != null) {
       result
         ..add('price')
         ..add(serializers.serialize(object.price,
+            specifiedType: const FullType(int)));
+    }
+    if (object.status != null) {
+      result
+        ..add('status')
+        ..add(serializers.serialize(object.status,
             specifiedType: const FullType(int)));
     }
     if (object.favorite != null) {
@@ -113,6 +125,12 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
       result
         ..add('id')
         ..add(serializers.serialize(object.cartId,
+            specifiedType: const FullType(String)));
+    }
+    if (object.date != null) {
+      result
+        ..add('date')
+        ..add(serializers.serialize(object.date,
             specifiedType: const FullType(String)));
     }
     return result;
@@ -203,6 +221,10 @@ class _$ProductSerializer implements StructuredSerializer<Product> {
           result.cartId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'date':
+          result.date = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
       }
     }
 
@@ -247,6 +269,8 @@ class _$Product extends Product {
   final int quantity;
   @override
   final String cartId;
+  @override
+  final String date;
 
   factory _$Product([void Function(ProductBuilder) updates]) =>
       (new ProductBuilder()..update(updates)).build();
@@ -269,21 +293,9 @@ class _$Product extends Product {
       this.discountType,
       this.soldCount,
       this.quantity,
-      this.cartId})
-      : super._() {
-    if (productCode == null) {
-      throw new BuiltValueNullFieldError('Product', 'productCode');
-    }
-    if (productName == null) {
-      throw new BuiltValueNullFieldError('Product', 'productName');
-    }
-    if (specification == null) {
-      throw new BuiltValueNullFieldError('Product', 'specification');
-    }
-    if (status == null) {
-      throw new BuiltValueNullFieldError('Product', 'status');
-    }
-  }
+      this.cartId,
+      this.date})
+      : super._();
 
   @override
   Product rebuild(void Function(ProductBuilder) updates) =>
@@ -313,7 +325,8 @@ class _$Product extends Product {
         discountType == other.discountType &&
         soldCount == other.soldCount &&
         quantity == other.quantity &&
-        cartId == other.cartId;
+        cartId == other.cartId &&
+        date == other.date;
   }
 
   @override
@@ -336,30 +349,33 @@ class _$Product extends Product {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            0,
-                                                                            favoriteId
+                                                                            $jc(
+                                                                                0,
+                                                                                favoriteId
+                                                                                    .hashCode),
+                                                                            productId
                                                                                 .hashCode),
-                                                                        productId
+                                                                        productCode
                                                                             .hashCode),
-                                                                    productCode
+                                                                    productName
                                                                         .hashCode),
-                                                                productName
+                                                                categoryid
                                                                     .hashCode),
-                                                            categoryid
+                                                            subcategoryid
                                                                 .hashCode),
-                                                        subcategoryid.hashCode),
-                                                    description.hashCode),
-                                                specification.hashCode),
-                                            price.hashCode),
-                                        status.hashCode),
-                                    favorite.hashCode),
-                                images.hashCode),
-                            percentAmount.hashCode),
-                        discountPrice.hashCode),
-                    discountType.hashCode),
-                soldCount.hashCode),
-            quantity.hashCode),
-        cartId.hashCode));
+                                                        description.hashCode),
+                                                    specification.hashCode),
+                                                price.hashCode),
+                                            status.hashCode),
+                                        favorite.hashCode),
+                                    images.hashCode),
+                                percentAmount.hashCode),
+                            discountPrice.hashCode),
+                        discountType.hashCode),
+                    soldCount.hashCode),
+                quantity.hashCode),
+            cartId.hashCode),
+        date.hashCode));
   }
 
   @override
@@ -382,7 +398,8 @@ class _$Product extends Product {
           ..add('discountType', discountType)
           ..add('soldCount', soldCount)
           ..add('quantity', quantity)
-          ..add('cartId', cartId))
+          ..add('cartId', cartId)
+          ..add('date', date))
         .toString();
   }
 }
@@ -465,6 +482,10 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
   String get cartId => _$this._cartId;
   set cartId(String cartId) => _$this._cartId = cartId;
 
+  String _date;
+  String get date => _$this._date;
+  set date(String date) => _$this._date = date;
+
   ProductBuilder();
 
   ProductBuilder get _$this {
@@ -487,6 +508,7 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
       _soldCount = _$v.soldCount;
       _quantity = _$v.quantity;
       _cartId = _$v.cartId;
+      _date = _$v.date;
       _$v = null;
     }
     return this;
@@ -528,7 +550,8 @@ class ProductBuilder implements Builder<Product, ProductBuilder> {
               discountType: discountType,
               soldCount: soldCount,
               quantity: quantity,
-              cartId: cartId);
+              cartId: cartId,
+              date: date);
     } catch (_) {
       String _$failedField;
       try {
@@ -578,15 +601,16 @@ class ProductAdapter extends TypeAdapter<Product> {
           ..discountPrice = fields[13] as int
           ..discountType = fields[14] as String
           ..soldCount = fields[15] as int
-          ..quantity = fields[17] as int
-          ..cartId = fields[16] as String)
+          ..quantity = fields[16] as int
+          ..cartId = fields[17] as String
+          ..date = fields[18] as String)
         .build();
   }
 
   @override
   void write(BinaryWriter writer, Product obj) {
     writer
-      ..writeByte(18)
+      ..writeByte(19)
       ..writeByte(0)
       ..write(obj.favoriteId)
       ..writeByte(1)
@@ -619,9 +643,11 @@ class ProductAdapter extends TypeAdapter<Product> {
       ..write(obj.discountType)
       ..writeByte(15)
       ..write(obj.soldCount)
-      ..writeByte(17)
-      ..write(obj.quantity)
       ..writeByte(16)
-      ..write(obj.cartId);
+      ..write(obj.quantity)
+      ..writeByte(17)
+      ..write(obj.cartId)
+      ..writeByte(18)
+      ..write(obj.date);
   }
 }

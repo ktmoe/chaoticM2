@@ -14,6 +14,10 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..add(BankInfoResponse.serializer)
       ..add(CartItem.serializer)
       ..add(CartListResponse.serializer)
+      ..add(ChangePasswordResponse.serializer)
+      ..add(ChangePwdPayload.serializer)
+      ..add(ChangePwdPayloadWrapper.serializer)
+      ..add(CheckDuplicatePhoneResponse.serializer)
       ..add(CompanyInfo.serializer)
       ..add(CompanyInfoResponse.serializer)
       ..add(DeleteCartListRequest.serializer)
@@ -80,6 +84,9 @@ Serializers _$serializers = (new Serializers().toBuilder()
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Product)]),
           () => new ListBuilder<Product>())
+      ..addBuilderFactory(
+          const FullType(BuiltList, const [const FullType(String)]),
+          () => new ListBuilder<String>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>())

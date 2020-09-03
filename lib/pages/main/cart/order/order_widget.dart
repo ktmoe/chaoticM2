@@ -4,11 +4,12 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/custom_widgets/m2_stepper.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
-import 'package:m2mobile/pages/main/cart/cart_widget.dart';
+import 'package:m2mobile/pages/main/main_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/custom_widgets/one_call_away_widget.dart';
 import 'package:m2mobile/models/ui_model/payment_methods_model.dart';
 import 'package:m2mobile/stores/store_order.dart';
+import 'package:m2mobile/stores/store_cart.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/utils/extensions.dart';
@@ -54,8 +55,9 @@ class _OrderWidgetState extends State<OrderWidget> {
         if (success) {
           final a = await context.successFailDialog(
               dialogType: 'Your Order is posted!', success: true);
+          Modular.get<StoreCart>().emptyTheCart();
           if (a) {
-            Modular.to.pushReplacementNamed(CartWidget.route, arguments: true);
+            Modular.to.popUntil(ModalRoute.withName(MainWidget.route));
           }
         }
       });

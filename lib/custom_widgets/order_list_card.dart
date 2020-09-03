@@ -3,9 +3,10 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/models/order.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
+import 'package:m2mobile/stores/store_app.dart';
 import 'package:m2mobile/utils/extensions.dart';
 import 'package:m2mobile/pages/main/more/order_list/order_detail/order_detail_widget.dart';
-import 'package:m2mobile/pages/main/more/order_list/complete_order/complete_order_widget.dart';
+import 'package:m2mobile/pages/main/cart/cart_widget.dart';
 import 'package:m2mobile/stores/store_home.dart';
 
 class OrderListCard extends StatefulWidget {
@@ -28,10 +29,10 @@ class _OrderListCardState extends State<OrderListCard> {
         child: InkWell(
           onTap: () {
             Modular.get<StoreHome>().selectedOrderId = widget.order.id;
-            widget.order.status == "Complete"
-                ? Modular.to
-                    .pushNamed(OrderDetailWidget.route, arguments: widget.order)
-                : Modular.to.pushNamed(CompleteOrderWidget.route);
+            widget.order.status == "Pending"
+                ? Modular.to.pushNamed(CartWidget.route, arguments: true)
+                : Modular.to.pushNamed(OrderDetailWidget.route,
+                    arguments: widget.order);
           },
           child: Stack(
             children: <Widget>[
@@ -66,7 +67,13 @@ class _OrderListCardState extends State<OrderListCard> {
                             style: Styles.m2TextTheme.copyWith(
                                 fontSize: Dimens.textRegular2_5x,
                                 fontWeight: FontWeight.w600)),
-                        Text(widget.order.totalPrice.money(),
+                        Text(
+                            (((widget.order.totalPrice / 100) *
+                                        Modular.get<StoreApp>()
+                                            .companyInfo
+                                            .tax) +
+                                    widget.order.totalPrice)
+                                .money(),
                             style: Styles.m2TextTheme.copyWith(
                                 fontSize: Dimens.textRegular2_5x,
                                 fontWeight: FontWeight.w600))
@@ -89,7 +96,7 @@ class _OrderListCardState extends State<OrderListCard> {
     switch (status) {
       case 'Complete':
         return _buildCompleteTag();
-      case 'Cancled':
+      case 'Canceled':
         return _buildCancledTag();
       case 'Pending':
         return _buildPendingTag();
@@ -106,7 +113,7 @@ class _OrderListCardState extends State<OrderListCard> {
         elevation: Dimens.cardElevation,
         child: Container(
             padding: const EdgeInsets.all(Dimens.marginMedium),
-            child: const Text("Cancled",
+            child: const Text("Canceled",
                 style: TextStyle(
                     color: Colors.white, fontWeight: FontWeight.w800))),
       );

@@ -1,6 +1,7 @@
 library order_item;
 
 import 'dart:convert';
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:m2mobile/models/serializers.dart';
@@ -20,6 +21,9 @@ abstract class OrderItem implements Built<OrderItem, OrderItemBuilder> {
   String get productName;
   @BuiltValueField(wireName: 'productid')
   String get productid;
+  @nullable
+  @BuiltValueField(wireName: 'images')
+  BuiltList<String> get images;
   @BuiltValueField(wireName: 'price')
   int get price;
   @BuiltValueField(wireName: 'quantity')

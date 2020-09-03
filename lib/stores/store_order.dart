@@ -1,6 +1,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:m2mobile/stores/store_app.dart';
 import 'package:m2mobile/stores/store_home.dart';
+import 'package:m2mobile/stores/store_cart.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/models/user_profile.dart';
 import 'package:m2mobile/models/ui_model/payment_methods_model.dart';
@@ -69,6 +70,7 @@ abstract class _StoreOrderBase with Store {
       b.customerid = Modular.get<StoreApp>().userProfile.id;
       b.phone = phoneNumber;
       b.address = address;
+      b.tax = Modular.get<StoreCart>().tax.toInt();
     });
     var _orderCustomerInfoPayload = OrderCustomerInfoPayload((b) {
       b.orderCustomerInfo = _orderCustomerInfo.toBuilder();

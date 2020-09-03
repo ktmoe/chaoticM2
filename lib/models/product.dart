@@ -1,3 +1,5 @@
+library product;
+
 import 'dart:convert';
 
 import 'package:built_collection/built_collection.dart';
@@ -15,8 +17,8 @@ abstract class Product implements Built<Product, ProductBuilder> {
 
   factory Product([updates(ProductBuilder b)]) = _$Product;
 
-  @nullable
   @HiveField(0)
+  @nullable
   @BuiltValueField(wireName: 'favoriteid')
   String get favoriteId;
   @HiveField(1)
@@ -24,9 +26,11 @@ abstract class Product implements Built<Product, ProductBuilder> {
   @BuiltValueField(wireName: 'productid')
   String get productId;
   @HiveField(2)
+  @nullable
   @BuiltValueField(wireName: 'productcode')
   String get productCode;
   @HiveField(3)
+  @nullable
   @BuiltValueField(wireName: 'productname')
   String get productName;
   @HiveField(4)
@@ -42,6 +46,7 @@ abstract class Product implements Built<Product, ProductBuilder> {
   @BuiltValueField(wireName: 'description')
   String get description;
   @HiveField(7)
+  @nullable
   @BuiltValueField(wireName: 'specification')
   String get specification;
   @HiveField(8)
@@ -49,40 +54,45 @@ abstract class Product implements Built<Product, ProductBuilder> {
   @BuiltValueField(wireName: 'price')
   int get price;
   @HiveField(9)
+  @nullable
   @BuiltValueField(wireName: 'status')
   int get status;
   @HiveField(10)
   @nullable
   @BuiltValueField(wireName: 'isFavorite')
   bool get favorite;
-  @nullable
   @HiveField(11)
+  @nullable
   @BuiltValueField(wireName: 'images')
   BuiltList<String> get images;
-  @nullable
   @HiveField(12)
+  @nullable
   @BuiltValueField(wireName: 'percent_amount')
   int get percentAmount;
-  @nullable
   @HiveField(13)
+  @nullable
   @BuiltValueField(wireName: 'discount_price')
   int get discountPrice;
-  @nullable
   @HiveField(14)
+  @nullable
   @BuiltValueField(wireName: 'discount_type')
   String get discountType;
-  @nullable
   @HiveField(15)
+  @nullable
   @BuiltValueField(wireName: 'sold_count')
   int get soldCount;
+  @HiveField(16)
   @nullable
-  @HiveField(17)
   @BuiltValueField(wireName: 'quantity')
   int get quantity;
+  @HiveField(17)
   @nullable
-  @HiveField(16)
   @BuiltValueField(wireName: 'id')
   String get cartId;
+  @HiveField(18)
+  @nullable
+  @BuiltValueField(wireName: 'date')
+  String get date;
 
   String toJson() {
     return json.encode(serializers.serializeWith(Product.serializer, this));

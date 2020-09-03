@@ -79,35 +79,27 @@ class M2SearchDelegate extends SearchDelegate {
         onRefresh: () async {
           await _storeSearch.search(query, true);
         },
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Observer(builder: (_) {
-                return _storeSearch.results.isNotEmpty
-                    ? GridView.count(
-                        crossAxisCount: 2,
-                        childAspectRatio: 120 / 170,
-                        padding: const EdgeInsets.all(Dimens.marginMedium),
-                        shrinkWrap: true,
-                        children:
-                            List.generate(_storeSearch.results.length, (index) {
-                          return ProductCard(
-                              product: _storeSearch.results[index],
-                              discountItem:
-                                  _storeSearch.results[index].discountPrice !=
-                                      0,
-                              discountByPercent:
-                                  _storeSearch.results[index].discountType !=
-                                      'amount');
-                        }),
-                      )
-                    : ListEmptyWidget(message: 'ရှာဖွေ၍ မတွေ့ရှိပါ။');
-              })
-            ],
-          ),
-        ),
+        child: Observer(builder: (_) {
+          return _storeSearch.results.isNotEmpty
+              ? GridView.count(
+                  scrollDirection: Axis.vertical,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  childAspectRatio: 120 / 170,
+                  padding: const EdgeInsets.all(Dimens.marginMedium),
+                  shrinkWrap: true,
+                  children: List.generate(_storeSearch.results.length, (index) {
+                    return ProductCard(
+                        product: _storeSearch.results[index],
+                        discountItem:
+                            _storeSearch.results[index].discountPrice != 0,
+                        discountByPercent:
+                            _storeSearch.results[index].discountType !=
+                                'amount');
+                  }),
+                )
+              : ListEmptyWidget(message: 'ရှာဖွေ၍ မတွေ့ရှိပါ။');
+        }),
       ),
     );
   }

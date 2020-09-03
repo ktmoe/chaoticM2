@@ -116,11 +116,35 @@ mixin _$StoreLogin on _StoreLoginBase, Store {
     });
   }
 
+  final _$duplicatePhoneAtom = Atom(name: '_StoreLoginBase.duplicatePhone');
+
+  @override
+  bool get duplicatePhone {
+    _$duplicatePhoneAtom.reportRead();
+    return super.duplicatePhone;
+  }
+
+  @override
+  set duplicatePhone(bool value) {
+    _$duplicatePhoneAtom.reportWrite(value, super.duplicatePhone, () {
+      super.duplicatePhone = value;
+    });
+  }
+
   final _$initAsyncAction = AsyncAction('_StoreLoginBase.init');
 
   @override
   Future<dynamic> init() {
     return _$initAsyncAction.run(() => super.init());
+  }
+
+  final _$checkDuplicatePhoneNumberAsyncAction =
+      AsyncAction('_StoreLoginBase.checkDuplicatePhoneNumber');
+
+  @override
+  Future<dynamic> checkDuplicatePhoneNumber() {
+    return _$checkDuplicatePhoneNumberAsyncAction
+        .run(() => super.checkDuplicatePhoneNumber());
   }
 
   final _$loginAsyncAction = AsyncAction('_StoreLoginBase.login');
@@ -164,7 +188,8 @@ phoneErrorString: ${phoneErrorString},
 passwordErrorString: ${passwordErrorString},
 exception: ${exception},
 loadingApi: ${loadingApi},
-userProfileChanged: ${userProfileChanged}
+userProfileChanged: ${userProfileChanged},
+duplicatePhone: ${duplicatePhone}
     ''';
   }
 }

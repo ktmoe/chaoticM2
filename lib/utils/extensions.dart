@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:m2mobile/utils/constants.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:m2mobile/models/order_item.dart';
+import 'package:m2mobile/models/product.dart';
 
 extension StringX on String {
   bool isJsonFormat() {
@@ -57,4 +59,15 @@ extension RequestX on Request {
       !headers.containsKey(HttpHeaders.contentTypeHeader) &&
       body != null &&
       (body as String).isJsonFormat();
+}
+
+extension OrderItemX on OrderItem {
+  Product get productFromOrderItem => Product((b) {
+        b.productId = productid;
+        b.productName = productName;
+        b.price = price;
+        b.images = images.toBuilder();
+        b.quantity = quantity;
+        b.discountPrice = 0;
+      });
 }

@@ -21,6 +21,8 @@ abstract class OrderCustomerInfo
   String get phone;
   @BuiltValueField(wireName: 'address')
   String get address;
+  @BuiltValueField(wireName: 'tax')
+  int get tax;
   String toJson() {
     return json
         .encode(serializers.serializeWith(OrderCustomerInfo.serializer, this));

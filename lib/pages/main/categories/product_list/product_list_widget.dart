@@ -38,9 +38,17 @@ class _ProductListWidgetState extends State<ProductListWidget> {
             widget.productName.subcategoryId, true);
       });
 
+  ReactionDisposer _onLoadingChanged() {
+    return reaction<bool>((_) => _storeProductList.loading, (loading) {
+      if (loading) {
+        _refreshIndicatorState.currentState.show();
+      }
+    });
+  }
+
   @override
   void initState() {
-    _disposers.addAll([_onInitDone()]);
+    _disposers.addAll([_onInitDone(), _onLoadingChanged()]);
     _storeProductList.init();
     super.initState();
   }
@@ -107,7 +115,10 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                                         "amount");
                               }),
                             )
-                          : ListEmptyWidget(message: 'ပစ္စည်းများ မရှိသေးပါ');
+                          : (!_storeProductList.loading)
+                              ? ListEmptyWidget(
+                                  message: 'ပစ္စည်းများ မရှိသေးပါ')
+                              : Container();
                     }),
                   ],
                 ),

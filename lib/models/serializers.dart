@@ -19,6 +19,7 @@ import 'package:m2mobile/models/responses/refresh_token_response.dart';
 import 'package:m2mobile/models/responses/product_response.dart';
 import 'package:m2mobile/models/company_info.dart';
 import 'package:m2mobile/models/responses/company_info_response.dart';
+import 'package:m2mobile/models/responses/change_password_response.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:m2mobile/models/m2_category.dart';
 import 'package:m2mobile/models/responses/m2_category_response.dart';
@@ -33,7 +34,10 @@ import 'package:m2mobile/models/responses/bank_info_response.dart';
 import 'package:m2mobile/models/responses/post_order_response.dart';
 import 'package:m2mobile/models/responses/order_payment_response.dart';
 import 'package:m2mobile/models/responses/ads_response.dart';
+import 'package:m2mobile/models/responses/check_duplicate_phone_response.dart';
 import 'package:m2mobile/models/payloads/favorite_item.dart';
+import 'package:m2mobile/models/payloads/change_pwd_payload.dart';
+import 'package:m2mobile/models/payloads/change_pwd_payload_wrapper.dart';
 import 'package:m2mobile/models/payloads/favorite_item_payload.dart';
 import 'package:m2mobile/models/payloads/delete_favorite_item_payload.dart';
 import 'package:m2mobile/models/payloads/order_customer_info_payload.dart';
@@ -95,7 +99,11 @@ part 'serializers.g.dart';
   Ads,
   AdsResponse,
   Noti,
-  NotiListResponse
+  NotiListResponse,
+  CheckDuplicatePhoneResponse,
+  ChangePasswordResponse,
+  ChangePwdPayload,
+  ChangePwdPayloadWrapper
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

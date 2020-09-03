@@ -12,6 +12,7 @@ import 'package:m2mobile/models/payloads/favorite_item_payload.dart';
 import 'package:m2mobile/models/payloads/delete_favorite_item_payload.dart';
 import 'package:m2mobile/models/payloads/favorite_item.dart';
 import 'package:m2mobile/stores/store_search.dart';
+import 'package:m2mobile/utils/extensions.dart';
 import 'package:mobx/mobx.dart';
 
 part 'store_home.g.dart';
@@ -61,7 +62,17 @@ abstract class _StoreHome with Store {
 
   @action
   void updateLatestProducts() {
-    products = ObservableList.of(_boxProduct.listenable.value.values);
+    final p = _boxProduct.listenable.value.values.toList();
+    p.sort((a, b) {
+      if (a.date != null && b.date != null) {
+        return b.date
+            .dateTimeFromString()
+            .compareTo(a.date.dateTimeFromString());
+      } else {
+        return b.productName.compareTo(a.productName);
+      }
+    });
+    products = ObservableList.of(p);
   }
 
   @action
@@ -107,6 +118,11 @@ abstract class _StoreHome with Store {
   @action
   Future operateFavorite(Product product) async {
     try {
+      final fool = FavoriteId((b) {
+        b.id = product.favoriteId ?? "fool";
+        b.productid = product.productId;
+      });
+      _onFavoriteSyncProducts(product, fool);
       final favoriteOperateResponse = ((product.favoriteId ?? "").isEmpty)
           ? await _api.addToFav(_getFavoriteItemPayload(product).toJson())
           : await _api

@@ -1,5 +1,7 @@
 import 'package:flutter_country_picker/flutter_country_picker.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/boxes/app_box.dart';
+import 'package:m2mobile/data/api/api_service.dart';
 import 'package:m2mobile/models/user_profile.dart';
 import 'package:m2mobile/exceptions/app_exception.dart';
 import 'package:mobx/mobx.dart';
@@ -8,6 +10,7 @@ part 'authenticate_store.g.dart';
 class AuthenticateStore = _AuthenticateStoreBase with _$AuthenticateStore;
 
 abstract class _AuthenticateStoreBase with Store {
+  final ApiService _apiService = Modular.get<ApiService>();
   AppBox _appBox;
 
   @observable
@@ -34,6 +37,9 @@ abstract class _AuthenticateStoreBase with Store {
   @observable
   AppException exception;
 
+  @observable
+  bool duplicatePhone;
+
   @computed
   String get fullPhone =>
       phone.startsWith('09') ? '+95${phone.substring(1)}' : '+95$phone';
@@ -50,6 +56,13 @@ abstract class _AuthenticateStoreBase with Store {
   Future savePhoneNumber() async {
     final tosave = phone.startsWith('09') ? phone : '0$phone';
     await _appBox.savePhoneNumber(tosave);
+  }
+
+  @action
+  Future checkDuplicatePhoneNumber() async {
+    final tocheck = phone.startsWith('09') ? phone : '0$phone';
+    final response = await _apiService.checkDuplicatePhoneNumber(tocheck);
+    duplicatePhone = response.body.data;
   }
 
   @action

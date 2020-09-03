@@ -75,6 +75,18 @@ class _LoginWidgetState extends State<LoginWidget> {
     });
   }
 
+  ReactionDisposer _onDuplicatePhoneChanged() {
+    return reaction<bool>((_) => _storeLogin.duplicatePhone, (duplicate) async {
+      if (!duplicate) {
+        await context.successFailDialog(
+            dialogType:
+                "This phone number is not registered.\nPlease register first.",
+            success: false);
+        _storeLogin.duplicatePhone = null;
+      } else if (duplicate) FocusScope.of(context).nextFocus();
+    });
+  }
+
   ReactionDisposer _onConnectivityChanged() => autorun((_) {
         if (!_storeApp.isNetworkOn)
           "You are offline.".makeSnack(_scaffoldState);
@@ -89,7 +101,8 @@ class _LoginWidgetState extends State<LoginWidget> {
       _onLoadingApiChanged(),
       _onUserProfileChanged(),
       _onPhoneNumberChanged(),
-      _onPasswordChanged()
+      _onPasswordChanged(),
+      _onDuplicatePhoneChanged()
     ]);
     _storeLogin.init();
   }
@@ -131,23 +144,17 @@ class _LoginWidgetState extends State<LoginWidget> {
                     padding: const EdgeInsets.only(top: Dimens.marginLarge),
                     child: Text(
                       'Welcome! Signin to continue.',
-                      textAlign: TextAlign.start,
+                      textAlign: TextAlign.center,
                       style: const TextStyle(
                           fontSize: Dimens.textHeading1x,
                           fontWeight: FontWeight.w500),
                     ),
                   ),
-                  const SizedBox(
-                    height: Dimens.marginLarge,
-                  ),
+                  const SizedBox(height: Dimens.marginLarge),
                   _buildMobileNumberField(),
-                  const SizedBox(
-                    height: Dimens.marginMedium2,
-                  ),
+                  const SizedBox(height: Dimens.marginMedium2),
                   _buildPasswordField(),
-                  const SizedBox(
-                    height: Dimens.marginLargeX,
-                  ),
+                  const SizedBox(height: Dimens.marginLargeX),
                   _buildLoginBtn(),
                   _buildForgotPassword()
                 ],
@@ -165,7 +172,7 @@ class _LoginWidgetState extends State<LoginWidget> {
         child: TextFormField(
           textInputAction: TextInputAction.next,
           controller: _phoneFieldController,
-          keyboardType: TextInputType.number,
+          keyboardType: TextInputType.phone,
           maxLength: maxPhoneLength,
           inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
           decoration: InputDecoration(
@@ -174,9 +181,9 @@ class _LoginWidgetState extends State<LoginWidget> {
           onChanged: (value) {
             _storeLogin.phone = value;
           },
-          onFieldSubmitted: (value) {
+          onFieldSubmitted: (value) async {
             _storeLogin.phone = value;
-            FocusScope.of(context).nextFocus();
+            await _storeLogin.checkDuplicatePhoneNumber();
           },
         ),
       );
@@ -187,6 +194,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           textInputAction: TextInputAction.next,
           controller: _passwordFieldController,
           obscureText: _obscure,
+          enabled: _storeLogin.duplicatePhone ?? false,
           decoration: InputDecoration(
               hintText: "Password",
               errorText: _storeLogin.passwordErrorString,

@@ -75,86 +75,85 @@ class _AboutWidgetState extends State<AboutWidget> {
   }
 
   Widget _buildM2AboutArea() => Observer(
-    builder: (_){
-      final storeApp = Modular.get<StoreApp>();
-      CompanyInfo companyInfo = storeApp.companyInfo;
-      return Align(
-          child: Container(
-            margin: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.03,
-                left: Dimens.marginLarge,
-                right: Dimens.marginLarge),
-            child: Column(
-              children: <Widget>[
-                Hero(
-                  tag: AboutWidget.heroTag,
-                  child: SvgPicture.asset(
-                    "lib/res/svgs/m2_logo.svg",
-                    width: MediaQuery.of(context).size.width * 0.3,
+        builder: (_) {
+          final storeApp = Modular.get<StoreApp>();
+          CompanyInfo companyInfo = storeApp.companyInfo;
+          return Align(
+            child: Container(
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.03,
+                  left: Dimens.marginLarge,
+                  right: Dimens.marginLarge),
+              child: Column(
+                children: <Widget>[
+                  Hero(
+                    tag: AboutWidget.heroTag,
+                    child: SvgPicture.asset(
+                      "lib/res/svgs/m2_logo.svg",
+                      width: MediaQuery.of(context).size.width * 0.3,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(Dimens.marginMedium2),
-                  child: Text(
-                    "M2 Mobile",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w400,
-                        fontSize: Dimens.textHeading1x),
+                  Padding(
+                    padding: const EdgeInsets.all(Dimens.marginMedium2),
+                    child: Text(
+                      "M2 Mobile",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.w400,
+                          fontSize: Dimens.textHeading1x),
+                    ),
                   ),
-                ),
-                SizedBox(height: Dimens.marginLargeX),
-                Container(
-                  margin: const EdgeInsets.only(bottom: Dimens.marginLarge),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const Icon(
-                        M2Icon.phone,
-                        color: Colors.grey,
-                      ),
-                      const SizedBox(
-                        width: Dimens.marginLarge,
-                      ),
-                      Expanded(
-                          child: Text("${companyInfo.phone}",
-                              style: Styles.m2TextTheme.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: Dimens.textRegular2x,
-                                  height: 1.5)))
-                    ],
+                  SizedBox(height: Dimens.marginLargeX),
+                  Container(
+                    margin: const EdgeInsets.only(bottom: Dimens.marginLarge),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Icon(
+                          M2Icon.phone,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(
+                          width: Dimens.marginLarge,
+                        ),
+                        Expanded(
+                            child: Text("${companyInfo.phone}",
+                                style: Styles.m2TextTheme.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: Dimens.textRegular2x,
+                                    height: 1.5)))
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: Dimens.marginLargeX),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const Icon(
-                        M2Icon.location,
-                        color: Colors.grey,
-                      ),
-                      const SizedBox(
-                        width: Dimens.marginLarge,
-                      ),
-                      Expanded(
-                          child: Text(
-                              "${companyInfo.address}",
-                              textAlign: TextAlign.start,
-                              style: Styles.m2TextTheme.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: Dimens.textRegular2x,
-                                  height: 1.5)))
-                    ],
+                  Container(
+                    margin: const EdgeInsets.only(bottom: Dimens.marginLargeX),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Icon(
+                          M2Icon.location,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(
+                          width: Dimens.marginLarge,
+                        ),
+                        Expanded(
+                            child: Text("${companyInfo.address}",
+                                textAlign: TextAlign.start,
+                                style: Styles.m2TextTheme.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: Dimens.textRegular2x,
+                                    height: 1.5)))
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-    },
-  );
+          );
+        },
+      );
 
   Widget _buildMapArea() => Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -169,9 +168,9 @@ class _AboutWidgetState extends State<AboutWidget> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: GoogleMap(
-              minMaxZoomPreference: const MinMaxZoomPreference(20,50),
+              minMaxZoomPreference: const MinMaxZoomPreference(20, 50),
               markers: _markers,
-              onTap: (latLong){},
+              onTap: (latLong) {},
               initialCameraPosition: const CameraPosition(target: location),
               onMapCreated: _onMapCreated,
             ),
@@ -200,8 +199,7 @@ class _AboutWidgetState extends State<AboutWidget> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16)),
               onPressed: () async {
-                const fbUrl =
-                    "https://www.facebook.com/J-%E1%80%99%E1%80%9F%E1%80%AC-%E1%80%90%E1%80%9B%E1%80%AF%E1%80%90%E1%80%B9%E1%80%80%E1%80%AC%E1%80%B8%E1%80%95%E1%80%85%E1%81%A5%E1%80%8A%E1%80%B9%E1%80%B8%E1%80%94%E1%80%BD%E1%80%84%E1%80%B9%E1%80%B7%E1%80%B1%E1%80%91%E1%80%AC%E1%80%B9%E1%80%9C%E1%80%AC%E1%80%82%E1%80%BA%E1%80%AE%E1%80%95%E1%80%85%E1%81%A5%E1%80%8A%E1%80%B9%E1%80%B8%E1%80%B1%E1%80%9B%E1%80%AC%E1%80%84%E1%80%B9%E1%80%B8%E1%80%9D%E1%80%9A%E1%80%B9%E1%80%B1%E1%80%9B%E1%80%B8-106787410695838/about/?ref=page_internal";
+                final fbUrl = Modular.get<StoreApp>().companyInfo.fburl;
                 await launch(fbUrl);
               }),
         ),

@@ -12,6 +12,7 @@ class StoreLogin = _StoreLoginBase with _$StoreLogin;
 abstract class _StoreLoginBase with Store {
   final ApiService _apiService = Modular.get<ApiService>();
   AppBox _appBox;
+
   @observable
   String phone = "";
 
@@ -33,6 +34,9 @@ abstract class _StoreLoginBase with Store {
   @observable
   bool userProfileChanged = false;
 
+  @observable
+  bool duplicatePhone;
+
   @action
   Future init() async {
     _appBox = await AppBox.create();
@@ -42,6 +46,13 @@ abstract class _StoreLoginBase with Store {
         userProfileChanged = true;
       }
     });
+  }
+
+  @action
+  Future checkDuplicatePhoneNumber() async {
+    final tocheck = phone.startsWith('09') ? phone : '0$phone';
+    final response = await _apiService.checkDuplicatePhoneNumber(tocheck);
+    duplicatePhone = response.body.data;
   }
 
   @action

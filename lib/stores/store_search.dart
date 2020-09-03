@@ -36,7 +36,12 @@ abstract class _StoreSearchBase with Store {
             keyword, Modular.get<StoreApp>().userProfile.id, latestCurrentPage);
         if (response.body.error == null) {
           latestTotalPage = response.body.lastPage;
-          results = ObservableList.of(response.body.product);
+          response.body.product.forEach((element) {
+            if (!results.contains(element)) {
+              results.add(element);
+            }
+          });
+          // results = ObservableList.of(response.body.product);
         } else {
           results = ObservableList.of([]);
         }

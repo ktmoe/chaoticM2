@@ -5,6 +5,7 @@ import 'package:m2mobile/res/icons/m2_icon_icons.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/custom_widgets/order_item_card.dart';
 import 'package:m2mobile/pages/main/cart/order/order_widget.dart';
+import 'package:m2mobile/stores/store_order_detail.dart';
 import 'package:m2mobile/pages/main/more/order_list/complete_order/complete_order_widget.dart';
 import 'package:m2mobile/stores/store_cart.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -24,10 +25,14 @@ class CartWidget extends StatefulWidget {
 
 class _CartWidgetState extends State<CartWidget> {
   final StoreCart _storeCart = Modular.get<StoreCart>();
+  final StoreOrderDetail _storeOrderDetail = Modular.get<StoreOrderDetail>();
 
   @override
   void initState() {
     super.initState();
+    if (widget.isSummary) {
+      Future.wait([_storeOrderDetail.getOrderDetail()]);
+    }
   }
 
   @override
@@ -46,10 +51,20 @@ class _CartWidgetState extends State<CartWidget> {
                 },
                 onDeletePressed: widget.isSummary ? null : _cartDeletePressed,
               ),
-              body: _storeCart.cartCount == 0
-                  ? _buildEmptyBody()
-                  : _buildNonEmptyBody()));
+              body: _buildCorrectBody()));
     });
+  }
+
+  Widget _buildCorrectBody() {
+    if (widget.isSummary) {
+      return _storeOrderDetail.orderItems.isEmpty
+          ? _buildEmptyBody()
+          : _buildNonEmptyBody();
+    } else {
+      return _storeCart.cartCount == 0
+          ? _buildEmptyBody()
+          : _buildNonEmptyBody();
+    }
   }
 
   Widget _buildNonEmptyBody() => Stack(
@@ -94,10 +109,14 @@ class _CartWidgetState extends State<CartWidget> {
             builder: (_) {
               return Expanded(
                   child: ListView.builder(
-                      itemCount: _storeCart.cartProducts.length,
+                      itemCount: widget.isSummary
+                          ? _storeOrderDetail.productsFromOrderItmes.length
+                          : _storeCart.cartProducts.length,
                       itemBuilder: (context, index) {
-                        return _buildOrderRow(
-                            _storeCart.cartProducts.values.toList()[index]);
+                        return _buildOrderRow(widget.isSummary
+                            ? _storeOrderDetail.productsFromOrderItmes
+                                .toList()[index]
+                            : _storeCart.cartProducts.values.toList()[index]);
                       }));
             },
           )
@@ -210,12 +229,23 @@ class BottomSheet extends StatefulWidget {
 
 class _BottomSheetState extends State<BottomSheet> {
   final StoreCart _storeCart = Modular.get<StoreCart>();
+  final StoreOrderDetail _sotreOrderDetail = Modular.get<StoreOrderDetail>();
+
   @override
   Widget build(BuildContext context) {
-    return Observer(
-        builder: (_) => _storeCart.cartProducts.isEmpty
-            ? _buildEmptyCartBottomSheet()
-            : _buildNonEmptyCartBottomSheet());
+    return Observer(builder: (_) => _buildCorrectBottomSheet());
+  }
+
+  Widget _buildCorrectBottomSheet() {
+    if (widget.isSummary) {
+      return _sotreOrderDetail.orderItems.isEmpty
+          ? _buildEmptyCartBottomSheet()
+          : _buildNonEmptyCartBottomSheet();
+    } else {
+      return _storeCart.cartProducts.isEmpty
+          ? _buildEmptyCartBottomSheet()
+          : _buildNonEmptyCartBottomSheet();
+    }
   }
 
   Widget _buildEmptyCartBottomSheet() => Container(
@@ -258,7 +288,10 @@ class _BottomSheetState extends State<BottomSheet> {
                 style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: Dimens.textRegular2_5x)),
-            Text(_storeCart.amount.toDouble().money(),
+            Text(
+                widget.isSummary
+                    ? _sotreOrderDetail.amount.toDouble().money()
+                    : _storeCart.amount.toDouble().money(),
                 textAlign: TextAlign.end,
                 style: TextStyle(
                     color: Theme.of(context).accentColor,
@@ -277,7 +310,10 @@ class _BottomSheetState extends State<BottomSheet> {
                 style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: Dimens.textRegular2_5x)),
-            Text(_storeCart.tax.toDouble().money(),
+            Text(
+                widget.isSummary
+                    ? _sotreOrderDetail.tax.toDouble().money()
+                    : _storeCart.tax.toDouble().money(),
                 textAlign: TextAlign.end,
                 style: TextStyle(
                     color: Theme.of(context).accentColor,
@@ -296,7 +332,10 @@ class _BottomSheetState extends State<BottomSheet> {
                 style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: Dimens.textRegular2_5x)),
-            Text(_storeCart.total.toDouble().money(),
+            Text(
+                widget.isSummary
+                    ? _sotreOrderDetail.total.toDouble().money()
+                    : _storeCart.total.toDouble().money(),
                 textAlign: TextAlign.end,
                 style: TextStyle(
                     color: Theme.of(context).accentColor,
@@ -346,7 +385,6 @@ class _BottomSheetState extends State<BottomSheet> {
                     disabledTextColor: Colors.white,
                     onPressed: () {
                       if (widget.isSummary) {
-                        _storeCart.emptyTheCart();
                         Modular.to
                             .pushReplacementNamed(CompleteOrderWidget.route);
                       } else {

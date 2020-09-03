@@ -23,12 +23,6 @@ class OrderDetailWidget extends StatefulWidget {
 class _OrderDetailWidgetState extends State<OrderDetailWidget> {
   final StoreOrderDetail _storeOrderDetail = Modular.get<StoreOrderDetail>();
 
-  // List<OrderDummy> dummyOrders = [
-  //   OrderDummy("Huawei P 30", 2, "12,000,000", "24,000,000"),
-  //   OrderDummy("Huawei P 30", 2, "12,000,000", "24,000,000"),
-  //   OrderDummy("Huawei P 30", 2, "12,000,000", "24,000,000")
-  // ];
-
   @override
   void initState() {
     Future.wait([_storeOrderDetail.getOrderDetail()]);
@@ -48,6 +42,7 @@ class _OrderDetailWidgetState extends State<OrderDetailWidget> {
         Container(
           height: double.infinity,
           child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             scrollDirection: Axis.vertical,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,6 +73,7 @@ class _OrderDetailWidgetState extends State<OrderDetailWidget> {
                     child: Wrap(
                       children: <Widget>[
                         Container(
+                          width: double.infinity,
                           margin: const EdgeInsets.all(Dimens.marginMedium),
                           child: Card(
                             elevation: Dimens.cardElevation * 2,
@@ -88,56 +84,62 @@ class _OrderDetailWidgetState extends State<OrderDetailWidget> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: Dimens.marginMedium),
                               child: Observer(builder: (_) {
-                                return Column(
-                                  children: <Widget>[
-                                    DataTable(
-                                      columnSpacing: Dimens.marginMedium2,
-                                      dataRowHeight: 70,
-                                      columns: [
-                                        _buildDataColumn('Name'),
-                                        _buildDataColumn('Qty'),
-                                        _buildDataColumn('Price'),
-                                        _buildDataColumn('Amount')
-                                      ],
-                                      rows: _storeOrderDetail.orderItems
-                                          .map((item) {
-                                        return DataRow(cells: [
-                                          DataCell(SizedBox(
-                                            width: 150,
-                                            child: Text('${item.productName}'),
-                                          )),
-                                          DataCell(Text('${item.quantity}')),
-                                          DataCell(Text(
-                                              item.price.thousandSeparator())),
-                                          DataCell(Text(
-                                              (item.quantity * item.price)
-                                                  .thousandSeparator())),
-                                        ]);
-                                      }).toList(),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.only(
-                                          top: Dimens.marginMedium),
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                          'Tax : ${_storeOrderDetail.tax.money()}',
-                                          style: Styles.m2TextTheme.copyWith(
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: Dimens.marginMedium2),
-                                      alignment: Alignment.centerRight,
-                                      child: Text(
-                                        'Total : ${_storeOrderDetail.total.money()}',
-                                        style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: Dimens.textRegular2_5x),
+                                return SingleChildScrollView(
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: <Widget>[
+                                      DataTable(
+                                        columnSpacing: Dimens.marginMedium2,
+                                        dataRowHeight: 70,
+                                        columns: [
+                                          _buildDataColumn('Name'),
+                                          _buildDataColumn('Qty'),
+                                          _buildDataColumn('Price'),
+                                          _buildDataColumn('Amount')
+                                        ],
+                                        rows: _storeOrderDetail.orderItems
+                                            .map((item) {
+                                          return DataRow(cells: [
+                                            DataCell(SizedBox(
+                                              child:
+                                                  Text('${item.productName}'),
+                                            )),
+                                            DataCell(Text('${item.quantity}')),
+                                            DataCell(Text(item.price
+                                                .thousandSeparator())),
+                                            DataCell(Text(
+                                                (item.quantity * item.price)
+                                                    .thousandSeparator())),
+                                          ]);
+                                        }).toList(),
                                       ),
-                                    )
-                                  ],
+                                      Container(
+                                        padding: const EdgeInsets.only(
+                                            top: Dimens.marginMedium),
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                            'Tax : ${_storeOrderDetail.tax.money()}',
+                                            style: Styles.m2TextTheme.copyWith(
+                                                fontWeight: FontWeight.bold)),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: Dimens.marginMedium2),
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          'Total : ${_storeOrderDetail.total.money()}',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: Dimens.textRegular2_5x),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 );
                               }),
                             ),
@@ -158,12 +160,3 @@ class _OrderDetailWidgetState extends State<OrderDetailWidget> {
           style: TextStyle(
               fontWeight: FontWeight.w700, fontSize: Dimens.textRegular2x)));
 }
-
-// class OrderDummy {
-//   String name;
-//   int qty;
-//   String price;
-//   String totalAmount;
-
-//   OrderDummy(this.name, this.qty, this.price, this.totalAmount);
-// }

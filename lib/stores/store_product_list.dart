@@ -15,6 +15,9 @@ abstract class _StoreProductListBase with Store {
   BoxProductByCategory _boxProductByCategory;
 
   @observable
+  bool loading = false;
+
+  @observable
   ObservableList<Product> products = ObservableList.of([]);
 
   @observable
@@ -55,6 +58,7 @@ abstract class _StoreProductListBase with Store {
 
   @action
   Future<void> getProductsByCategory(String subcategoryId, bool refresh) async {
+    loading = true;
     if (refresh) {
       latestCurrentPage = 0;
     }
@@ -78,6 +82,8 @@ abstract class _StoreProductListBase with Store {
       }
     } catch (e) {
       exception = AppException(message: e.toString());
+    } finally {
+      loading = false;
     }
   }
 }

@@ -49,7 +49,7 @@ class _CompleteOrderWidgetState extends State<CompleteOrderWidget> {
           final a = await context.successFailDialog(
               dialogType: "You sent slip voucher.", success: true);
           if (a) {
-            Modular.to.popUntil(ModalRoute.withName(MainWidget.route));
+            Modular.to.pushReplacementNamed(MainWidget.route);
           }
         }
       });

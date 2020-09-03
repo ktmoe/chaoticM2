@@ -129,6 +129,22 @@ mixin _$AuthenticateStore on _AuthenticateStoreBase, Store {
     });
   }
 
+  final _$duplicatePhoneAtom =
+      Atom(name: '_AuthenticateStoreBase.duplicatePhone');
+
+  @override
+  bool get duplicatePhone {
+    _$duplicatePhoneAtom.reportRead();
+    return super.duplicatePhone;
+  }
+
+  @override
+  set duplicatePhone(bool value) {
+    _$duplicatePhoneAtom.reportWrite(value, super.duplicatePhone, () {
+      super.duplicatePhone = value;
+    });
+  }
+
   final _$initAsyncAction = AsyncAction('_AuthenticateStoreBase.init');
 
   @override
@@ -142,6 +158,15 @@ mixin _$AuthenticateStore on _AuthenticateStoreBase, Store {
   @override
   Future<dynamic> savePhoneNumber() {
     return _$savePhoneNumberAsyncAction.run(() => super.savePhoneNumber());
+  }
+
+  final _$checkDuplicatePhoneNumberAsyncAction =
+      AsyncAction('_AuthenticateStoreBase.checkDuplicatePhoneNumber');
+
+  @override
+  Future<dynamic> checkDuplicatePhoneNumber() {
+    return _$checkDuplicatePhoneNumberAsyncAction
+        .run(() => super.checkDuplicatePhoneNumber());
   }
 
   final _$_AuthenticateStoreBaseActionController =
@@ -179,6 +204,7 @@ validOtp: ${validOtp},
 inputOtp: ${inputOtp},
 userProfile: ${userProfile},
 exception: ${exception},
+duplicatePhone: ${duplicatePhone},
 fullPhone: ${fullPhone},
 validPhone: ${validPhone}
     ''';

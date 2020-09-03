@@ -10,6 +10,8 @@ import 'package:m2mobile/stores/authenticate_store.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:m2mobile/utils/extensions.dart';
+import 'package:m2mobile/custom_widgets/one_call_away_widget.dart';
+import 'package:mobx/mobx.dart';
 
 class AuthenticateWidget extends StatefulWidget {
   static const route = "/authenticate";
@@ -20,7 +22,20 @@ class AuthenticateWidget extends StatefulWidget {
 class _AuthenticateWidgetState extends State<AuthenticateWidget> {
   final _pageController = PageController();
   final AuthenticateStore _storeAuthenticate = Modular.get<AuthenticateStore>();
-  // final StoreApp _storeApp = Modular.get<StoreApp>();
+  final List<ReactionDisposer> _disposers = [];
+
+  ReactionDisposer _duplicatePhoneCheck() {
+    return reaction<bool>((_) => _storeAuthenticate.duplicatePhone,
+        (duplicate) async {
+      if (duplicate) {
+        context.successFailDialog(
+            dialogType: "This phone number is already registered.");
+      } else {
+        await _registerUser(_storeAuthenticate.fullPhone, context);
+        _nextAuth();
+      }
+    });
+  }
 
   Future _registerUser(String mobile, BuildContext context) async {
     FirebaseAuth _auth = FirebaseAuth.instance;
@@ -51,7 +66,16 @@ class _AuthenticateWidgetState extends State<AuthenticateWidget> {
   @override
   void initState() {
     _storeAuthenticate.init();
+    _disposers.addAll([_duplicatePhoneCheck()]);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _disposers.forEach((d) {
+      d();
+    });
+    super.dispose();
   }
 
   @override
@@ -142,8 +166,7 @@ class _AuthenticateWidgetState extends State<AuthenticateWidget> {
   Future _onAuthenticateBtnPressed() async {
     if (_storeAuthenticate.page.value == 0) {
       if (_storeAuthenticate.validPhone) {
-        await _registerUser(_storeAuthenticate.fullPhone, context);
-        _nextAuth();
+        await _storeAuthenticate.checkDuplicatePhoneNumber();
       } else {
         "Something went wrong. Please Try again.".showSnack(context);
       }

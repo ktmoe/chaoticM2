@@ -29,6 +29,8 @@ class _$OrderCustomerInfoSerializer
       'address',
       serializers.serialize(object.address,
           specifiedType: const FullType(String)),
+      'tax',
+      serializers.serialize(object.tax, specifiedType: const FullType(int)),
     ];
 
     return result;
@@ -58,6 +60,10 @@ class _$OrderCustomerInfoSerializer
           result.address = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'tax':
+          result.tax = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
       }
     }
 
@@ -72,12 +78,14 @@ class _$OrderCustomerInfo extends OrderCustomerInfo {
   final String phone;
   @override
   final String address;
+  @override
+  final int tax;
 
   factory _$OrderCustomerInfo(
           [void Function(OrderCustomerInfoBuilder) updates]) =>
       (new OrderCustomerInfoBuilder()..update(updates)).build();
 
-  _$OrderCustomerInfo._({this.customerid, this.phone, this.address})
+  _$OrderCustomerInfo._({this.customerid, this.phone, this.address, this.tax})
       : super._() {
     if (customerid == null) {
       throw new BuiltValueNullFieldError('OrderCustomerInfo', 'customerid');
@@ -87,6 +95,9 @@ class _$OrderCustomerInfo extends OrderCustomerInfo {
     }
     if (address == null) {
       throw new BuiltValueNullFieldError('OrderCustomerInfo', 'address');
+    }
+    if (tax == null) {
+      throw new BuiltValueNullFieldError('OrderCustomerInfo', 'tax');
     }
   }
 
@@ -104,13 +115,15 @@ class _$OrderCustomerInfo extends OrderCustomerInfo {
     return other is OrderCustomerInfo &&
         customerid == other.customerid &&
         phone == other.phone &&
-        address == other.address;
+        address == other.address &&
+        tax == other.tax;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc(0, customerid.hashCode), phone.hashCode), address.hashCode));
+        $jc($jc($jc(0, customerid.hashCode), phone.hashCode), address.hashCode),
+        tax.hashCode));
   }
 
   @override
@@ -118,7 +131,8 @@ class _$OrderCustomerInfo extends OrderCustomerInfo {
     return (newBuiltValueToStringHelper('OrderCustomerInfo')
           ..add('customerid', customerid)
           ..add('phone', phone)
-          ..add('address', address))
+          ..add('address', address)
+          ..add('tax', tax))
         .toString();
   }
 }
@@ -139,6 +153,10 @@ class OrderCustomerInfoBuilder
   String get address => _$this._address;
   set address(String address) => _$this._address = address;
 
+  int _tax;
+  int get tax => _$this._tax;
+  set tax(int tax) => _$this._tax = tax;
+
   OrderCustomerInfoBuilder();
 
   OrderCustomerInfoBuilder get _$this {
@@ -146,6 +164,7 @@ class OrderCustomerInfoBuilder
       _customerid = _$v.customerid;
       _phone = _$v.phone;
       _address = _$v.address;
+      _tax = _$v.tax;
       _$v = null;
     }
     return this;
@@ -168,7 +187,7 @@ class OrderCustomerInfoBuilder
   _$OrderCustomerInfo build() {
     final _$result = _$v ??
         new _$OrderCustomerInfo._(
-            customerid: customerid, phone: phone, address: address);
+            customerid: customerid, phone: phone, address: address, tax: tax);
     replace(_$result);
     return _$result;
   }

@@ -41,7 +41,13 @@ class _$OrderItemSerializer implements StructuredSerializer<OrderItem> {
       serializers.serialize(object.updateddate,
           specifiedType: const FullType(String)),
     ];
-
+    if (object.images != null) {
+      result
+        ..add('images')
+        ..add(serializers.serialize(object.images,
+            specifiedType:
+                const FullType(BuiltList, const [const FullType(String)])));
+    }
     return result;
   }
 
@@ -71,6 +77,12 @@ class _$OrderItemSerializer implements StructuredSerializer<OrderItem> {
         case 'productid':
           result.productid = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'images':
+          result.images.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(String)]))
+              as BuiltList<Object>);
           break;
         case 'price':
           result.price = serializers.deserialize(value,
@@ -105,6 +117,8 @@ class _$OrderItem extends OrderItem {
   @override
   final String productid;
   @override
+  final BuiltList<String> images;
+  @override
   final int price;
   @override
   final int quantity;
@@ -121,6 +135,7 @@ class _$OrderItem extends OrderItem {
       this.orderid,
       this.productName,
       this.productid,
+      this.images,
       this.price,
       this.quantity,
       this.createddate,
@@ -167,6 +182,7 @@ class _$OrderItem extends OrderItem {
         orderid == other.orderid &&
         productName == other.productName &&
         productid == other.productid &&
+        images == other.images &&
         price == other.price &&
         quantity == other.quantity &&
         createddate == other.createddate &&
@@ -180,9 +196,11 @@ class _$OrderItem extends OrderItem {
             $jc(
                 $jc(
                     $jc(
-                        $jc($jc($jc(0, id.hashCode), orderid.hashCode),
-                            productName.hashCode),
-                        productid.hashCode),
+                        $jc(
+                            $jc($jc($jc(0, id.hashCode), orderid.hashCode),
+                                productName.hashCode),
+                            productid.hashCode),
+                        images.hashCode),
                     price.hashCode),
                 quantity.hashCode),
             createddate.hashCode),
@@ -196,6 +214,7 @@ class _$OrderItem extends OrderItem {
           ..add('orderid', orderid)
           ..add('productName', productName)
           ..add('productid', productid)
+          ..add('images', images)
           ..add('price', price)
           ..add('quantity', quantity)
           ..add('createddate', createddate)
@@ -223,6 +242,11 @@ class OrderItemBuilder implements Builder<OrderItem, OrderItemBuilder> {
   String get productid => _$this._productid;
   set productid(String productid) => _$this._productid = productid;
 
+  ListBuilder<String> _images;
+  ListBuilder<String> get images =>
+      _$this._images ??= new ListBuilder<String>();
+  set images(ListBuilder<String> images) => _$this._images = images;
+
   int _price;
   int get price => _$this._price;
   set price(int price) => _$this._price = price;
@@ -247,6 +271,7 @@ class OrderItemBuilder implements Builder<OrderItem, OrderItemBuilder> {
       _orderid = _$v.orderid;
       _productName = _$v.productName;
       _productid = _$v.productid;
+      _images = _$v.images?.toBuilder();
       _price = _$v.price;
       _quantity = _$v.quantity;
       _createddate = _$v.createddate;
@@ -271,16 +296,30 @@ class OrderItemBuilder implements Builder<OrderItem, OrderItemBuilder> {
 
   @override
   _$OrderItem build() {
-    final _$result = _$v ??
-        new _$OrderItem._(
-            id: id,
-            orderid: orderid,
-            productName: productName,
-            productid: productid,
-            price: price,
-            quantity: quantity,
-            createddate: createddate,
-            updateddate: updateddate);
+    _$OrderItem _$result;
+    try {
+      _$result = _$v ??
+          new _$OrderItem._(
+              id: id,
+              orderid: orderid,
+              productName: productName,
+              productid: productid,
+              images: _images?.build(),
+              price: price,
+              quantity: quantity,
+              createddate: createddate,
+              updateddate: updateddate);
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'images';
+        _images?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'OrderItem', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

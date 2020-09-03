@@ -213,44 +213,40 @@ class _ProductCardBottomState extends State<ProductCardBottom> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              InkWell(
-                onTap: () async {
-                  await Modular.get<StoreHome>()
-                      .operateFavorite(widget.product);
-                },
-                child: Icon(M2Icon.favourite,
-                    size: 16,
-                    color: (widget.product.favoriteId ?? "").isNotEmpty
-                        ? Theme.of(context).iconTheme.color
-                        : Colors.white),
-              ),
+              IconButton(
+                  icon: Icon(M2Icon.favourite,
+                      size: 16,
+                      color: (widget.product.favoriteId ?? "").isNotEmpty
+                          ? Theme.of(context).iconTheme.color
+                          : Colors.white),
+                  onPressed: () async {
+                    await Modular.get<StoreHome>()
+                        .operateFavorite(widget.product);
+                  }),
               VerticalDivider(
                 color: Colors.white,
                 indent: Dimens.marginMedium,
                 endIndent: Dimens.marginMedium,
               ),
-              InkWell(
-                onTap: () async {
-                  if (_storeCart.cartProducts
-                      .containsKey(widget.product.productId)) {
-                    "Item removed from cart.".showSnack(context);
-                    _storeCart.removeFromCart(widget.product);
-                    // widget._storeCart.removeFromCart(widget.product);
-                  } else {
-                    "Item added to cart.".showSnack(context);
-                    _storeCart.addToCart(widget.product);
-                    // widget._storeCart.addToCart(widget.product);
-                  }
-                },
-                // widget._storeCart.cartProducts.containsKey(widget.product)
-                child: Icon(
-                  _storeCart.cartProducts.containsKey(widget.product.productId)
-                      ? M2Icon.cart_cross
-                      : M2Icon.cart_plus,
-                  color: Colors.white,
-                  size: 18,
-                ),
-              )
+              IconButton(
+                  icon: Icon(
+                    _storeCart.cartProducts
+                            .containsKey(widget.product.productId)
+                        ? M2Icon.cart_cross
+                        : M2Icon.cart_plus,
+                    color: Colors.white,
+                    size: 18,
+                  ),
+                  onPressed: () async {
+                    if (_storeCart.cartProducts
+                        .containsKey(widget.product.productId)) {
+                      "Item removed from cart.".showSnack(context);
+                      _storeCart.removeFromCart(widget.product);
+                    } else {
+                      "Item added to cart.".showSnack(context);
+                      _storeCart.addToCart(widget.product);
+                    }
+                  }),
             ],
           ));
     });

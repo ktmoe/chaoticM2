@@ -13,7 +13,8 @@ class OrderListWidget extends StatefulWidget {
   _OrderListWidgetState createState() => _OrderListWidgetState();
 }
 
-class _OrderListWidgetState extends State<OrderListWidget> {
+class _OrderListWidgetState extends State<OrderListWidget>
+    with WidgetsBindingObserver {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey();
   final StoreOrderList _storeOrderList = Modular.get<StoreOrderList>();
 
@@ -21,6 +22,20 @@ class _OrderListWidgetState extends State<OrderListWidget> {
   void initState() {
     super.initState();
     Future.wait([_storeOrderList.init(), _storeOrderList.getOrders()]);
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      Future.wait([_storeOrderList.getOrders()]);
+    }
   }
 
   @override

@@ -160,6 +160,26 @@ class _$ApiService extends ApiService {
   }
 
   @override
+  Future<Response<CheckDuplicatePhoneResponse>> checkDuplicatePhoneNumber(
+      String phoneNumber) {
+    final $url = '/api/customerview/checkDuplicatePhoneNum';
+    final $params = <String, dynamic>{'phoneNumber': phoneNumber};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<CheckDuplicatePhoneResponse,
+        CheckDuplicatePhoneResponse>($request);
+  }
+
+  @override
+  Future<Response<ChangePasswordResponse>> changePassword(
+      String changePwdPayload) {
+    final $url = '/api/customerview/changePassword';
+    final $body = changePwdPayload;
+    final $request = Request('GET', $url, client.baseUrl, body: $body);
+    return client
+        .send<ChangePasswordResponse, ChangePasswordResponse>($request);
+  }
+
+  @override
   Future<Response<PostProfileResponse>> saveProfile(String imageUrl,
       String name, String phone, String address, String password) {
     final $url = '/api/customerview/saveProfile';

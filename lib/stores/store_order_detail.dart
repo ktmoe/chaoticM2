@@ -4,6 +4,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/stores/store_home.dart';
 import 'package:m2mobile/models/order_item.dart';
 import 'package:m2mobile/stores/store_app.dart';
+import 'package:m2mobile/models/product.dart';
+import 'package:m2mobile/utils/extensions.dart';
 
 part 'store_order_detail.g.dart';
 
@@ -14,6 +16,10 @@ abstract class _StoreOrderDetailBase with Store {
 
   @observable
   ObservableList<OrderItem> orderItems = ObservableList.of([]);
+
+  @computed
+  ObservableList<Product> get productsFromOrderItmes => ObservableList.of(
+      orderItems.toList().map((item) => item.productFromOrderItem));
 
   @computed
   int get amount {

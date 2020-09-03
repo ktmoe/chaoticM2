@@ -3,8 +3,10 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:m2mobile/custom_widgets/m2_appbar.dart';
 import 'package:m2mobile/custom_widgets/screen_bg_card.dart';
 import 'package:m2mobile/pages/language/language_widget.dart';
+import 'package:m2mobile/pages/main/more/settings/change_password/change_password_widget.dart';
 import 'package:m2mobile/res/dimens.dart';
 import 'package:m2mobile/res/styles.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsWidget extends StatefulWidget {
   static const route = "/main/more/settings";
@@ -40,10 +42,23 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     dense: true),
                 const Divider(height: 2),
                 ListTile(
+                    onTap: () {
+                      Modular.to.pushNamed(ChangePasswordWidget.route);
+                    },
+                    title: Text('Change Password',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: Dimens.textRegular2x)),
+                    dense: true),
+                const Divider(height: 2),
+                ListTile(
                     title: const Text('App Version', style: Styles.m2TextTheme),
                     trailing: const Text('1.0.0', style: Styles.m2TextTheme)),
                 const Divider(height: 2),
                 ListTile(
+                    onTap: () async {
+                      await launch("http://www.newwave-tech.com/");
+                    },
                     title:
                         const Text('Developed by', style: Styles.m2TextTheme),
                     trailing:

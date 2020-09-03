@@ -10,6 +10,7 @@ import 'package:m2mobile/models/responses/login_response.dart';
 import 'package:m2mobile/models/responses/noti_list_response.dart';
 import 'package:m2mobile/models/responses/post_profile_response.dart';
 import 'package:m2mobile/models/responses/product_response.dart';
+import 'package:m2mobile/models/responses/change_password_response.dart';
 import 'package:m2mobile/models/responses/order_list_response.dart';
 import 'package:m2mobile/models/responses/company_info_response.dart';
 import 'package:m2mobile/models/responses/m2_category_response.dart';
@@ -19,6 +20,7 @@ import 'package:m2mobile/models/responses/order_detail_response.dart';
 import 'package:m2mobile/models/responses/post_order_response.dart';
 import 'package:m2mobile/models/responses/order_payment_response.dart';
 import 'package:m2mobile/models/responses/ads_response.dart';
+import 'package:m2mobile/models/responses/check_duplicate_phone_response.dart';
 import 'package:built_collection/built_collection.dart';
 
 part 'api_service.chopper.dart';
@@ -98,6 +100,14 @@ abstract class ApiService extends ChopperService {
   Future<Response<SubCategoryResponse>> getSubCategories();
 
   /// User Profile ///
+  @Get(path: 'api/customerview/checkDuplicatePhoneNum')
+  Future<Response<CheckDuplicatePhoneResponse>> checkDuplicatePhoneNumber(
+      @Query('phoneNumber') String phoneNumber);
+
+  @Get(path: 'api/customerview/changePassword')
+  Future<Response<ChangePasswordResponse>> changePassword(
+      @Body() String changePwdPayload);
+
   @Post(path: 'api/customerview/saveProfile')
   Future<Response<PostProfileResponse>> saveProfile(
       @Query('imageurl') String imageUrl,

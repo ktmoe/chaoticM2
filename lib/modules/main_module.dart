@@ -15,6 +15,7 @@ import 'package:m2mobile/stores/store_home.dart';
 import 'package:m2mobile/stores/store_cart.dart';
 import 'package:m2mobile/stores/store_order.dart';
 import 'package:m2mobile/stores/store_search.dart';
+import 'package:m2mobile/stores/store_order_detail.dart';
 
 class MainScreenModule extends ChildModule {
   @override
@@ -22,7 +23,8 @@ class MainScreenModule extends ChildModule {
         Bind((i) => StoreHome()),
         Bind((i) => StoreCart()),
         Bind((i) => StoreOrder()),
-        Bind((i) => StoreSearch())
+        Bind((i) => StoreSearch()),
+        Bind((i) => StoreOrderDetail())
       ];
 
   @override
